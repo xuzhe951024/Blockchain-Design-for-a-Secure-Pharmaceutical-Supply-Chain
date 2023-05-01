@@ -26,39 +26,53 @@ public class WorkLoadServiceImpl implements WorkLoadService {
         Double sleepTime;
         String loadResponse;
         String caseType = workLoadReq.isNormalCase() ? "Normal" : "Poisson";
-        String output = "";
+        StringBuilder output = new StringBuilder();
         String line = "";
+        Long requestStartTime;
+        Long requestEndTime;
+        Long requestAllTime = 0L;
+        Long requestTimeConsume;
 
         line = "------------------------------------------------------------Start " + caseType + " WorkLoad--------------------------------------------------------------------";
-        output += line;
+        output.append(line);
         log.info(line);
 
         line = "Load Detail:\n" + workLoadReq.toString();
-        output += "\n" + line;
+        output.append("\n").append(line);
         log.info(line);
         try {
             for (int i = 0; i < workLoadReq.getReqCount(); i++) {
                 sleepTime = workLoadReq.isNormalCase() ?
-                        getSleepTime(Double.valueOf(i), workLoadReq.getSigma(), workLoadReq.getMu()) :
-                        getSleepTime(Double.valueOf(i), workLoadReq.getLamda());
+                        getSleepTime((double) i, workLoadReq.getSigma(), workLoadReq.getMu()) :
+                        getSleepTime((double) i, workLoadReq.getLamda());
                 line = "Load count: " + (i + 1) + "\nnow sleep for    " + sleepTime + "    seconds";
-                output += "\n" + line;
+                output.append("\n").append(line);
                 log.info("Load count: " + ((i + 1)));
                 log.info("now sleep for    " + sleepTime + "    seconds");
                 Thread.sleep(sleepTime.longValue() * 1000);
+
+                requestStartTime = System.currentTimeMillis();
+
                 loadResponse = HttpRequest.get(workLoadReq.getUrl()).body();
-                line = "loadResponse: " + loadResponse;
-                output += "\n" + line;
+
+                requestEndTime = System.currentTimeMillis();
+
+                requestTimeConsume = requestEndTime - requestStartTime;
+                requestAllTime += requestTimeConsume;
+                line = "loadResponse: " + loadResponse + "\n" +
+                        "requestTimeConsume: " + (requestTimeConsume) + "ms";
+                output.append("\n").append(line);
                 log.info(line);
             }
         } catch (Exception e) {
             log.error(e.getMessage());
             return null;
         }
+        output.append("\n").append("Average request time: ").append(requestAllTime / workLoadReq.getReqCount()).append("ms");
         line = "----------------------------------------------------------------End " + caseType + " WorkLoad--------------------------------------------------------------------";
-        output += "\n" + line;
+        output.append("\n").append(line);
         log.info(line);
-        return output;
+        return output.toString();
     }
 
     @Override
