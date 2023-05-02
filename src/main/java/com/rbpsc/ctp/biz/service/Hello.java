@@ -1,4 +1,4 @@
-package com.example.demo.biz.service;
+package com.rbpsc.ctp.biz.service;
 
 /**
  * @project: WorkLoader

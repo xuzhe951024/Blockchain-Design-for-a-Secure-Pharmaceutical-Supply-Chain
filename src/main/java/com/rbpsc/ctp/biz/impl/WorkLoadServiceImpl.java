@@ -1,9 +1,11 @@
-package com.example.demo.biz;
+package com.rbpsc.ctp.biz.impl;
 
-import com.example.demo.biz.service.WorkLoadService;
-import com.example.demo.entities.CAdvisorData;
-import com.example.demo.entities.WorkLoadReq;
+import com.rbpsc.ctp.api.entities.factory.WorkLoadRecordFactory;
+import com.rbpsc.ctp.biz.service.WorkLoadService;
+import com.rbpsc.ctp.api.entities.WorkLoadRecord;
+import com.rbpsc.ctp.api.entities.WorkLoadReq;
 import com.github.kevinsawicki.http.HttpRequest;
+import com.rbpsc.ctp.repository.impl.WorkLoadRecordRepositoryImpl;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -19,7 +21,7 @@ import org.springframework.stereotype.Service;
 public class WorkLoadServiceImpl implements WorkLoadService {
 
     @Autowired
-    private CAdvisorRepositoryImpl cAdvisorRepository;
+    private WorkLoadRecordRepositoryImpl cAdvisorRepository;
 
     @Override
     public String generateWorkLoad(WorkLoadReq workLoadReq) throws InterruptedException {
@@ -32,6 +34,7 @@ public class WorkLoadServiceImpl implements WorkLoadService {
         Long requestEndTime;
         Long requestAllTime = 0L;
         Long requestTimeConsume;
+        WorkLoadRecord workLoadRecord = WorkLoadRecordFactory.createWorkLoadRecord(workLoadReq);
 
         line = "------------------------------------------------------------Start " + caseType + " WorkLoad--------------------------------------------------------------------";
         output.append(line);
@@ -56,8 +59,9 @@ public class WorkLoadServiceImpl implements WorkLoadService {
                 loadResponse = HttpRequest.get(workLoadReq.getUrl()).body();
 
                 requestEndTime = System.currentTimeMillis();
-
                 requestTimeConsume = requestEndTime - requestStartTime;
+                workLoadRecord.addResponseTime(requestTimeConsume);
+
                 requestAllTime += requestTimeConsume;
                 line = "loadResponse: " + loadResponse + "\n" +
                         "requestTimeConsume: " + (requestTimeConsume) + "ms";
@@ -68,11 +72,15 @@ public class WorkLoadServiceImpl implements WorkLoadService {
             log.error(e.getMessage());
             return null;
         }
-        output.append("\n").append("Average request time: ").append(requestAllTime / workLoadReq.getReqCount()).append("ms");
+        output.append("\n").append("Average request time: ").append(workLoadRecord.getAverageResponseTime()).append("ms");
         line = "----------------------------------------------------------------End " + caseType + " WorkLoad--------------------------------------------------------------------";
         output.append("\n").append(line);
         log.info(line);
-        return output.toString();
+        String outputString = output.toString();
+        workLoadRecord.setBenchmarkString(outputString);
+
+        cAdvisorRepository.insert(workLoadRecord);
+        return outputString;
     }
 
     @Override
@@ -90,10 +98,10 @@ public class WorkLoadServiceImpl implements WorkLoadService {
                 "\n");
 
 
-        CAdvisorData cAdvisorData = new CAdvisorData();
-        cAdvisorData.setBenchmarkString(cadvisorResult);
+        WorkLoadRecord workLoadRecord = new WorkLoadRecord();
+        workLoadRecord.setBenchmarkString(cadvisorResult);
 
-        cAdvisorRepository.insert(cAdvisorData);
+        cAdvisorRepository.insert(workLoadRecord);
 
         return "Success!";
     }

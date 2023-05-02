@@ -1,6 +1,6 @@
-package com.example.demo.biz;
+package com.rbpsc.ctp.biz.impl;
 
-import com.example.demo.biz.service.Hello;
+import com.rbpsc.ctp.biz.service.Hello;
 import org.springframework.stereotype.Service;
 
 /**

@@ -1,6 +1,6 @@
-package com.example.demo.entities;
+package com.rbpsc.ctp.api.entities;
 
-import com.example.demo.common.Constant.WLConstants;
+import com.rbpsc.ctp.common.Constant.WLConstants;
 import lombok.Data;
 
 import javax.validation.constraints.NotBlank;

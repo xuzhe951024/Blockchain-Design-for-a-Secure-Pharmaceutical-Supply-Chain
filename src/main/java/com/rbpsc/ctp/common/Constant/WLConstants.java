@@ -1,4 +1,4 @@
-package com.example.demo.common.Constant;
+package com.rbpsc.ctp.common.Constant;
 
 /**
  * @project: WorkLoader
@@ -9,4 +9,5 @@ package com.example.demo.common.Constant;
 public class WLConstants {
     public static final String NORMAL_CASE = "N";
     public static final String POISSON_CASE = "P";
+    public static final String MANGODB_COLLECTION_NAME_BENCHMARK = "benchmark";
 }

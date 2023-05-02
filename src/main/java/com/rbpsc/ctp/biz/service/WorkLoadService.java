@@ -1,6 +1,6 @@
-package com.example.demo.biz.service;
+package com.rbpsc.ctp.biz.service;
 
-import com.example.demo.entities.WorkLoadReq;
+import com.rbpsc.ctp.api.entities.WorkLoadReq;
 
 /**
  * @project: WorkLoader

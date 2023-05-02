@@ -1,9 +1,8 @@
-package com.example.demo.api.controllor;
+package com.rbpsc.ctp.api.controllor;
 
-import com.example.demo.biz.service.WorkLoadService;
-import com.example.demo.entities.WorkLoadReq;
+import com.rbpsc.ctp.biz.service.WorkLoadService;
+import com.rbpsc.ctp.api.entities.WorkLoadReq;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.http.MediaType;
 import org.springframework.stereotype.Service;
 import org.springframework.web.bind.annotation.*;

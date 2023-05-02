@@ -1,6 +1,6 @@
-package com.example.demo.api.controllor;
+package com.rbpsc.ctp.api.controllor;
 
-import com.example.demo.biz.service.Hello;
+import com.rbpsc.ctp.biz.service.Hello;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.MediaType;
 import org.springframework.web.bind.annotation.GetMapping;
