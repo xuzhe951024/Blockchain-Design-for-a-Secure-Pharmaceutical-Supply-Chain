@@ -21,7 +21,7 @@ import org.springframework.stereotype.Service;
 public class WorkLoadServiceImpl implements WorkLoadService {
 
     @Autowired
-    private WorkLoadRecordRepositoryImpl cAdvisorRepository;
+    private WorkLoadRecordRepositoryImpl workLoadRecordRepository;
 
     @Override
     public String generateWorkLoad(WorkLoadReq workLoadReq) throws InterruptedException {
@@ -79,7 +79,7 @@ public class WorkLoadServiceImpl implements WorkLoadService {
         String outputString = output.toString();
         workLoadRecord.setBenchmarkString(outputString);
 
-        cAdvisorRepository.insert(workLoadRecord);
+        workLoadRecordRepository.insertWorkLoadRecord(workLoadRecord);
         return outputString;
     }
 
@@ -101,7 +101,7 @@ public class WorkLoadServiceImpl implements WorkLoadService {
         WorkLoadRecord workLoadRecord = new WorkLoadRecord();
         workLoadRecord.setBenchmarkString(cadvisorResult);
 
-        cAdvisorRepository.insert(workLoadRecord);
+        workLoadRecordRepository.insertWorkLoadRecord(workLoadRecord);
 
         return "Success!";
     }

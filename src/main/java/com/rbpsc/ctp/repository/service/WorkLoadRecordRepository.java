@@ -1,6 +1,7 @@
 package com.rbpsc.ctp.repository.service;
 
 import com.rbpsc.ctp.api.entities.WorkLoadRecord;
+import com.rbpsc.ctp.repository.service.base.BaseRepositoryForMongoDB;
 
 /**
  * @project: WorkLoader
@@ -9,11 +10,11 @@ import com.rbpsc.ctp.api.entities.WorkLoadRecord;
  * @create: 2021/1/27
  **/
 public interface WorkLoadRecordRepository {
-    public void insert(WorkLoadRecord workLoadRecord);
+    void insertWorkLoadRecord(WorkLoadRecord workLoadRecord);
 
-    public void delete(WorkLoadRecord workLoadRecord);
+    void deleteWorkLoadRecord(WorkLoadRecord workLoadRecord);
 
-    public boolean update(String id, String field, String value);
+    boolean updateWorkLoadRecord(WorkLoadRecord workLoadRecord);
 
-    public WorkLoadRecord selectById(String id);
+    WorkLoadRecord selectWorkLoadRecordById(WorkLoadRecord workLoadRecord);
 }

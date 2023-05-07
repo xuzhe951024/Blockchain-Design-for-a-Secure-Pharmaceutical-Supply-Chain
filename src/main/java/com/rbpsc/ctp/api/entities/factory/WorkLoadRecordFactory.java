@@ -6,6 +6,8 @@ import com.rbpsc.ctp.api.entities.WorkLoadReq;
 import java.util.ArrayList;
 import java.util.UUID;
 
+import static com.rbpsc.ctp.api.entities.EntityConstants.BASE_ENTITY_ID_FIELD_NAME;
+
 /**
  * @project: WorkLoad
  * @description:
@@ -18,6 +20,7 @@ public class WorkLoadRecordFactory {
         workLoadRecord.setId(UUID.randomUUID().toString());
         workLoadRecord.setResponseTimeList(new ArrayList());
         workLoadRecord.setAverageResponseTime(0);
+        workLoadRecord.setIdFieldName(BASE_ENTITY_ID_FIELD_NAME);
         return workLoadRecord;
     }
 }

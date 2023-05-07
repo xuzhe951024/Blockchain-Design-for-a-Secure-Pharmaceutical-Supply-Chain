@@ -1,16 +1,10 @@
 package com.rbpsc.ctp.repository.impl;
 
-import com.mongodb.client.result.UpdateResult;
+import com.rbpsc.ctp.repository.impl.base.BaseRepositoryForMongoDBImpl;
 import com.rbpsc.ctp.repository.service.WorkLoadRecordRepository;
 import com.rbpsc.ctp.api.entities.WorkLoadRecord;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.data.mongodb.core.MongoTemplate;
-import org.springframework.data.mongodb.core.query.Criteria;
-import org.springframework.data.mongodb.core.query.Query;
-import org.springframework.data.mongodb.core.query.Update;
 import org.springframework.stereotype.Repository;
-
-import static com.rbpsc.ctp.common.Constant.WLConstants.MANGODB_COLLECTION_NAME_BENCHMARK;
 
 /**
  * @project: WorkLoader
@@ -21,31 +15,26 @@ import static com.rbpsc.ctp.common.Constant.WLConstants.MANGODB_COLLECTION_NAME_
 @Repository
 public class WorkLoadRecordRepositoryImpl implements WorkLoadRecordRepository {
     @Autowired
-    private MongoTemplate mongoTemplate;
+    private BaseRepositoryForMongoDBImpl baseRepositoryForMongoDB;
 
     @Override
-    public void insert(WorkLoadRecord workLoadRecord) {
-        mongoTemplate.insert(workLoadRecord, MANGODB_COLLECTION_NAME_BENCHMARK);
+    public void insertWorkLoadRecord(WorkLoadRecord workLoadRecord) {
+        baseRepositoryForMongoDB.save(workLoadRecord);
     }
 
     @Override
-    public void delete(WorkLoadRecord workLoadRecord) {
-        mongoTemplate.remove(workLoadRecord, MANGODB_COLLECTION_NAME_BENCHMARK);
+    public void deleteWorkLoadRecord(WorkLoadRecord workLoadRecord) {
+        baseRepositoryForMongoDB.deleteById(workLoadRecord.getId());
     }
 
     @Override
-    public boolean update(String id, String field, String value) {
-        Query query = new Query(Criteria.where("id").is(id));
-        Update update = new Update();
-        update.set(field, value);
-        UpdateResult updateResult = mongoTemplate.updateFirst(query, update, WorkLoadRecord.class, MANGODB_COLLECTION_NAME_BENCHMARK);
-        return updateResult.getMatchedCount() * updateResult.getModifiedCount() > 0;
+    public boolean updateWorkLoadRecord(WorkLoadRecord workLoadRecord) {
+        return baseRepositoryForMongoDB.update(workLoadRecord);
     }
 
     @Override
-    public WorkLoadRecord selectById(String id) {
-        Query query = new Query(Criteria.where("id").is(id));
-        return mongoTemplate.findOne(query, WorkLoadRecord.class, MANGODB_COLLECTION_NAME_BENCHMARK);
+    public WorkLoadRecord selectWorkLoadRecordById(WorkLoadRecord workLoadRecord) {
+        return (WorkLoadRecord) baseRepositoryForMongoDB.findById(workLoadRecord.getId()).orElse(null);
     }
 
 }

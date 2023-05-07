@@ -6,7 +6,6 @@ import com.rbpsc.ctp.api.entities.factory.WorkLoadRecordFactory;
 import com.rbpsc.ctp.biz.service.WorkLoadService;
 import com.rbpsc.ctp.common.Constant.WLConstants;
 import com.rbpsc.ctp.repository.service.WorkLoadRecordRepository;
-import org.aspectj.apache.bcel.classfile.Constant;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
@@ -40,18 +39,18 @@ class CTPApplicationTests {
         workLoadReq.setNormalOrPoisson(WLConstants.NORMAL_CASE);
 
         WorkLoadRecord workLoadRecord = WorkLoadRecordFactory.createWorkLoadRecord(workLoadReq);
-        workLoadRecordRepository.insert(workLoadRecord);
+        workLoadRecordRepository.insertWorkLoadRecord(workLoadRecord);
 
-        WorkLoadRecord workLoadRecordSelected = workLoadRecordRepository.selectById(workLoadRecord.getId());
+        WorkLoadRecord workLoadRecordSelected = workLoadRecordRepository.selectWorkLoadRecordById(workLoadRecord);
         assert workLoadRecordSelected.getId().equals(workLoadRecord.getId());
 
         workLoadRecordSelected.addResponseTime(1);
-        assert workLoadRecordRepository.update(workLoadRecordSelected.getId(), "averageResponseTime", "1");
-        WorkLoadRecord workLoadRecordUpdated = workLoadRecordRepository.selectById(workLoadRecord.getId());
+        assert workLoadRecordRepository.updateWorkLoadRecord(workLoadRecordSelected);
+        WorkLoadRecord workLoadRecordUpdated = workLoadRecordRepository.selectWorkLoadRecordById(workLoadRecord);
         assert workLoadRecordUpdated.getAverageResponseTime() == 1;
 
-        workLoadRecordRepository.delete(workLoadRecordUpdated);
-        WorkLoadRecord workLoadRecordDeleted = workLoadRecordRepository.selectById(workLoadRecord.getId());
+        workLoadRecordRepository.deleteWorkLoadRecord(workLoadRecordUpdated);
+        WorkLoadRecord workLoadRecordDeleted = workLoadRecordRepository.selectWorkLoadRecordById(workLoadRecord);
         assert workLoadRecordDeleted == null;
 
     }

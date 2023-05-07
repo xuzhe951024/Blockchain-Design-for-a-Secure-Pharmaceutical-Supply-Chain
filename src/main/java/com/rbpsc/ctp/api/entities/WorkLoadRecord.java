@@ -1,5 +1,6 @@
 package com.rbpsc.ctp.api.entities;
 
+import com.rbpsc.ctp.api.entities.base.BaseEntity;
 import lombok.Data;
 import org.springframework.data.mongodb.core.mapping.Document;
 
@@ -15,10 +16,7 @@ import java.util.List;
  **/
 @Document
 @Data
-public class WorkLoadRecord {
-    @NotBlank
-    private String id;
-
+public class WorkLoadRecord extends BaseEntity<String> {
     @NotNull
     private WorkLoadReq workLoadReq;
 
