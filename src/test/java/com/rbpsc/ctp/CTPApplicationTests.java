@@ -1,8 +1,8 @@
 package com.rbpsc.ctp;
 
-import com.rbpsc.ctp.api.entities.WorkLoadRecord;
-import com.rbpsc.ctp.api.entities.WorkLoadReq;
-import com.rbpsc.ctp.api.entities.factory.WorkLoadRecordFactory;
+import com.rbpsc.ctp.api.entities.work_request.WorkLoadRecord;
+import com.rbpsc.ctp.api.entities.work_request.WorkLoadReq;
+import com.rbpsc.ctp.api.entities.factory.EntityFactory;
 import com.rbpsc.ctp.biz.service.WorkLoadService;
 import com.rbpsc.ctp.common.Constant.WLConstants;
 import com.rbpsc.ctp.repository.service.WorkLoadRecordRepository;
@@ -38,7 +38,7 @@ class CTPApplicationTests {
         workLoadReq.setMu(1);
         workLoadReq.setNormalOrPoisson(WLConstants.NORMAL_CASE);
 
-        WorkLoadRecord workLoadRecord = WorkLoadRecordFactory.createWorkLoadRecord(workLoadReq);
+        WorkLoadRecord workLoadRecord = EntityFactory.createWorkLoadRecord();
         workLoadRecordRepository.insertWorkLoadRecord(workLoadRecord);
 
         WorkLoadRecord workLoadRecordSelected = workLoadRecordRepository.selectWorkLoadRecordById(workLoadRecord);

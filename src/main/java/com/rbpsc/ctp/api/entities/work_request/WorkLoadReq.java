@@ -1,4 +1,4 @@
-package com.rbpsc.ctp.api.entities;
+package com.rbpsc.ctp.api.entities.work_request;
 
 import com.rbpsc.ctp.common.Constant.WLConstants;
 import lombok.Data;

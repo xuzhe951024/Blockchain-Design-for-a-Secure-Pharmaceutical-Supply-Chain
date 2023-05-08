@@ -1,9 +1,9 @@
 package com.rbpsc.ctp.biz.impl;
 
-import com.rbpsc.ctp.api.entities.factory.WorkLoadRecordFactory;
+import com.rbpsc.ctp.api.entities.factory.EntityFactory;
 import com.rbpsc.ctp.biz.service.WorkLoadService;
-import com.rbpsc.ctp.api.entities.WorkLoadRecord;
-import com.rbpsc.ctp.api.entities.WorkLoadReq;
+import com.rbpsc.ctp.api.entities.work_request.WorkLoadRecord;
+import com.rbpsc.ctp.api.entities.work_request.WorkLoadReq;
 import com.github.kevinsawicki.http.HttpRequest;
 import com.rbpsc.ctp.repository.impl.WorkLoadRecordRepositoryImpl;
 import lombok.extern.slf4j.Slf4j;
@@ -34,7 +34,7 @@ public class WorkLoadServiceImpl implements WorkLoadService {
         Long requestEndTime;
         Long requestAllTime = 0L;
         Long requestTimeConsume;
-        WorkLoadRecord workLoadRecord = WorkLoadRecordFactory.createWorkLoadRecord(workLoadReq);
+        WorkLoadRecord workLoadRecord = EntityFactory.createWorkLoadRecord();
 
         line = "------------------------------------------------------------Start " + caseType + " WorkLoad--------------------------------------------------------------------";
         output.append(line);

@@ -1,7 +1,7 @@
 package com.rbpsc.ctp.api.controllor;
 
 import com.rbpsc.ctp.biz.service.WorkLoadService;
-import com.rbpsc.ctp.api.entities.WorkLoadReq;
+import com.rbpsc.ctp.api.entities.work_request.WorkLoadReq;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.MediaType;
 import org.springframework.stereotype.Service;

@@ -1,10 +1,10 @@
-package com.rbpsc.ctp.api.entities;
+package com.rbpsc.ctp.api.entities.work_request;
 
 import com.rbpsc.ctp.api.entities.base.BaseEntity;
 import lombok.Data;
+import lombok.EqualsAndHashCode;
 import org.springframework.data.mongodb.core.mapping.Document;
 
-import javax.validation.constraints.NotBlank;
 import javax.validation.constraints.NotNull;
 import java.util.List;
 
@@ -16,12 +16,13 @@ import java.util.List;
  **/
 @Document
 @Data
+@EqualsAndHashCode(callSuper = true)
 public class WorkLoadRecord extends BaseEntity<String> {
     @NotNull
     private WorkLoadReq workLoadReq;
 
     @NotNull
-    private List responseTimeList;
+    private List<Double> responseTimeList;
 
     @NotNull
     private double averageResponseTime;

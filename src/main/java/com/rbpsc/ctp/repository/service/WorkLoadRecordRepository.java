@@ -1,7 +1,6 @@
 package com.rbpsc.ctp.repository.service;
 
-import com.rbpsc.ctp.api.entities.WorkLoadRecord;
-import com.rbpsc.ctp.repository.service.base.BaseRepositoryForMongoDB;
+import com.rbpsc.ctp.api.entities.work_request.WorkLoadRecord;
 
 /**
  * @project: WorkLoader

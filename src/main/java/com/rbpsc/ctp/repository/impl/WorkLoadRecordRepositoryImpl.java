@@ -2,7 +2,7 @@ package com.rbpsc.ctp.repository.impl;
 
 import com.rbpsc.ctp.repository.impl.base.BaseRepositoryForMongoDBImpl;
 import com.rbpsc.ctp.repository.service.WorkLoadRecordRepository;
-import com.rbpsc.ctp.api.entities.WorkLoadRecord;
+import com.rbpsc.ctp.api.entities.work_request.WorkLoadRecord;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Repository;
 
