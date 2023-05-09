@@ -3,17 +3,27 @@ package com.rbpsc.ctp.api.entities.supplychain.drug;
 import com.rbpsc.ctp.api.entities.supplychain.SupplyChainBaseEntity;
 import com.rbpsc.ctp.api.entities.dto.OperationVO;
 import com.rbpsc.ctp.api.entities.supplychain.roles.Consumer;
+import com.rbpsc.ctp.api.entities.supplychain.roles.RoleBase;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
 import org.springframework.data.mongodb.core.mapping.Document;
 
-import java.util.Queue;
+import java.util.List;
 
 @Document
 @Data
 @EqualsAndHashCode(callSuper = true)
 public class DrugLifeCycle extends SupplyChainBaseEntity {
     DrugInfo drug;
-    Queue<OperationVO> operationVOList;
+    List<OperationVO<RoleBase>> operationVOQueue;
     Consumer expectedReceiver;
+
+    public OperationVO<RoleBase> pollOperationVOQ(){
+        OperationVO<RoleBase> operationVO = this.operationVOQueue.get(0);
+        return operationVOQueue.remove(0);
+    }
+
+    public OperationVO<RoleBase> peakOperationVOQ(){
+        return this.operationVOQueue.get(0);
+    }
 }

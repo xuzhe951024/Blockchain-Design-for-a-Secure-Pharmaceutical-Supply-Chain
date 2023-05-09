@@ -9,7 +9,6 @@ import org.springframework.data.mongodb.core.mapping.Document;
 @Data
 @EqualsAndHashCode(callSuper = true)
 public class DrugInfo extends SupplyChainBaseEntity {
-    String drugBatchId;
     String drugTagTagId;
     String drugName;
 }

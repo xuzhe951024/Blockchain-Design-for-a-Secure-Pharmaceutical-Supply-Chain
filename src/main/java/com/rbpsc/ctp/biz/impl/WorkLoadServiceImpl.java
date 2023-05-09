@@ -1,6 +1,6 @@
 package com.rbpsc.ctp.biz.impl;
 
-import com.rbpsc.ctp.api.entities.factory.EntityFactory;
+import com.rbpsc.ctp.api.entities.factories.DataEntityFactory;
 import com.rbpsc.ctp.biz.service.WorkLoadService;
 import com.rbpsc.ctp.api.entities.work_request.WorkLoadRecord;
 import com.rbpsc.ctp.api.entities.work_request.WorkLoadReq;
@@ -34,7 +34,7 @@ public class WorkLoadServiceImpl implements WorkLoadService {
         Long requestEndTime;
         Long requestAllTime = 0L;
         Long requestTimeConsume;
-        WorkLoadRecord workLoadRecord = EntityFactory.createWorkLoadRecord();
+        WorkLoadRecord workLoadRecord = DataEntityFactory.createWorkLoadRecord();
 
         line = "------------------------------------------------------------Start " + caseType + " WorkLoad--------------------------------------------------------------------";
         output.append(line);

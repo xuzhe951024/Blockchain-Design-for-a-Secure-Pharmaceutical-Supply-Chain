@@ -5,4 +5,8 @@ public class EntityConstants {
     public static final int ATTACK_TYPE_CONFIDENTIALITY = 0;
     public static final int ATTACK_TYPE_INTEGRITY = 1;
     public static final int ATTACK_TYPE_AVAILABILITY = 2;
+
+    public static final String ROLE_NAME_CONSUMER = "consumer";
+    public static final String ROLE_NAME_INSTITUTION = "institution";
+    public static final String ROLE_NAME_ATTACKER = "attacker";
 }
