@@ -26,4 +26,12 @@ public class DrugLifeCycle extends SupplyChainBaseEntity {
     public OperationVO<RoleBase> peakOperationVOQ(){
         return this.operationVOQueue.get(0);
     }
+
+    public void addOperationVO(OperationVO<RoleBase> operationVO){
+        this.operationVOQueue.add(operationVO);
+    }
+
+    public void setTagTagId(String tagTagId){
+        this.drug.setDrugTagTagId(tagTagId);
+    }
 }

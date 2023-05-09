@@ -3,7 +3,9 @@ import com.mongodb.bulk.BulkWriteResult;
 
 import com.mongodb.client.result.UpdateResult;
 import com.rbpsc.ctp.api.entities.base.BaseEntity;
+import com.rbpsc.ctp.api.entities.work_request.WorkLoadRecord;
 import com.rbpsc.ctp.repository.service.base.BaseRepositoryForMongoDB;
+import com.rbpsc.ctp.repository.service.base.BaseWorkLoadRecordRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageImpl;
@@ -23,30 +25,30 @@ import java.util.List;
 import java.util.Optional;
 
 @Repository
-public class BaseRepositoryForMongoDBImpl<T extends BaseEntity<ID>, ID> {
+public class BaseWorkLoadRecordRepositoryForMongoDBImpl {
     @Autowired
     private MongoTemplate mongoTemplate;
 
     @Autowired
-    private BaseRepositoryForMongoDB<T, ID> baseRepositoryForMongoDB;
+    private BaseWorkLoadRecordRepository baseRepositoryForMongoDB;
 
-    public T save(T entity) {
+    public WorkLoadRecord save(WorkLoadRecord entity) {
         return baseRepositoryForMongoDB.save(entity);
     }
 
-    public List<T> findAll() {
+    public List<WorkLoadRecord> findAll() {
         return baseRepositoryForMongoDB.findAll();
     }
 
-    public Optional<T> findById(ID id) {
+    public Optional<WorkLoadRecord> findById(String id) {
         return baseRepositoryForMongoDB.findById(id);
     }
 
-    public void deleteById(ID id) {
+    public void deleteById(String id) {
         baseRepositoryForMongoDB.deleteById(id);
     }
 
-    public List<T> findAllByExample(T entity) {
+    public List<WorkLoadRecord> findAllByExample(WorkLoadRecord entity) {
         Query query = new Query();
         for (Field field : entity.getClass().getDeclaredFields()) {
 
@@ -65,10 +67,10 @@ public class BaseRepositoryForMongoDBImpl<T extends BaseEntity<ID>, ID> {
                 query.addCriteria(Criteria.where(field.getName()).is(value));
             }
         }
-        return mongoTemplate.find(query, (Class<T>) entity.getClass());
+        return mongoTemplate.find(query, (Class<WorkLoadRecord>) entity.getClass());
     }
 
-    public boolean update(T entity) {
+    public boolean update(WorkLoadRecord entity) {
         Query query = new Query(Criteria.where(entity.getIdFieldName()).is(entity.getId()));
         Update update = new Update();
         for (Field field : entity.getClass().getDeclaredFields()) {
@@ -94,13 +96,13 @@ public class BaseRepositoryForMongoDBImpl<T extends BaseEntity<ID>, ID> {
         return updateResult.getModifiedCount() * updateResult.getMatchedCount() != 0;
     }
 
-    public BulkWriteResult saveAll(List<T> entities) {
-        return mongoTemplate.bulkOps(BulkOperations.BulkMode.UNORDERED, (Class<T>) entities.get(0).getClass()).insert(entities).execute();
+    public BulkWriteResult saveAll(List<WorkLoadRecord> entities) {
+        return mongoTemplate.bulkOps(BulkOperations.BulkMode.UNORDERED, (Class<WorkLoadRecord>) entities.get(0).getClass()).insert(entities).execute();
     }
 
-    public Page<T> findAll(Pageable pageable, Class<T> entityClass) {
+    public Page<WorkLoadRecord> findAll(Pageable pageable, Class<WorkLoadRecord> entityClass) {
         long total = baseRepositoryForMongoDB.count();
-        List<T> entities = baseRepositoryForMongoDB.findAll(pageable).getContent();
+        List<WorkLoadRecord> entities = baseRepositoryForMongoDB.findAll(pageable).getContent();
         return new PageImpl<>(entities, pageable, total);
     }
 }

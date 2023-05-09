@@ -1,6 +1,6 @@
 package com.rbpsc.ctp.api.entities.work_request;
 
-import com.rbpsc.ctp.common.Constant.WLConstants;
+import com.rbpsc.ctp.common.Constant.ServiceConstants;
 import lombok.Data;
 
 import javax.validation.constraints.NotBlank;
@@ -33,6 +33,6 @@ public class WorkLoadReq {
     String normalOrPoisson;
 
     public boolean isNormalCase(){
-        return normalOrPoisson.equals(WLConstants.NORMAL_CASE);
+        return normalOrPoisson.equals(ServiceConstants.NORMAL_CASE);
     }
 }

@@ -45,6 +45,7 @@ public class DataEntityFactory {
 
     public static void setAttackModelBase(AttackModelBase attackModelBaseSource, AttackModelBase attackModelBaseTarget){
         attackModelBaseTarget.setTargetDrugId(attackModelBaseSource.getTargetDrugId());
+        attackModelBaseTarget.setRoleName(ROLE_NAME_ATTACKER);
     }
 
     public static AttackAvailability createAttackAvailability(AttackModelBase attackModelBase) {
