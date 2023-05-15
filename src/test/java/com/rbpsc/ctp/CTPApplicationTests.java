@@ -1,6 +1,8 @@
 package com.rbpsc.ctp;
 
+import com.fasterxml.jackson.databind.ObjectMapper;
 import com.rbpsc.ctp.api.entities.dto.OperationVO;
+import com.rbpsc.ctp.api.entities.dto.response.DrugLifeCycleResponse;
 import com.rbpsc.ctp.api.entities.dto.webview.DrugLifeCycleView;
 import com.rbpsc.ctp.api.entities.supplychain.drug.DrugInfo;
 import com.rbpsc.ctp.api.entities.supplychain.drug.DrugLifeCycle;
@@ -13,17 +15,28 @@ import com.rbpsc.ctp.api.entities.factories.DataEntityFactory;
 import com.rbpsc.ctp.biz.service.WorkLoadService;
 import com.rbpsc.ctp.common.Constant.ServiceConstants;
 import com.rbpsc.ctp.common.utiles.TestDataGenerator;
+import com.rbpsc.ctp.common.utiles.WebClientUtil;
 import com.rbpsc.ctp.repository.service.WorkLoadRecordRepository;
+import lombok.extern.slf4j.Slf4j;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
+import org.springframework.http.MediaType;
+import org.springframework.http.ResponseEntity;
+import org.springframework.util.LinkedMultiValueMap;
+import org.springframework.util.MultiValueMap;
 import org.springframework.util.StringUtils;
+import org.springframework.web.reactive.function.client.WebClient;
+import reactor.core.publisher.Mono;
 
 import java.util.ArrayList;
 import java.util.List;
 import java.util.UUID;
 
+import static com.rbpsc.ctp.common.Constant.ServiceConstants.*;
+
 @SpringBootTest
+@Slf4j
 class CTPApplicationTests {
 
     @Autowired
@@ -102,6 +115,46 @@ class CTPApplicationTests {
         assert consumerReceivedList.size() == drugLifeCycleList.size() - 5 :
                 "consumerReceiveListSize: " + consumerReceivedList.size() +
                 "\tdrugLifeCycleListSize: " + drugLifeCycleList.size();
+    }
+
+    @Test
+    void webClientAndApiToggleTest() throws InterruptedException {
+        WebClientUtil webClientUtil = new WebClientUtil();
+
+        Mono<DrugLifeCycleResponse> responseMono = webClientUtil.postWithParams(
+                "http://127.0.0.1:8090/v1/drugLifeCycle/drugOrderStep/toggle",
+                false,
+                Boolean.class,
+                DrugLifeCycleResponse.class);
+
+        responseMono.subscribe(result -> {
+            assert result.isSuccess();
+        }, error -> {
+            error.printStackTrace();
+        });
+//        Thread.sleep(50);
+
+        webClientUtil.getWithoutParams("http://127.0.0.1:8090/v1/drugLifeCycle/drugOrderStep/checkAvailable"
+                        ,DrugLifeCycleResponse.class)
+                .subscribe(resultCheckAvailable -> {
+                    assert resultCheckAvailable.getResponseCode() == RESPONSE_CODE_FAIL_SERVICE_DISABLED;
+                }, error -> {
+                    error.printStackTrace();
+                });
+//        Thread.sleep(50);
+
+        webClientUtil.postWithParams(
+                "http://127.0.0.1:8090/v1/drugLifeCycle/drugOrderStep/toggle",
+                true,
+                Boolean.class,
+                DrugLifeCycleResponse.class)
+                .subscribe(result -> {
+                    assert result.isSuccess();
+                }, error -> {
+                    error.printStackTrace();
+                });
+
+        Thread.sleep(1000);
     }
 
 }

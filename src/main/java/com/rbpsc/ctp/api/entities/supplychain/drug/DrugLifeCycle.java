@@ -6,6 +6,7 @@ import com.rbpsc.ctp.api.entities.supplychain.roles.Consumer;
 import com.rbpsc.ctp.api.entities.supplychain.roles.RoleBase;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
+import lombok.ToString;
 import org.springframework.data.mongodb.core.mapping.Document;
 import org.springframework.util.StringUtils;
 
@@ -14,6 +15,7 @@ import java.util.List;
 @Document
 @Data
 @EqualsAndHashCode(callSuper = true)
+@ToString(callSuper = true)
 public class DrugLifeCycle extends SupplyChainBaseEntity {
     DrugInfo drug;
     List<OperationVO<RoleBase>> operationVOQueue;

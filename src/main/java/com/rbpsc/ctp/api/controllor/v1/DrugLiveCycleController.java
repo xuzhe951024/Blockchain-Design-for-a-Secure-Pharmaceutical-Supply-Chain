@@ -1,6 +1,5 @@
 package com.rbpsc.ctp.api.controllor.v1;
 
-import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.rbpsc.ctp.api.entities.dto.OperationVO;
 import com.rbpsc.ctp.api.entities.dto.response.DrugLifeCycleResponse;
@@ -35,22 +34,26 @@ public class DrugLiveCycleController {
     @GetMapping(value = "/checkAvailable")
     public DrugLifeCycleResponse checkAvailable(){
         DrugLifeCycleResponse response = new DrugLifeCycleResponse();
+
         if (!API_ENABLED.get()){
             response.setResponseWithCode(RESPONSE_CODE_FAIL_SERVICE_DISABLED);
             response.setDescribe("Service may be suffering from DDoS attack!");
             return response;
         }
+
         return response;
     }
 
-    @GetMapping(value = "/toggle")
-    public String toggle(){
-        API_ENABLED.set(!API_ENABLED.get());
-        return "API is now " + (API_ENABLED.get() ? "enabled" : "disabled") + ".";
+    @PostMapping(value = "/toggle")
+    public DrugLifeCycleResponse toggle(@RequestBody boolean enable){
+        DrugLifeCycleResponse response = new DrugLifeCycleResponse();
+        API_ENABLED.set(enable);
+        response.setDescribe("API is now " + (API_ENABLED.get() ? "enabled" : "disabled") + ".");
+        return response;
     }
 
     @PostMapping("/manufacture")
-    public DrugLifeCycleResponse nextStepManufacture(@RequestBody DrugLifeCycle drugLifeCycle) throws JsonProcessingException {
+    public DrugLifeCycleResponse nextStepManufacture(@RequestBody DrugLifeCycle drugLifeCycle) {
 
         DrugLifeCycleResponse response = checkBeforeServe(drugLifeCycle);
 
@@ -66,7 +69,7 @@ public class DrugLiveCycleController {
     }
 
     @PostMapping("/distributor")
-    public DrugLifeCycleResponse nextStepDistributor(@RequestBody DrugLifeCycle drugLifeCycle) throws JsonProcessingException {
+    public DrugLifeCycleResponse nextStepDistributor(@RequestBody DrugLifeCycle drugLifeCycle) {
 
         DrugLifeCycleResponse response = checkBeforeServe(drugLifeCycle);
 
@@ -85,7 +88,7 @@ public class DrugLiveCycleController {
     }
 
     @PostMapping("/consumer")
-    public DrugLifeCycleResponse nextStepConsumer(@RequestBody DrugLifeCycle drugLifeCycle) throws JsonProcessingException {
+    public DrugLifeCycleResponse nextStepConsumer(@RequestBody DrugLifeCycle drugLifeCycle) {
 
         DrugLifeCycleResponse response = checkBeforeServe(drugLifeCycle);
 
@@ -132,7 +135,7 @@ public class DrugLiveCycleController {
         return response;
     }
 
-    private DrugLifeCycleResponse sendToNextStep(DrugLifeCycle drugLifeCycle) throws JsonProcessingException {
+    private DrugLifeCycleResponse sendToNextStep(DrugLifeCycle drugLifeCycle) {
         DrugLifeCycleResponse response = new DrugLifeCycleResponse();
 
         OperationVO<RoleBase> operationVO = drugLifeCycle.peakOperationVOQ();
@@ -147,12 +150,11 @@ public class DrugLiveCycleController {
 
         WebClientUtil webClientUtil = new WebClientUtil();
 
-        MultiValueMap<String, String> param = new LinkedMultiValueMap<>();
-        param.add(DRUG_LIFECYCLE_REQUEST_PARAM_NAMES, new ObjectMapper().writeValueAsString(drugLifeCycle));
+        Mono<DrugLifeCycleResponse> responseMono = webClientUtil.postWithParams(operationVO.getOperation().getAddress(), drugLifeCycle, DrugLifeCycle.class, DrugLifeCycleResponse.class);
 
-        Mono<String> responseMono = webClientUtil.postWithParams(operationVO.getOperation().getAddress(), param, String.class);
-
-        responseMono.subscribe(log::info, error -> {
+        responseMono.subscribe(result -> {
+            log.info(result.toString());
+        }, error -> {
             throw new RuntimeException(error);
         });
 

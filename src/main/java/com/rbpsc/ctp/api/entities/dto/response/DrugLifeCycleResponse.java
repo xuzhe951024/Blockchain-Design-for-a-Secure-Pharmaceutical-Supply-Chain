@@ -4,12 +4,15 @@ import com.rbpsc.ctp.api.entities.base.BaseResponse;
 import com.rbpsc.ctp.api.entities.supplychain.drug.DrugLifeCycle;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
+import lombok.ToString;
+import org.springframework.data.mongodb.core.mapping.Document;
 
 import static com.rbpsc.ctp.common.Constant.ServiceConstants.RESPONSE_CODE_MESSAGE_MAP;
 import static com.rbpsc.ctp.common.Constant.ServiceConstants.RESPONSE_CODE_SUCCESS;
 
 @Data
 @EqualsAndHashCode(callSuper = true)
+@ToString(callSuper = true)
 public class DrugLifeCycleResponse extends BaseResponse<String> {
     public DrugLifeCycleResponse(){
         this.setResponseWithCode(RESPONSE_CODE_SUCCESS);
