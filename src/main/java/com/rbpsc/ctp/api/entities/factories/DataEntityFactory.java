@@ -102,7 +102,7 @@ public class DataEntityFactory {
     public static Consumer createConsumer(int dose, String address){
         Consumer consumer = new Consumer();
         setId(consumer);
-        consumer.setDose(dose);
+        consumer.setExpectedDose(dose);
         consumer.setAddress(address);
         consumer.setRoleName(ROLE_NAME_CONSUMER);
         return consumer;

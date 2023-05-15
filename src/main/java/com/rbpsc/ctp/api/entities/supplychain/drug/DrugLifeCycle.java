@@ -7,6 +7,7 @@ import com.rbpsc.ctp.api.entities.supplychain.roles.RoleBase;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
 import org.springframework.data.mongodb.core.mapping.Document;
+import org.springframework.util.StringUtils;
 
 import java.util.List;
 
@@ -27,11 +28,19 @@ public class DrugLifeCycle extends SupplyChainBaseEntity {
         return this.operationVOQueue.get(0);
     }
 
-    public void addOperationVO(OperationVO<RoleBase> operationVO){
+    public void addOperation(OperationVO<RoleBase> operationVO){
         this.operationVOQueue.add(operationVO);
     }
 
     public void setTagTagId(String tagTagId){
         this.drug.setDrugTagTagId(tagTagId);
+    }
+
+    public int getOperationQueueSize(){
+        return this.operationVOQueue.size();
+    }
+
+    public boolean isProduced(){
+        return StringUtils.isEmpty(drug.getDrugTagTagId());
     }
 }

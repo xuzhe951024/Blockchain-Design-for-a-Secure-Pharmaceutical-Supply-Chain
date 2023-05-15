@@ -8,5 +8,7 @@ package com.rbpsc.ctp.biz.service;
  **/
 public interface Hello {
     public String say();
+
+    public String refuse();
 }
 

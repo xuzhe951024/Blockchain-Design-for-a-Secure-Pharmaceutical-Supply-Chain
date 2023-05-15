@@ -15,4 +15,9 @@ public class HelloWL implements Hello {
     public String say() {
         return "helloWL";
     }
+
+    @Override
+    public String refuse() {
+        return "NO!!";
+    }
 }

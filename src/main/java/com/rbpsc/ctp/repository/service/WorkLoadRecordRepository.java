@@ -1,6 +1,7 @@
 package com.rbpsc.ctp.repository.service;
 
 import com.rbpsc.ctp.api.entities.work_request.WorkLoadRecord;
+import org.springframework.stereotype.Repository;
 
 /**
  * @project: WorkLoader
@@ -8,6 +9,7 @@ import com.rbpsc.ctp.api.entities.work_request.WorkLoadRecord;
  * @author: zhexu
  * @create: 2021/1/27
  **/
+@Repository
 public interface WorkLoadRecordRepository {
     void insertWorkLoadRecord(WorkLoadRecord workLoadRecord);
 

@@ -24,8 +24,6 @@ import java.util.Optional;
 
 @Repository
 public class BaseDrugInfoRepositoryForMongoDBImpl {
-    @Autowired
-    private MongoTemplate mongoTemplate;
 
     @Autowired
     private BaseDrugInfoRepository baseRepositoryForMongoDB;

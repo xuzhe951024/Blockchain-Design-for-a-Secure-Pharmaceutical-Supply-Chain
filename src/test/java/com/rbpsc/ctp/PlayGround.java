@@ -1,5 +1,8 @@
 package com.rbpsc.ctp;
 
+import com.rbpsc.ctp.api.entities.base.BaseEntity;
+import com.rbpsc.ctp.api.entities.supplychain.roles.Consumer;
+
 import java.util.ArrayDeque;
 import java.util.Arrays;
 import java.util.Queue;
@@ -13,5 +16,9 @@ public class PlayGround {
         System.out.printf("queue = %s%n", queue);
 
         System.out.println("queue class name: " + queue.getClass().getName());
+
+        Consumer consumer = new Consumer();
+        BaseEntity<String> entity = (BaseEntity<String>) consumer;
+        System.out.println("entity class:" + entity.getClass().getName());
     }
 }

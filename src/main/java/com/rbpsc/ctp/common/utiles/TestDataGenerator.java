@@ -13,7 +13,6 @@ import com.rbpsc.ctp.api.entities.supplychain.operations.attack.AttackModelBase;
 import com.rbpsc.ctp.api.entities.supplychain.roles.Consumer;
 import com.rbpsc.ctp.api.entities.supplychain.roles.Institution;
 import com.rbpsc.ctp.api.entities.supplychain.roles.RoleBase;
-import org.springframework.beans.factory.annotation.Value;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -23,8 +22,8 @@ public class TestDataGenerator {
     public static DrugLifeCycleView generateDrugLifeCycleViewRandom(){
         ExperimentConfig experimentConfig = new ExperimentConfig();
         experimentConfig.setExperimentName("TestPage");
-        experimentConfig.setConsumerCount(3);
-        experimentConfig.setDoesForEachConsumer(1);
+        experimentConfig.setConsumerCount(10);
+        experimentConfig.setDoesForEachConsumer(2);
         experimentConfig.setDrugName("Covid-Vaccine");
         experimentConfig.setDistributorsForEachLevel(new ArrayList<Integer>(){{
             add(1);
@@ -78,9 +77,9 @@ public class TestDataGenerator {
         operationVOA.setOperationType(AttackAvailability.class.getName());
         operationVOA.setOperation(attackAvailability);
 
-        drugLifeCycleList.get(0).addOperationVO(operationVOC);
-        drugLifeCycleList.get(1).addOperationVO(operationVOI);
-        drugLifeCycleList.get(2).addOperationVO(operationVOA);
+        drugLifeCycleList.get(0).addOperation(operationVOC);
+        drugLifeCycleList.get(1).addOperation(operationVOI);
+        drugLifeCycleList.get(drugLifeCycleList.size() - 3).addOperation(operationVOA);
 
         drugLifeCycleView.setDrugLifeCycleList(drugLifeCycleList);
         return drugLifeCycleView;

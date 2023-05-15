@@ -1,7 +1,12 @@
 package com.rbpsc.ctp;
 
+import com.rbpsc.ctp.api.entities.dto.OperationVO;
 import com.rbpsc.ctp.api.entities.dto.webview.DrugLifeCycleView;
+import com.rbpsc.ctp.api.entities.supplychain.drug.DrugInfo;
 import com.rbpsc.ctp.api.entities.supplychain.drug.DrugLifeCycle;
+import com.rbpsc.ctp.api.entities.supplychain.operations.DrugOrderStep;
+import com.rbpsc.ctp.api.entities.supplychain.operations.attack.AttackAvailability;
+import com.rbpsc.ctp.api.entities.supplychain.roles.RoleBase;
 import com.rbpsc.ctp.api.entities.work_request.WorkLoadRecord;
 import com.rbpsc.ctp.api.entities.work_request.WorkLoadReq;
 import com.rbpsc.ctp.api.entities.factories.DataEntityFactory;
@@ -12,7 +17,9 @@ import com.rbpsc.ctp.repository.service.WorkLoadRecordRepository;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
+import org.springframework.util.StringUtils;
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.UUID;
 
@@ -67,10 +74,34 @@ class CTPApplicationTests {
 
         List<DrugLifeCycle> drugLifeCycleList = drugLifeCycleView.getDrugLifeCycleList();
 
+        List<DrugInfo> consumerReceivedList = new ArrayList<>();
+
+        lifeCycleLoop:
         for (DrugLifeCycle drugLifeCycle :
                 drugLifeCycleList) {
-            drugLifeCycle.setTagTagId(UUID.randomUUID().toString());
+            while (drugLifeCycle.getOperationQueueSize() > 0){
+                if (StringUtils.isEmpty(drugLifeCycle.getDrug().getDrugTagTagId())){
+                    drugLifeCycle.setTagTagId(UUID.randomUUID().toString());
+                }
+
+                OperationVO<RoleBase> operationVO = drugLifeCycle.pollOperationVOQ();
+
+                if (!DrugOrderStep.class.getName().equals(operationVO.getOperationType())){
+                    if (AttackAvailability.class.getName().equals(operationVO.getOperationType())){
+                        break lifeCycleLoop;
+                    }
+                    break;
+                }
+
+                if (0 == drugLifeCycle.getOperationQueueSize()){
+                    consumerReceivedList.add(drugLifeCycle.getDrug());
+                }
+            }
         }
+
+        assert consumerReceivedList.size() == drugLifeCycleList.size() - 5 :
+                "consumerReceiveListSize: " + consumerReceivedList.size() +
+                "\tdrugLifeCycleListSize: " + drugLifeCycleList.size();
     }
 
 }

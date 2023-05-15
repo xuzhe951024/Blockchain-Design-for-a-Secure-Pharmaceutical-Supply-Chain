@@ -26,8 +26,9 @@ import java.util.Optional;
 
 @Repository
 public class BaseWorkLoadRecordRepositoryForMongoDBImpl {
+
     @Autowired
-    private MongoTemplate mongoTemplate;
+    private MongoDBUtil<String, WorkLoadRecord> mongoDBUtil;
 
     @Autowired
     private BaseWorkLoadRecordRepository baseRepositoryForMongoDB;
@@ -49,55 +50,15 @@ public class BaseWorkLoadRecordRepositoryForMongoDBImpl {
     }
 
     public List<WorkLoadRecord> findAllByExample(WorkLoadRecord entity) {
-        Query query = new Query();
-        for (Field field : entity.getClass().getDeclaredFields()) {
-
-            boolean isAccessible = field.isAccessible();
-            if (!isAccessible) {
-                field.setAccessible(true);
-            }
-
-            Object value = ReflectionUtils.getField(field, entity);
-
-            if (!isAccessible) {
-                field.setAccessible(false);
-            }
-
-            if (value != null) {
-                query.addCriteria(Criteria.where(field.getName()).is(value));
-            }
-        }
-        return mongoTemplate.find(query, (Class<WorkLoadRecord>) entity.getClass());
+       return mongoDBUtil.findAllByExample(entity);
     }
 
     public boolean update(WorkLoadRecord entity) {
-        Query query = new Query(Criteria.where(entity.getIdFieldName()).is(entity.getId()));
-        Update update = new Update();
-        for (Field field : entity.getClass().getDeclaredFields()) {
-            if (!field.getName().equals(entity.getIdFieldName())) {
-
-                boolean isAccessible = field.isAccessible();
-                if (!isAccessible) {
-                    field.setAccessible(true);
-                }
-
-                Object value = ReflectionUtils.getField(field, entity);
-
-                if (!isAccessible) {
-                    field.setAccessible(false);
-                }
-
-                if (value != null) {
-                    update.set(field.getName(), value);
-                }
-            }
-        }
-        UpdateResult updateResult = mongoTemplate.updateFirst(query, update, entity.getClass());
-        return updateResult.getModifiedCount() * updateResult.getMatchedCount() != 0;
+        return mongoDBUtil.autoUpdateMongoDB(entity);
     }
 
     public BulkWriteResult saveAll(List<WorkLoadRecord> entities) {
-        return mongoTemplate.bulkOps(BulkOperations.BulkMode.UNORDERED, (Class<WorkLoadRecord>) entities.get(0).getClass()).insert(entities).execute();
+        return mongoDBUtil.saveAll(entities);
     }
 
     public Page<WorkLoadRecord> findAll(Pageable pageable, Class<WorkLoadRecord> entityClass) {

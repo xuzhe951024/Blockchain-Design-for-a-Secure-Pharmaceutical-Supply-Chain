@@ -8,13 +8,15 @@ import org.springframework.data.mongodb.core.mapping.Document;
 @Data
 @EqualsAndHashCode(callSuper = true)
 public class Consumer extends RoleBase {
-    int dose;
+    int expectedDose;
 
     public void satisfyDosage() {
-        this.dose--;
+        if (this.expectedDose > 0){
+            this.expectedDose--;
+        }
     }
 
     public boolean isSatisfied() {
-        return this.dose == 0;
+        return this.expectedDose == 0;
     }
 }

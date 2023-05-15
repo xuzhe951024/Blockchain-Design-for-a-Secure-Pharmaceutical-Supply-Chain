@@ -1,4 +1,4 @@
-package com.rbpsc.ctp.api.controllor;
+package com.rbpsc.ctp.api.controllor.v1;
 
 
 import com.rbpsc.ctp.api.entities.dto.OperationVO;
@@ -9,6 +9,7 @@ import com.rbpsc.ctp.api.entities.supplychain.operations.attack.AttackModelBase;
 import com.rbpsc.ctp.api.entities.supplychain.roles.RoleBase;
 import com.rbpsc.ctp.common.utiles.ParentToChildConvertor;
 import com.rbpsc.ctp.common.utiles.TestDataGenerator;
+import com.rbpsc.ctp.configuration.v1prefix.V1RestController;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -17,8 +18,8 @@ import org.springframework.web.bind.annotation.*;
 import javax.servlet.http.HttpServletRequest;
 import java.util.List;
 
-@Controller
-//@RequestMapping()
+@V1RestController
+@RequestMapping("/web")
 @Slf4j
 public class WebPageController {
 
