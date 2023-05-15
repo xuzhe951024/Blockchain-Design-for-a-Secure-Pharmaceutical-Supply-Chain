@@ -15,7 +15,8 @@ import com.rbpsc.ctp.api.entities.supplychain.roles.RoleBase;
 import java.util.*;
 
 public class FunctionEntityFactory {
-    public static DrugLifeCycleView createDrugLifeCycleView(ExperimentConfig experimentConfig, List<Consumer> consumerList, List<List<Institution>> institutionTree) {
+    private static ObjectMapper objectMapper;
+    public static DrugLifeCycleView createDrugLifeCycleView(ExperimentConfig experimentConfig, List<Consumer> consumerList, List<List<Institution>> institutionTree) throws JsonProcessingException {
         DrugLifeCycleView drugLifeCycleView = new DrugLifeCycleView();
         drugLifeCycleView.setBatchId(experimentConfig.getExperimentName());
         DataEntityFactory.setId(drugLifeCycleView);
@@ -28,16 +29,16 @@ public class FunctionEntityFactory {
             DrugInfo drugInfo = DataEntityFactory.createDrugInfo(drugLifeCycleView, drugName);
 
             int levelNum = experimentConfig.getDistributorsForEachLevel().size();
-            List<OperationVO<RoleBase>> operationVOQueue = new ArrayList<>();
+            List<OperationVO> operationVOQueue = new ArrayList<>();
             for (int j = 0; j < levelNum; j++) {
                 int randInt = random.nextInt(experimentConfig.getDistributorsForEachLevel().get(j));
                 List<Institution> institutionList = institutionTree.get(j);
 
                 DrugOrderStep drugOrderStep = DataEntityFactory.createDrugOrderStep(drugLifeCycleView, institutionList.get(randInt));
 
-                OperationVO<RoleBase> operationVO = new OperationVO<>();
+                OperationVO operationVO = new OperationVO();
                 operationVO.setOperationType(drugOrderStep.getClass().getName());
-                operationVO.setOperation(drugOrderStep);
+                operationVO.setOperation(objectMapper.writeValueAsString(drugOrderStep));
 
                 operationVOQueue.add(operationVO);
             }

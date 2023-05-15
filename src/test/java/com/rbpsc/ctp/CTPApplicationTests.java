@@ -1,5 +1,6 @@
 package com.rbpsc.ctp;
 
+import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.rbpsc.ctp.api.entities.dto.OperationVO;
 import com.rbpsc.ctp.api.entities.dto.response.DrugLifeCycleResponse;
@@ -82,7 +83,7 @@ class CTPApplicationTests {
     }
 
     @Test
-    void basicProcessesTest(){
+    void basicProcessesTest() throws JsonProcessingException {
         DrugLifeCycleView drugLifeCycleView = TestDataGenerator.generateDrugLifeCycleWithAttack();
 
         List<DrugLifeCycle> drugLifeCycleList = drugLifeCycleView.getDrugLifeCycleList();
@@ -97,7 +98,7 @@ class CTPApplicationTests {
                     drugLifeCycle.setTagTagId(UUID.randomUUID().toString());
                 }
 
-                OperationVO<RoleBase> operationVO = drugLifeCycle.pollOperationVOQ();
+                OperationVO operationVO = drugLifeCycle.pollOperationVOQ();
 
                 if (!DrugOrderStep.class.getName().equals(operationVO.getOperationType())){
                     if (AttackAvailability.class.getName().equals(operationVO.getOperationType())){
@@ -129,19 +130,21 @@ class CTPApplicationTests {
 
         responseMono.subscribe(result -> {
             assert result.isSuccess();
+            log.info("switch off success!");
         }, error -> {
             error.printStackTrace();
         });
-//        Thread.sleep(50);
+        Thread.sleep(500);
 
         webClientUtil.getWithoutParams("http://127.0.0.1:8090/v1/drugLifeCycle/drugOrderStep/checkAvailable"
                         ,DrugLifeCycleResponse.class)
                 .subscribe(resultCheckAvailable -> {
                     assert resultCheckAvailable.getResponseCode() == RESPONSE_CODE_FAIL_SERVICE_DISABLED;
+                    log.info("service has been switched off!");
                 }, error -> {
                     error.printStackTrace();
                 });
-//        Thread.sleep(50);
+        Thread.sleep(500);
 
         webClientUtil.postWithParams(
                 "http://127.0.0.1:8090/v1/drugLifeCycle/drugOrderStep/toggle",
@@ -150,11 +153,22 @@ class CTPApplicationTests {
                 DrugLifeCycleResponse.class)
                 .subscribe(result -> {
                     assert result.isSuccess();
+                    log.info("switch on success!");
+                }, error -> {
+                    error.printStackTrace();
+                });
+        Thread.sleep(500);
+
+        webClientUtil.getWithoutParams("http://127.0.0.1:8090/v1/drugLifeCycle/drugOrderStep/checkAvailable"
+                        ,DrugLifeCycleResponse.class)
+                .subscribe(resultCheckAvailable -> {
+                    assert resultCheckAvailable.isSuccess();
+                    log.info("service has been switched on!");
                 }, error -> {
                     error.printStackTrace();
                 });
 
-        Thread.sleep(1000);
+        Thread.sleep(500);
     }
 
 }

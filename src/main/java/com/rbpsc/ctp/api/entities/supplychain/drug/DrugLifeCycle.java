@@ -18,19 +18,19 @@ import java.util.List;
 @ToString(callSuper = true)
 public class DrugLifeCycle extends SupplyChainBaseEntity {
     DrugInfo drug;
-    List<OperationVO<RoleBase>> operationVOQueue;
+    List<OperationVO> operationVOQueue;
     Consumer expectedReceiver;
 
-    public OperationVO<RoleBase> pollOperationVOQ(){
-        OperationVO<RoleBase> operationVO = this.operationVOQueue.get(0);
+    public OperationVO pollOperationVOQ(){
+        OperationVO operationVO = this.operationVOQueue.get(0);
         return operationVOQueue.remove(0);
     }
 
-    public OperationVO<RoleBase> peakOperationVOQ(){
+    public OperationVO peakOperationVOQ(){
         return this.operationVOQueue.get(0);
     }
 
-    public void addOperation(OperationVO<RoleBase> operationVO){
+    public void addOperation(OperationVO operationVO){
         this.operationVOQueue.add(operationVO);
     }
 

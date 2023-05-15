@@ -1,5 +1,6 @@
 package com.rbpsc.ctp.api.controllor.v1;
 
+import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.rbpsc.ctp.api.entities.dto.OperationVO;
 import com.rbpsc.ctp.api.entities.dto.response.DrugLifeCycleResponse;
@@ -12,8 +13,6 @@ import com.rbpsc.ctp.configuration.v1prefix.V1RestController;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.MediaType;
-import org.springframework.util.LinkedMultiValueMap;
-import org.springframework.util.MultiValueMap;
 import org.springframework.util.StringUtils;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -31,9 +30,14 @@ public class DrugLiveCycleController {
     @Autowired
     SupplyChainStepsService supplyChainStepsService;
 
+    @Autowired
+    ObjectMapper objectMapper;
+
     @GetMapping(value = "/checkAvailable")
     public DrugLifeCycleResponse checkAvailable(){
         DrugLifeCycleResponse response = new DrugLifeCycleResponse();
+
+        log.info("Checking: API is now " + (API_ENABLED.get() ? "enabled" : "disabled") + ".");
 
         if (!API_ENABLED.get()){
             response.setResponseWithCode(RESPONSE_CODE_FAIL_SERVICE_DISABLED);
@@ -49,11 +53,12 @@ public class DrugLiveCycleController {
         DrugLifeCycleResponse response = new DrugLifeCycleResponse();
         API_ENABLED.set(enable);
         response.setDescribe("API is now " + (API_ENABLED.get() ? "enabled" : "disabled") + ".");
+        log.info(response.getDescribe());
         return response;
     }
 
     @PostMapping("/manufacture")
-    public DrugLifeCycleResponse nextStepManufacture(@RequestBody DrugLifeCycle drugLifeCycle) {
+    public DrugLifeCycleResponse nextStepManufacture(@RequestBody DrugLifeCycle drugLifeCycle) throws JsonProcessingException {
 
         DrugLifeCycleResponse response = checkBeforeServe(drugLifeCycle);
 
@@ -69,7 +74,7 @@ public class DrugLiveCycleController {
     }
 
     @PostMapping("/distributor")
-    public DrugLifeCycleResponse nextStepDistributor(@RequestBody DrugLifeCycle drugLifeCycle) {
+    public DrugLifeCycleResponse nextStepDistributor(@RequestBody DrugLifeCycle drugLifeCycle) throws JsonProcessingException {
 
         DrugLifeCycleResponse response = checkBeforeServe(drugLifeCycle);
 
@@ -88,7 +93,7 @@ public class DrugLiveCycleController {
     }
 
     @PostMapping("/consumer")
-    public DrugLifeCycleResponse nextStepConsumer(@RequestBody DrugLifeCycle drugLifeCycle) {
+    public DrugLifeCycleResponse nextStepConsumer(@RequestBody DrugLifeCycle drugLifeCycle) throws JsonProcessingException {
 
         DrugLifeCycleResponse response = checkBeforeServe(drugLifeCycle);
 
@@ -122,7 +127,7 @@ public class DrugLiveCycleController {
         }
 
         // TODO: add role check for self
-        OperationVO<RoleBase> operationVO = drugLifeCycle.peakOperationVOQ();
+        OperationVO operationVO = drugLifeCycle.peakOperationVOQ();
         if (!DrugOrderStep.class.getName().equals(operationVO.getOperationType())){
             response.setResponseWithCode(RESPONSE_CODE_FAIL_OPERATION_TYPE_NOT_MATCH);
             response.setDescribe(String.format("check if operation type{%s} matches node role{%s}.",
@@ -135,11 +140,11 @@ public class DrugLiveCycleController {
         return response;
     }
 
-    private DrugLifeCycleResponse sendToNextStep(DrugLifeCycle drugLifeCycle) {
+    private DrugLifeCycleResponse sendToNextStep(DrugLifeCycle drugLifeCycle) throws JsonProcessingException {
         DrugLifeCycleResponse response = new DrugLifeCycleResponse();
 
-        OperationVO<RoleBase> operationVO = drugLifeCycle.peakOperationVOQ();
-        if (StringUtils.isEmpty(operationVO.getOperation().getAddress())){
+        OperationVO operationVO = drugLifeCycle.peakOperationVOQ();
+        if (StringUtils.isEmpty(objectMapper.readValue(operationVO.getOperation(), RoleBase.class).getAddress())){
             log.error("Address can not be empty!");
             response.setResponseWithCode(RESPONSE_CODE_FAIL_FIND_ADDRESS);
 
@@ -150,7 +155,7 @@ public class DrugLiveCycleController {
 
         WebClientUtil webClientUtil = new WebClientUtil();
 
-        Mono<DrugLifeCycleResponse> responseMono = webClientUtil.postWithParams(operationVO.getOperation().getAddress(), drugLifeCycle, DrugLifeCycle.class, DrugLifeCycleResponse.class);
+        Mono<DrugLifeCycleResponse> responseMono = webClientUtil.postWithParams(objectMapper.readValue(operationVO.getOperation(), RoleBase.class).getAddress(), drugLifeCycle, DrugLifeCycle.class, DrugLifeCycleResponse.class);
 
         responseMono.subscribe(result -> {
             log.info(result.toString());

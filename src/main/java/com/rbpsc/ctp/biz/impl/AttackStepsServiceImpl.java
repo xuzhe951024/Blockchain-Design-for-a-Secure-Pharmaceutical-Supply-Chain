@@ -1,7 +1,6 @@
 package com.rbpsc.ctp.biz.impl;
 
 import com.rbpsc.ctp.api.entities.dto.response.DrugLifeCycleResponse;
-import com.rbpsc.ctp.api.entities.supplychain.drug.DrugInfo;
 import com.rbpsc.ctp.api.entities.supplychain.operations.attack.AttackAvailability;
 import com.rbpsc.ctp.api.entities.supplychain.operations.attack.AttackConfidentiality;
 import com.rbpsc.ctp.api.entities.supplychain.operations.attack.AttackIntegrity;
@@ -20,10 +19,9 @@ public class AttackStepsServiceImpl implements AttackStepsService {
 
     @Override
     public boolean attackAvailability(AttackAvailability attackAvailability) {
-        // TODO: access "toggle-api"
 
         webClientUtil.postWithParams(
-                        "http://127.0.0.1:8090/v1/drugLifeCycle/drugOrderStep/toggle",
+                        attackAvailability.getTargetAddress(),
                         true,
                         Boolean.class,
                         DrugLifeCycleResponse.class)
@@ -33,7 +31,7 @@ public class AttackStepsServiceImpl implements AttackStepsService {
                     error.printStackTrace();
                 });
 
-        return false;
+        return true;
     }
 
     @Override

@@ -1,7 +1,5 @@
 package com.rbpsc.ctp;
 
-import com.fasterxml.jackson.core.JsonProcessingException;
-import com.fasterxml.jackson.databind.ObjectMapper;
 import com.rbpsc.ctp.api.entities.base.BaseEntity;
 import com.rbpsc.ctp.api.entities.base.BaseResponse;
 import com.rbpsc.ctp.api.entities.dto.response.DrugLifeCycleResponse;
@@ -10,7 +8,6 @@ import com.rbpsc.ctp.api.entities.supplychain.SupplyChainBaseEntity;
 import com.rbpsc.ctp.api.entities.supplychain.drug.DrugInfo;
 import com.rbpsc.ctp.api.entities.supplychain.operations.attack.AttackAvailability;
 import com.rbpsc.ctp.api.entities.supplychain.roles.Consumer;
-import com.rbpsc.ctp.api.entities.supplychain.roles.RoleBase;
 import com.rbpsc.ctp.common.utiles.WebClientUtil;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.util.LinkedMultiValueMap;
@@ -26,7 +23,7 @@ import static com.rbpsc.ctp.common.Constant.ServiceConstants.RESPONSE_CODE_FAIL_
 
 @Slf4j
 public class PlayGround {
-    public static void main(String[] args) throws InterruptedException, JsonProcessingException {
+    public static void main(String[] args) throws InterruptedException {
         Queue<String> queue = new ArrayDeque<>(Arrays.asList("a", "b", "c"));
         System.out.printf("queue poll = %s%n", queue.poll());
         queue.remove();
@@ -50,6 +47,6 @@ public class PlayGround {
         attackAvailability.setRoleName("1");
         attackAvailability.setTargetDrugId("2");
 
-        System.out.println(new ObjectMapper().writeValueAsString((RoleBase)attackAvailability));
+
     }
 }

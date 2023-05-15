@@ -5,7 +5,7 @@ import com.rbpsc.ctp.api.entities.supplychain.roles.RoleBase;
 import lombok.Data;
 
 @Data
-public class OperationVO<T> {
+public class OperationVO {
     String operationType;
-    RoleBase operation;
+    String operation;
 }

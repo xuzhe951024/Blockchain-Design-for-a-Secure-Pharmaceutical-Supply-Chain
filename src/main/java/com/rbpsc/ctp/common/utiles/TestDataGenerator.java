@@ -1,5 +1,7 @@
 package com.rbpsc.ctp.common.utiles;
 
+import com.fasterxml.jackson.core.JsonProcessingException;
+import com.fasterxml.jackson.databind.ObjectMapper;
 import com.rbpsc.ctp.api.entities.configs.ExperimentConfig;
 import com.rbpsc.ctp.api.entities.dto.OperationVO;
 import com.rbpsc.ctp.api.entities.dto.webview.DrugLifeCycleView;
@@ -18,8 +20,9 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class TestDataGenerator {
+    private static ObjectMapper objectMapper;
 
-    public static DrugLifeCycleView generateDrugLifeCycleViewRandom(){
+    public static DrugLifeCycleView generateDrugLifeCycleViewRandom() throws JsonProcessingException {
         ExperimentConfig experimentConfig = new ExperimentConfig();
         experimentConfig.setExperimentName("TestPage");
         experimentConfig.setConsumerCount(10);
@@ -55,7 +58,7 @@ public class TestDataGenerator {
         return FunctionEntityFactory.createDrugLifeCycleView(experimentConfig, consumerList, institutionTree);
     }
 
-    public static DrugLifeCycleView addAttacks(DrugLifeCycleView drugLifeCycleView){
+    public static DrugLifeCycleView addAttacks(DrugLifeCycleView drugLifeCycleView) throws JsonProcessingException {
         List<DrugLifeCycle> drugLifeCycleList = drugLifeCycleView.getDrugLifeCycleList();
         AttackModelBase attackModelBase = new AttackModelBase();
         attackModelBase.setAddress("127.0.0.1");
@@ -65,17 +68,17 @@ public class TestDataGenerator {
         AttackConfidentiality attackConfidentiality = DataEntityFactory.createAttackConfidentiality(attackModelBase);
         AttackIntegrity attackIntegrity = DataEntityFactory.createAttackIntegrity(attackModelBase);
 
-        OperationVO<RoleBase> operationVOC = new OperationVO<>();
+        OperationVO operationVOC = new OperationVO();
         operationVOC.setOperationType(AttackConfidentiality.class.getName());
-        operationVOC.setOperation(attackConfidentiality);
+        operationVOC.setOperation(objectMapper.writeValueAsString(attackConfidentiality));
 
-        OperationVO<RoleBase> operationVOI = new OperationVO<>();
+        OperationVO operationVOI = new OperationVO();
         operationVOI.setOperationType(AttackIntegrity.class.getName());
-        operationVOI.setOperation(attackIntegrity);
+        operationVOI.setOperation(objectMapper.writeValueAsString(attackIntegrity));
 
-        OperationVO<RoleBase> operationVOA = new OperationVO<>();
+        OperationVO operationVOA = new OperationVO();
         operationVOA.setOperationType(AttackAvailability.class.getName());
-        operationVOA.setOperation(attackAvailability);
+        operationVOA.setOperation(objectMapper.writeValueAsString(attackAvailability));
 
         drugLifeCycleList.get(0).addOperation(operationVOC);
         drugLifeCycleList.get(1).addOperation(operationVOI);
@@ -85,7 +88,7 @@ public class TestDataGenerator {
         return drugLifeCycleView;
     }
 
-    public static DrugLifeCycleView generateDrugLifeCycleWithAttack(){
+    public static DrugLifeCycleView generateDrugLifeCycleWithAttack() throws JsonProcessingException {
         return  TestDataGenerator.addAttacks(TestDataGenerator.generateDrugLifeCycleViewRandom());
     }
 }

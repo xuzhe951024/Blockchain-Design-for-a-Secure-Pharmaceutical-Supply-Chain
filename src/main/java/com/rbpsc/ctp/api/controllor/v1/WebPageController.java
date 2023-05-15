@@ -1,6 +1,7 @@
 package com.rbpsc.ctp.api.controllor.v1;
 
 
+import com.fasterxml.jackson.core.JsonProcessingException;
 import com.rbpsc.ctp.api.entities.dto.OperationVO;
 import com.rbpsc.ctp.api.entities.dto.webview.DrugLifeCycleView;
 import com.rbpsc.ctp.api.entities.supplychain.drug.DrugLifeCycle;
@@ -25,7 +26,7 @@ public class WebPageController {
 
 
     @GetMapping("/cards")
-    public String getCards(Model model) {
+    public String getCards(Model model) throws JsonProcessingException {
 
 
         DrugLifeCycleView drugLifeCycleView = TestDataGenerator.generateDrugLifeCycleViewRandom();
@@ -43,7 +44,7 @@ public class WebPageController {
         for (DrugLifeCycle lifeCycle :
                 drugLifeCycleList) {
             log.debug("Drug Info: \n" + lifeCycle.getDrug().toString());
-            OperationVO<RoleBase> operationVO = lifeCycle.pollOperationVOQ();
+            OperationVO operationVO = lifeCycle.pollOperationVOQ();
             if (DrugOrderStep.class.getName().equals(operationVO.getOperationType())){
                 log.debug("Normal Step:\n" + ParentToChildConvertor.convert(operationVO, DrugOrderStep.class).toString());
             } else {
