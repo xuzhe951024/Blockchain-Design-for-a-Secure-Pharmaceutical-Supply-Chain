@@ -1,3 +1,3 @@
-# WorkLoad
+# Blockchain and RFID Synergy: An Approach to Liquid Drug Supply Chain Transparency and Integrity
 
-A service workload test with a requests lanching simulator
+This is the code repository for thesis ***"Blockchain and RFID Synergy: An Approach to Liquid Drug Supply Chain Transparency and Integrity"***
