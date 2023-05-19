@@ -15,7 +15,6 @@ import com.rbpsc.ctp.api.entities.supplychain.roles.RoleBase;
 import java.util.*;
 
 public class FunctionEntityFactory {
-    private static ObjectMapper objectMapper;
     public static DrugLifeCycleView createDrugLifeCycleView(ExperimentConfig experimentConfig, List<Consumer> consumerList, List<List<Institution>> institutionTree) throws JsonProcessingException {
         DrugLifeCycleView drugLifeCycleView = new DrugLifeCycleView();
         drugLifeCycleView.setBatchId(experimentConfig.getExperimentName());
@@ -38,7 +37,7 @@ public class FunctionEntityFactory {
 
                 OperationVO operationVO = new OperationVO();
                 operationVO.setOperationType(drugOrderStep.getClass().getName());
-                operationVO.setOperation(objectMapper.writeValueAsString(drugOrderStep));
+                operationVO.setOperation(new ObjectMapper().writeValueAsString(drugOrderStep));
 
                 operationVOQueue.add(operationVO);
             }
