@@ -27,9 +27,7 @@ public class AttackStepsServiceImpl implements AttackStepsService {
                         DrugLifeCycleResponse.class)
                 .subscribe(result -> {
                     assert result.isSuccess();
-                }, error -> {
-                    error.printStackTrace();
-                });
+                }, Throwable::printStackTrace);
 
         return true;
     }
