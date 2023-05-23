@@ -13,4 +13,5 @@ import org.springframework.data.mongodb.core.mapping.Document;
 public class DrugInfo extends SupplyChainBaseEntity {
     String drugTagTagId;
     String drugName;
+    boolean isFake = false;
 }
