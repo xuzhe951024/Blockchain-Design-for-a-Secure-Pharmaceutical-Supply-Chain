@@ -34,6 +34,10 @@ public class AttackStepsServiceImpl implements AttackStepsService {
 
     @Override
     public boolean attackConfidentiality(AttackConfidentiality attackConfidentiality) {
+
+        // TODO: add "receipt response controller", automatically schedule the receipt response on the webpage
+        // TODO: replace the redirect address in the operation object here
+
         return false;
     }
 
