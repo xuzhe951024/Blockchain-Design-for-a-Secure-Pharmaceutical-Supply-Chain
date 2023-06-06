@@ -10,4 +10,6 @@ import org.springframework.data.mongodb.core.mapping.Document;
 @EqualsAndHashCode(callSuper = true)
 @ToString(callSuper = true)
 public class AttackConfidentiality extends AttackModelBase {
+    String ReplacedExampleMsg;
+    String exampleMsg;
 }

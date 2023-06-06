@@ -6,6 +6,7 @@ import com.rbpsc.ctp.api.entities.supplychain.operations.attack.AttackConfidenti
 import com.rbpsc.ctp.api.entities.supplychain.operations.attack.AttackIntegrity;
 import com.rbpsc.ctp.biz.service.AttackStepsService;
 import com.rbpsc.ctp.common.utiles.WebClientUtil;
+import com.rbpsc.ctp.repository.service.AttackConfidentialityRepository;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -16,6 +17,9 @@ public class AttackStepsServiceImpl implements AttackStepsService {
 
     @Autowired
     WebClientUtil webClientUtil;
+
+    @Autowired
+    AttackConfidentialityRepository attackConfidentialityRepository;
 
     @Override
     public boolean attackAvailability(AttackAvailability attackAvailability) {
@@ -36,7 +40,9 @@ public class AttackStepsServiceImpl implements AttackStepsService {
     public boolean attackConfidentiality(AttackConfidentiality attackConfidentiality) {
 
         // TODO: add "receipt response controller", automatically schedule the receipt response on the webpage
-        // TODO: replace the redirect address in the operation object here
+        // TODO: replace ExampleMsg here
+
+        attackConfidentialityRepository.insertAttack(attackConfidentiality);
 
         return false;
     }
