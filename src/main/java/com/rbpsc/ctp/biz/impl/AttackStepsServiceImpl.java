@@ -39,7 +39,8 @@ public class AttackStepsServiceImpl implements AttackStepsService {
     @Override
     public boolean attackConfidentiality(AttackConfidentiality attackConfidentiality) {
 
-        // TODO: add "receipt response controller", automatically schedule the receipt response on the webpage
+        // TODO: add "receipt queue"
+        // TODO: put fake receipt back in the receipt queue
         // TODO: replace ExampleMsg here
 
         attackConfidentialityRepository.insertAttack(attackConfidentiality);
@@ -49,6 +50,7 @@ public class AttackStepsServiceImpl implements AttackStepsService {
 
     @Override
     public boolean attackIntegrity(AttackIntegrity attackIntegrity) {
+        // TODO: Make the selling chain stop here and store "DrugLifeCycle" object
         return false;
     }
 }
