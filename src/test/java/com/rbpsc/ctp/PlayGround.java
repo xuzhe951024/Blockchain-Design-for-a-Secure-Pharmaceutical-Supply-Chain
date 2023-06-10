@@ -10,43 +10,47 @@ import com.rbpsc.ctp.api.entities.supplychain.operations.attack.AttackAvailabili
 import com.rbpsc.ctp.api.entities.supplychain.roles.Consumer;
 import com.rbpsc.ctp.common.utiles.WebClientUtil;
 import lombok.extern.slf4j.Slf4j;
+import org.reflections.Reflections;
 import org.springframework.util.LinkedMultiValueMap;
 import org.springframework.util.MultiValueMap;
 import reactor.core.publisher.Mono;
 
-import java.util.ArrayDeque;
-import java.util.Arrays;
-import java.util.Queue;
-import java.util.Random;
+import java.util.*;
 
 import static com.rbpsc.ctp.common.Constant.ServiceConstants.RESPONSE_CODE_FAIL_SERVICE_DISABLED;
 
 @Slf4j
 public class PlayGround {
     public static void main(String[] args) throws InterruptedException {
-        Queue<String> queue = new ArrayDeque<>(Arrays.asList("a", "b", "c"));
-        System.out.printf("queue poll = %s%n", queue.poll());
-        queue.remove();
-        System.out.printf("queue = %s%n", queue);
+//        Queue<String> queue = new ArrayDeque<>(Arrays.asList("a", "b", "c"));
+//        System.out.printf("queue poll = %s%n", queue.poll());
+//        queue.remove();
+//        System.out.printf("queue = %s%n", queue);
+//
+//        System.out.println("queue class name: " + queue.getClass().getName());
+//
+//        Consumer consumer = new Consumer();
+//        BaseEntity<String> entity = (BaseEntity<String>) consumer;
+//        System.out.println("entity class:" + entity.getClass().getName());
+//
+//        AttackAvailability attackAvailability = new AttackAvailability();
+//        System.out.println(attackAvailability);
+//
+//        SupplyChainBaseEntity supplyChainBaseEntity = new SupplyChainBaseEntity();
+//        System.out.println(supplyChainBaseEntity);
+//
+//        DrugLifeCycleResponse drugLifeCycleResponse = new DrugLifeCycleResponse();
+//        System.out.println(drugLifeCycleResponse);
+//
+//        attackAvailability.setRoleName("1");
+//        attackAvailability.setTargetDrugId("2");
 
-        System.out.println("queue class name: " + queue.getClass().getName());
+        Reflections reflections = new Reflections("com.rbpsc.ctp.api.entities.supplychain.operations.attack");
+        Set<Class<?>> allClasses = reflections.getSubTypesOf(Object.class);
 
-        Consumer consumer = new Consumer();
-        BaseEntity<String> entity = (BaseEntity<String>) consumer;
-        System.out.println("entity class:" + entity.getClass().getName());
-
-        AttackAvailability attackAvailability = new AttackAvailability();
-        System.out.println(attackAvailability);
-
-        SupplyChainBaseEntity supplyChainBaseEntity = new SupplyChainBaseEntity();
-        System.out.println(supplyChainBaseEntity);
-
-        DrugLifeCycleResponse drugLifeCycleResponse = new DrugLifeCycleResponse();
-        System.out.println(drugLifeCycleResponse);
-
-        attackAvailability.setRoleName("1");
-        attackAvailability.setTargetDrugId("2");
-
+        for (Class<?> clazz : allClasses) {
+            System.out.println(clazz.getName());
+        }
 
     }
 }

@@ -18,12 +18,12 @@ import java.util.List;
 
 @V1RestController
 @RequestMapping("/web")
+@CrossOrigin(origins = "http://localhost:3000")
 @Slf4j
 public class WebPageController {
 
 
     @GetMapping("/cards")
-    @CrossOrigin(origins = "http://localhost:3000")
     public List<DrugLifeCycleVO> getCards() throws JsonProcessingException {
 
 
@@ -32,9 +32,18 @@ public class WebPageController {
         return TestDataGenerator.generateDrugLifeCycleVO(drugLifeCycleList);
     }
 
+
+    @GetMapping("/operationTypes")
+    public List<DrugLifeCycleVO> getOperationTypes() throws JsonProcessingException {
+
+
+        List<DrugLifeCycle> drugLifeCycleList = TestDataGenerator.generateDrugLifeCycleViewRandom();
+
+        return TestDataGenerator.generateDrugLifeCycleVO(drugLifeCycleList);
+    }
+
     @PostMapping("/submit")
-    @CrossOrigin(origins = "http://localhost:3000")
-    public String processCards(@ModelAttribute("drugLifeCycleView") DrugLifeCycleVO drugLifeCycleVO, HttpServletRequest request) {
+    public String processCards(@ModelAttribute("data") List<DrugLifeCycleVO> drugLifeCycleVOList) {
 
 //        List<DrugLifeCycle> drugLifeCycleList = drugLifeCycleVO.getDrugLifeCycleList();
 //
@@ -49,6 +58,8 @@ public class WebPageController {
 //                log.debug("Attack:\n" + ParentToChildConvertor.convert(operationDTO, AttackModelBase.class));
 //            }
 //        }
+
+        log.info(drugLifeCycleVOList.toString());
 
         // 在这里执行其他操作，例如保存更新后的数据到数据库
         return "redirect:/cards";

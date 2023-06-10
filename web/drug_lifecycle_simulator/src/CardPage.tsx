@@ -6,7 +6,7 @@ import { BASE_URL } from './config';
 import { Autocomplete } from '@material-ui/lab';
 
 // 定义数据类型
-type DrugLifeCycle = {
+type DrugLifeCycleVO = {
     drugName: string;
     drugId: string;
     physicalMarking: string;
@@ -20,7 +20,7 @@ type DrugLifeCycle = {
 
 // 定义操作类型
 const operationTypes = ["Normal_Step", "Attack_Availability", "Attack_Confidentiality", "Attack_Integrity"];
-const operators = ["Normal_Step", "Attack_Availability", "Attack_Confidentiality", "Attack_Integrity"];
+const operatorAddList = ["Normal_Step", "Attack_Availability", "Attack_Confidentiality", "Attack_Integrity"];
 
 const StyledCard = styled(Card)(({ theme }) => ({
     marginTop: theme.spacing(2),
@@ -63,7 +63,8 @@ const StyledTextField = styled(TextField)(({ theme }) => ({
 
 
 export function CardPage() {
-    const [data, setData] = useState<DrugLifeCycle[]>([]);
+    const [data, setData] = useState<DrugLifeCycleVO[]>([]);
+    const [operationTypeMap, setOperationTypeMap] = useState<Map<string, string>>(new Map());
 
     // 获取初始数据
     useEffect(() => {
@@ -73,17 +74,35 @@ export function CardPage() {
         });
     }, []);
 
+    // 获取operationType列表并构建operationTypeMap
+    useEffect(() => {
+        axios.get(`${BASE_URL}/web/operationTypes`).then((response) => {
+            const newOperationTypeMap = new Map();
+            response.data.forEach((fullType: string) => {
+                const displayType = fullType.substring(fullType.lastIndexOf('.') + 1);
+                newOperationTypeMap.set(displayType, fullType);
+            });
+            setOperationTypeMap(newOperationTypeMap);
+        });
+    }, []);
+
     // 提交数据
     const handleSubmit = () => {
         axios.post(`${BASE_URL}/web/submit`, data);
     };
 
     // 在列表中添加操作
-    const addOperation = (index: number) => {
+    const addOperation = (index: number, operationIndex: number) => {
         const newData = [...data];
-        newData[index].operationVOList.push({ operationType: '', operationMsg: '', operatorAdd: '' });
+        // 将新条目插入到当前条目之后
+        newData[index].operationVOList.splice(operationIndex + 1, 0, {
+            operationType: operationTypes[0],
+            operationMsg: 'Default MSG',
+            operatorAdd: 'Blank',
+        });
         setData(newData);
     };
+
 
     // 在列表中删除操作
     const deleteOperation = (index: number, operationIndex: number) => {
@@ -101,21 +120,38 @@ export function CardPage() {
                         <Box component="h3" sx={{ color: 'grey.700' }}>Drug Id: {item.drugId}</Box>
                         <Box component="h3" sx={{ color: 'grey.700' }}>Drug Physical Marking: {item.physicalMarking}</Box>
                         <Box component="h3" sx={{ color: 'grey.700', mb: 5}}>Expected Buyer: {item.targetConsumer}</Box>
+
+                        <Grid container spacing={2}>
+                            <Grid item xs={3}>
+                                <Box component="h4" sx={{ color: 'grey.800' }}>Operation Type</Box>
+                            </Grid>
+                            <Grid item xs={3}>
+                                <Box component="h4" sx={{ color: 'grey.800' }}>Operation Message</Box>
+                            </Grid>
+                            <Grid item xs={3}>
+                                <Box component="h4" sx={{ color: 'grey.800' }}>Operator Address</Box>
+                            </Grid>
+                            <Grid item xs={3}>
+                                <Box component="h4" sx={{ color: 'grey.800' }}>Actions</Box>
+                            </Grid>
+                        </Grid>
+
                         {item.operationVOList.map((operation, operationIndex) => (
                             <Grid container spacing={2} key={operationIndex}>
                                 <Grid item xs={3}>
                                     <StyledSelect
-                                        value={operation.operationType}
+                                        value={operationTypeMap.get(operation.operationType)}
                                         onChange={(e) => {
                                             const newData = [...data];
-                                            newData[index].operationVOList[operationIndex].operationType = e.target.value as string;
+                                            // 当选中值改变时，保存fullType而不是displayType
+                                            newData[index].operationVOList[operationIndex].operationType = operationTypeMap.get(e.target.value as string) || '';
                                             setData(newData);
                                         }}
                                         fullWidth
                                     >
-                                        {operationTypes.map((type) => (
-                                            <MenuItem key={type} value={type}>
-                                                {type}
+                                        {Array.from(operationTypeMap.keys()).map((displayType) => (
+                                            <MenuItem key={displayType} value={displayType}>
+                                                {displayType}
                                             </MenuItem>
                                         ))}
                                     </StyledSelect>
@@ -133,7 +169,7 @@ export function CardPage() {
                                 </Grid>
                                 <Grid item xs={3}>
                                     <Autocomplete
-                                        options={operators} // 这是一个字符串数组，表示所有可能的操作者
+                                        options={operatorAddList} // 这是一个字符串数组，表示所有可能的操作者
                                         getOptionLabel={(option) => option}
                                         value={operation.operatorAdd}
                                         onChange={(event: any, newValue: string | null) => {
@@ -145,7 +181,7 @@ export function CardPage() {
                                     />
                                 </Grid>
                                 <Grid item xs={3}>
-                                    <IconButton onClick={() => addOperation(index)}>
+                                    <IconButton onClick={() => addOperation(index, operationIndex)}>
                                         <AddCircleOutline />
                                     </IconButton>
                                     <IconButton onClick={() => deleteOperation(index, operationIndex)}>

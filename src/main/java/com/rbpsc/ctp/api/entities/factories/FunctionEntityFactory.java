@@ -44,6 +44,7 @@ public class FunctionEntityFactory {
             DrugLifeCycle drugLifeCycle = DataEntityFactory.createDrugLifeCycle(drugLifeCycleVO, drugInfo);
             drugLifeCycle.setOperationDTOQueue(operationDTOQueue);
             drugLifeCycle.setExpectedReceiver(consumerList.get(i/experimentConfig.getDoesForEachConsumer()));
+            drugLifeCycle.setTagTagId(UUID.randomUUID().toString());
             drugLifeCycleList.add(drugLifeCycle);
         }
 
