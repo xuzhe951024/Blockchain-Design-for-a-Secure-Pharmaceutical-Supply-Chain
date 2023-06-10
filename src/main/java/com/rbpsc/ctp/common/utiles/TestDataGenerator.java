@@ -3,8 +3,9 @@ package com.rbpsc.ctp.common.utiles;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.rbpsc.ctp.api.entities.configs.ExperimentConfig;
-import com.rbpsc.ctp.api.entities.dto.OperationVO;
-import com.rbpsc.ctp.api.entities.dto.webview.DrugLifeCycleView;
+import com.rbpsc.ctp.api.entities.dto.OperationDTO;
+import com.rbpsc.ctp.api.entities.dto.webview.DrugLifeCycleVO;
+import com.rbpsc.ctp.api.entities.dto.webview.OperationVO;
 import com.rbpsc.ctp.api.entities.factories.DataEntityFactory;
 import com.rbpsc.ctp.api.entities.factories.FunctionEntityFactory;
 import com.rbpsc.ctp.api.entities.supplychain.drug.DrugLifeCycle;
@@ -14,7 +15,6 @@ import com.rbpsc.ctp.api.entities.supplychain.operations.attack.AttackIntegrity;
 import com.rbpsc.ctp.api.entities.supplychain.operations.attack.AttackModelBase;
 import com.rbpsc.ctp.api.entities.supplychain.roles.Consumer;
 import com.rbpsc.ctp.api.entities.supplychain.roles.Institution;
-import com.rbpsc.ctp.api.entities.supplychain.roles.RoleBase;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -22,7 +22,7 @@ import java.util.List;
 public class TestDataGenerator {
     private static ObjectMapper objectMapper;
 
-    public static DrugLifeCycleView generateDrugLifeCycleViewRandom() throws JsonProcessingException {
+    public static List<DrugLifeCycle> generateDrugLifeCycleViewRandom() throws JsonProcessingException {
         ExperimentConfig experimentConfig = new ExperimentConfig();
         experimentConfig.setExperimentName("TestPage");
         experimentConfig.setConsumerCount(10);
@@ -58,25 +58,24 @@ public class TestDataGenerator {
         return FunctionEntityFactory.createDrugLifeCycleView(experimentConfig, consumerList, institutionTree);
     }
 
-    public static DrugLifeCycleView addAttacks(DrugLifeCycleView drugLifeCycleView) throws JsonProcessingException {
-        List<DrugLifeCycle> drugLifeCycleList = drugLifeCycleView.getDrugLifeCycleList();
+    public static List<DrugLifeCycle> addAttacks(List<DrugLifeCycle> drugLifeCycleList) throws JsonProcessingException {
         AttackModelBase attackModelBase = new AttackModelBase();
         attackModelBase.setAddress("127.0.0.1");
-        attackModelBase.setTargetBatchId(drugLifeCycleView.getBatchId());
+        attackModelBase.setTargetBatchId(drugLifeCycleList.get(0).getBatchId());
 
         AttackAvailability attackAvailability = DataEntityFactory.createAttackAvailability(attackModelBase);
         AttackConfidentiality attackConfidentiality = DataEntityFactory.createAttackConfidentiality(attackModelBase);
         AttackIntegrity attackIntegrity = DataEntityFactory.createAttackIntegrity(attackModelBase);
 
-        OperationVO operationVOC = new OperationVO();
+        OperationDTO operationVOC = new OperationDTO();
         operationVOC.setOperationType(AttackConfidentiality.class.getName());
         operationVOC.setOperation(objectMapper.writeValueAsString(attackConfidentiality));
 
-        OperationVO operationVOI = new OperationVO();
+        OperationDTO operationVOI = new OperationDTO();
         operationVOI.setOperationType(AttackIntegrity.class.getName());
         operationVOI.setOperation(objectMapper.writeValueAsString(attackIntegrity));
 
-        OperationVO operationVOA = new OperationVO();
+        OperationDTO operationVOA = new OperationDTO();
         operationVOA.setOperationType(AttackAvailability.class.getName());
         operationVOA.setOperation(objectMapper.writeValueAsString(attackAvailability));
 
@@ -84,11 +83,31 @@ public class TestDataGenerator {
         drugLifeCycleList.get(1).addOperation(operationVOI);
         drugLifeCycleList.get(drugLifeCycleList.size() - 3).addOperation(operationVOA);
 
-        drugLifeCycleView.setDrugLifeCycleList(drugLifeCycleList);
-        return drugLifeCycleView;
+        return drugLifeCycleList;
     }
 
-    public static DrugLifeCycleView generateDrugLifeCycleWithAttack() throws JsonProcessingException {
+    public static List<DrugLifeCycle> generateDrugLifeCycleWithAttack() throws JsonProcessingException {
         return  TestDataGenerator.addAttacks(TestDataGenerator.generateDrugLifeCycleViewRandom());
+    }
+
+    public static List<DrugLifeCycleVO> generateDrugLifeCycleVO(List<DrugLifeCycle> drugLifeCycleList) {
+        List<DrugLifeCycleVO> drugLifeCycleVOList = new ArrayList<DrugLifeCycleVO>(){{
+            drugLifeCycleList.forEach(drugLifeCycle -> {
+                DrugLifeCycleVO drugLifeCycleVO = new DrugLifeCycleVO();
+                List<OperationVO> operationVOList = new ArrayList<OperationVO>(){{
+                    drugLifeCycle.getOperationDTOQueue().forEach(operationDTO -> {
+                        OperationVO operationVO = new OperationVO();
+                        operationVO.setOperationMsg("Default MSG");
+                        operationVO.setOperatorAdd("127.0.0.1");
+                        operationVO.setOperationType(operationDTO.getOperationType());
+                        add(operationVO);
+                    });
+                }};
+                drugLifeCycleVO.createSelf(drugLifeCycle, operationVOList);
+
+                add(drugLifeCycleVO);
+            });
+        }};
+        return drugLifeCycleVOList;
     }
 }

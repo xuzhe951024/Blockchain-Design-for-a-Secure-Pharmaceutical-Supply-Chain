@@ -1,9 +1,8 @@
 package com.rbpsc.ctp.api.entities.supplychain.drug;
 
+import com.rbpsc.ctp.api.entities.dto.OperationDTO;
 import com.rbpsc.ctp.api.entities.supplychain.SupplyChainBaseEntity;
-import com.rbpsc.ctp.api.entities.dto.OperationVO;
 import com.rbpsc.ctp.api.entities.supplychain.roles.Consumer;
-import com.rbpsc.ctp.api.entities.supplychain.roles.RoleBase;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
 import lombok.ToString;
@@ -18,20 +17,20 @@ import java.util.List;
 @ToString(callSuper = true)
 public class DrugLifeCycle extends SupplyChainBaseEntity {
     DrugInfo drug;
-    List<OperationVO> operationVOQueue;
+    List<OperationDTO> operationDTOQueue;
     Consumer expectedReceiver;
 
-    public OperationVO pollOperationVOQ(){
-        OperationVO operationVO = this.operationVOQueue.get(0);
-        return operationVOQueue.remove(0);
+    public OperationDTO pollOperationVOQ(){
+        OperationDTO operationDTO = this.operationDTOQueue.get(0);
+        return operationDTOQueue.remove(0);
     }
 
-    public OperationVO peakOperationVOQ(){
-        return this.operationVOQueue.get(0);
+    public OperationDTO peakOperationVOQ(){
+        return this.operationDTOQueue.get(0);
     }
 
-    public void addOperation(OperationVO operationVO){
-        this.operationVOQueue.add(operationVO);
+    public void addOperation(OperationDTO operationDTO){
+        this.operationDTOQueue.add(operationDTO);
     }
 
     public void setTagTagId(String tagTagId){
@@ -39,7 +38,7 @@ public class DrugLifeCycle extends SupplyChainBaseEntity {
     }
 
     public int getOperationQueueSize(){
-        return this.operationVOQueue.size();
+        return this.operationDTOQueue.size();
     }
 
     public boolean isProduced(){

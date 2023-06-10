@@ -1,6 +1,6 @@
 package com.rbpsc.ctp.api.entities.factories;
 
-import com.rbpsc.ctp.api.entities.dto.webview.DrugLifeCycleView;
+import com.rbpsc.ctp.api.entities.dto.webview.DrugLifeCycleVO;
 import com.rbpsc.ctp.api.entities.supplychain.operations.attack.AttackAvailability;
 import com.rbpsc.ctp.api.entities.supplychain.operations.attack.AttackConfidentiality;
 import com.rbpsc.ctp.api.entities.supplychain.operations.attack.AttackIntegrity;
@@ -77,10 +77,10 @@ public class DataEntityFactory {
         return drugInfo;
     }
 
-    public static DrugLifeCycleView createDrugLifeCycleView(){
-        DrugLifeCycleView drugLifeCycleView = new DrugLifeCycleView();
-        setId(drugLifeCycleView);
-        return drugLifeCycleView;
+    public static DrugLifeCycleVO createDrugLifeCycleView(){
+        DrugLifeCycleVO drugLifeCycleVO = new DrugLifeCycleVO();
+        setId(drugLifeCycleVO);
+        return drugLifeCycleVO;
     }
 
     public static DrugLifeCycle createDrugLifeCycle(SupplyChainBaseEntity supplyChainBaseEntity, DrugInfo drugInfo){

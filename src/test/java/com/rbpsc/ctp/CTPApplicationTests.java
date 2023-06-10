@@ -1,15 +1,13 @@
 package com.rbpsc.ctp;
 
 import com.fasterxml.jackson.core.JsonProcessingException;
-import com.fasterxml.jackson.databind.ObjectMapper;
-import com.rbpsc.ctp.api.entities.dto.OperationVO;
+import com.rbpsc.ctp.api.entities.dto.OperationDTO;
 import com.rbpsc.ctp.api.entities.dto.response.DrugLifeCycleResponse;
-import com.rbpsc.ctp.api.entities.dto.webview.DrugLifeCycleView;
+import com.rbpsc.ctp.api.entities.dto.webview.DrugLifeCycleVO;
 import com.rbpsc.ctp.api.entities.supplychain.drug.DrugInfo;
 import com.rbpsc.ctp.api.entities.supplychain.drug.DrugLifeCycle;
 import com.rbpsc.ctp.api.entities.supplychain.operations.DrugOrderStep;
 import com.rbpsc.ctp.api.entities.supplychain.operations.attack.AttackAvailability;
-import com.rbpsc.ctp.api.entities.supplychain.roles.RoleBase;
 import com.rbpsc.ctp.api.entities.work_request.WorkLoadRecord;
 import com.rbpsc.ctp.api.entities.work_request.WorkLoadReq;
 import com.rbpsc.ctp.api.entities.factories.DataEntityFactory;
@@ -22,12 +20,7 @@ import lombok.extern.slf4j.Slf4j;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
-import org.springframework.http.MediaType;
-import org.springframework.http.ResponseEntity;
-import org.springframework.util.LinkedMultiValueMap;
-import org.springframework.util.MultiValueMap;
 import org.springframework.util.StringUtils;
-import org.springframework.web.reactive.function.client.WebClient;
 import reactor.core.publisher.Mono;
 
 import java.util.ArrayList;
@@ -84,9 +77,8 @@ class CTPApplicationTests {
 
     @Test
     void basicProcessesTest() throws JsonProcessingException {
-        DrugLifeCycleView drugLifeCycleView = TestDataGenerator.generateDrugLifeCycleWithAttack();
 
-        List<DrugLifeCycle> drugLifeCycleList = drugLifeCycleView.getDrugLifeCycleList();
+        List<DrugLifeCycle> drugLifeCycleList = TestDataGenerator.generateDrugLifeCycleWithAttack();
 
         List<DrugInfo> consumerReceivedList = new ArrayList<>();
 
@@ -98,10 +90,10 @@ class CTPApplicationTests {
                     drugLifeCycle.setTagTagId(UUID.randomUUID().toString());
                 }
 
-                OperationVO operationVO = drugLifeCycle.pollOperationVOQ();
+                OperationDTO operationDTO = drugLifeCycle.pollOperationVOQ();
 
-                if (!DrugOrderStep.class.getName().equals(operationVO.getOperationType())){
-                    if (AttackAvailability.class.getName().equals(operationVO.getOperationType())){
+                if (!DrugOrderStep.class.getName().equals(operationDTO.getOperationType())){
+                    if (AttackAvailability.class.getName().equals(operationDTO.getOperationType())){
                         break lifeCycleLoop;
                     }
                     break;

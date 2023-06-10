@@ -2,7 +2,7 @@ package com.rbpsc.ctp.api.controllor.v1;
 
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
-import com.rbpsc.ctp.api.entities.dto.OperationVO;
+import com.rbpsc.ctp.api.entities.dto.OperationDTO;
 import com.rbpsc.ctp.api.entities.dto.response.DrugLifeCycleResponse;
 import com.rbpsc.ctp.api.entities.supplychain.drug.DrugLifeCycle;
 import com.rbpsc.ctp.api.entities.supplychain.operations.DrugOrderStep;
@@ -127,11 +127,11 @@ public class DrugLiveCycleController {
         }
 
         // TODO: add role check for self
-        OperationVO operationVO = drugLifeCycle.peakOperationVOQ();
-        if (!DrugOrderStep.class.getName().equals(operationVO.getOperationType())){
+        OperationDTO operationDTO = drugLifeCycle.peakOperationVOQ();
+        if (!DrugOrderStep.class.getName().equals(operationDTO.getOperationType())){
             response.setResponseWithCode(RESPONSE_CODE_FAIL_OPERATION_TYPE_NOT_MATCH);
             response.setDescribe(String.format("check if operation type{%s} matches node role{%s}.",
-                    operationVO.getOperationType(),
+                    operationDTO.getOperationType(),
                     "TODO:Role"));
 
             return response;
@@ -143,19 +143,19 @@ public class DrugLiveCycleController {
     private DrugLifeCycleResponse sendToNextStep(DrugLifeCycle drugLifeCycle) throws JsonProcessingException {
         DrugLifeCycleResponse response = new DrugLifeCycleResponse();
 
-        OperationVO operationVO = drugLifeCycle.peakOperationVOQ();
-        if (StringUtils.isEmpty(objectMapper.readValue(operationVO.getOperation(), RoleBase.class).getAddress())){
+        OperationDTO operationDTO = drugLifeCycle.peakOperationVOQ();
+        if (StringUtils.isEmpty(objectMapper.readValue(operationDTO.getOperation(), RoleBase.class).getAddress())){
             log.error("Address can not be empty!");
             response.setResponseWithCode(RESPONSE_CODE_FAIL_FIND_ADDRESS);
 
-            response.setDescribe(String.format("Please check address for operation:{%s}", operationVO));
+            response.setDescribe(String.format("Please check address for operation:{%s}", operationDTO));
 
             return response;
         }
 
         WebClientUtil webClientUtil = new WebClientUtil();
 
-        Mono<DrugLifeCycleResponse> responseMono = webClientUtil.postWithParams(objectMapper.readValue(operationVO.getOperation(), RoleBase.class).getAddress(), drugLifeCycle, DrugLifeCycle.class, DrugLifeCycleResponse.class);
+        Mono<DrugLifeCycleResponse> responseMono = webClientUtil.postWithParams(objectMapper.readValue(operationDTO.getOperation(), RoleBase.class).getAddress(), drugLifeCycle, DrugLifeCycle.class, DrugLifeCycleResponse.class);
 
         responseMono.subscribe(result -> {
             log.info(result.toString());
