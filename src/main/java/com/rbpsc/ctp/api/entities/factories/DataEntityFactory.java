@@ -1,15 +1,17 @@
 package com.rbpsc.ctp.api.entities.factories;
 
-import com.rbpsc.ctp.api.entities.dto.webview.DrugLifeCycleVO;
-import com.rbpsc.ctp.api.entities.supplychain.operations.attack.AttackAvailability;
-import com.rbpsc.ctp.api.entities.supplychain.operations.attack.AttackConfidentiality;
-import com.rbpsc.ctp.api.entities.supplychain.operations.attack.AttackIntegrity;
-import com.rbpsc.ctp.api.entities.supplychain.operations.OperationBase;
 import com.rbpsc.ctp.api.entities.base.BaseEntity;
+import com.rbpsc.ctp.api.entities.dto.OperationDTO;
+import com.rbpsc.ctp.api.entities.dto.webview.DrugLifeCycleVO;
 import com.rbpsc.ctp.api.entities.supplychain.SupplyChainBaseEntity;
 import com.rbpsc.ctp.api.entities.supplychain.drug.DrugInfo;
 import com.rbpsc.ctp.api.entities.supplychain.drug.DrugLifeCycle;
 import com.rbpsc.ctp.api.entities.supplychain.operations.DrugOrderStep;
+import com.rbpsc.ctp.api.entities.supplychain.operations.OperationBase;
+import com.rbpsc.ctp.api.entities.supplychain.operations.Receipt;
+import com.rbpsc.ctp.api.entities.supplychain.operations.attack.AttackAvailability;
+import com.rbpsc.ctp.api.entities.supplychain.operations.attack.AttackConfidentiality;
+import com.rbpsc.ctp.api.entities.supplychain.operations.attack.AttackIntegrity;
 import com.rbpsc.ctp.api.entities.supplychain.roles.Consumer;
 import com.rbpsc.ctp.api.entities.supplychain.roles.Institution;
 import com.rbpsc.ctp.api.entities.work_request.WorkLoadRecord;
@@ -88,6 +90,10 @@ public class DataEntityFactory {
         setId(drugLifeCycle);
         setSupplyChainBase(supplyChainBaseEntity, drugLifeCycle);
         drugLifeCycle.setDrug(drugInfo);
+        ArrayList<OperationDTO> operationQueue = new ArrayList<>();
+        ArrayList<Receipt> receiptArrayQueue = new ArrayList<>();
+        drugLifeCycle.setOperationDTOQueue(operationQueue);
+        drugLifeCycle.setReceiptQueue(receiptArrayQueue);
         return drugLifeCycle;
     }
 
@@ -115,4 +121,5 @@ public class DataEntityFactory {
         institution.setRoleName(ROLE_NAME_INSTITUTION);
         return institution;
     }
+
 }

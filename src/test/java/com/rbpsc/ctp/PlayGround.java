@@ -1,28 +1,10 @@
 package com.rbpsc.ctp;
 
-import com.rbpsc.ctp.api.entities.base.BaseEntity;
-import com.rbpsc.ctp.api.entities.base.BaseResponse;
-import com.rbpsc.ctp.api.entities.dto.response.DrugLifeCycleResponse;
-import com.rbpsc.ctp.api.entities.factories.DataEntityFactory;
-import com.rbpsc.ctp.api.entities.supplychain.SupplyChainBaseEntity;
-import com.rbpsc.ctp.api.entities.supplychain.drug.DrugInfo;
-import com.rbpsc.ctp.api.entities.supplychain.operations.attack.AttackAvailability;
-import com.rbpsc.ctp.api.entities.supplychain.roles.Consumer;
-import com.rbpsc.ctp.common.utiles.WebClientUtil;
-import io.github.classgraph.ClassGraph;
-import io.github.classgraph.ScanResult;
 import lombok.extern.slf4j.Slf4j;
-
-import org.springframework.util.LinkedMultiValueMap;
-import org.springframework.util.MultiValueMap;
 import oshi.SystemInfo;
 import oshi.hardware.CentralProcessor;
 import oshi.hardware.GlobalMemory;
-import reactor.core.publisher.Mono;
-
-import java.util.*;
-
-import static com.rbpsc.ctp.common.Constant.ServiceConstants.RESPONSE_CODE_FAIL_SERVICE_DISABLED;
+import oshi.software.os.OperatingSystem;
 
 @Slf4j
 public class PlayGround {
@@ -73,6 +55,8 @@ public class PlayGround {
         System.out.println("Swap used: " + swapUsed/(1024*1024));
         System.out.println("Swap total: " + swapTotal/(1024*1024));
 
+        OperatingSystem os = si.getOperatingSystem();
 
+        System.out.println("Operating System: " + os.getFamily() + " " + os.getVersionInfo());
     }
 }
