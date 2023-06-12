@@ -2,23 +2,28 @@ import React, { useEffect, useState } from 'react';
 import axios from 'axios';
 import { Button, Card, CardContent, TextField, Select, MenuItem, IconButton, Container, Box, styled, Grid } from '@material-ui/core';
 import { AddCircleOutline, RemoveCircleOutline } from '@material-ui/icons';
-import { BASE_URL } from './config';
+import { BASE_URL_V1, BASE_URL_WS } from './config';
 import { Autocomplete } from '@material-ui/lab';
+import { v4 as uuidv4 } from 'uuid';
+import SockJS from 'sockjs-client';
+import { Client } from '@stomp/stompjs';
 
-// 定义数据类型
+
+// Define data type
 type DrugLifeCycleVO = {
     drugName: string;
     drugId: string;
     physicalMarking: string;
     targetConsumer: string;
     operationVOList: {
+        id: string;
         operationType: string;
         operationMsg: string;
         operatorAdd: string;
     }[];
 };
 
-// 定义操作类型
+// Define data type
 const operationTypes = ["Normal_Step", "Attack_Availability", "Attack_Confidentiality", "Attack_Integrity"];
 const operatorAddList = ["Normal_Step", "Attack_Availability", "Attack_Confidentiality", "Attack_Integrity"];
 
@@ -32,7 +37,7 @@ const StyledCard = styled(Card)(({ theme }) => ({
 }));
 
 
-
+// Style definitions
 const StyledSelect = styled(Select)(({ theme }) => ({
     backgroundColor: theme.palette.common.white,
     color: theme.palette.grey[900],
@@ -65,49 +70,114 @@ const StyledTextField = styled(TextField)(({ theme }) => ({
 export function CardPage() {
     const [data, setData] = useState<DrugLifeCycleVO[]>([]);
     const [operationTypeMap, setOperationTypeMap] = useState<Map<string, string>>(new Map());
+    const [webSocket, setWebSocket] = useState<Client | null>(null);
+    const [progress, setProgress] = useState<string[]>([]);
 
-    // 获取初始数据
+    // Fetch initial data and operationTypeMap
     useEffect(() => {
-        axios.get(`${BASE_URL}/web/cards`).then((response) => {
-            setData(response.data);
-            console.log(response)
-        });
-    }, []);
-
-    // 获取operationType列表并构建operationTypeMap
-    useEffect(() => {
-        axios.get(`${BASE_URL}/web/operationTypes`).then((response) => {
+        Promise.all([
+            axios.get(`${BASE_URL_V1}/web/cards`),
+            axios.get(`${BASE_URL_V1}/web/operationTypes`)
+        ]).then(([cardsResponse, operationTypesResponse]) => {
             const newOperationTypeMap = new Map();
-            response.data.forEach((fullType: string) => {
+            operationTypesResponse.data.forEach((fullType: string) => {
                 const displayType = fullType.substring(fullType.lastIndexOf('.') + 1);
                 newOperationTypeMap.set(displayType, fullType);
             });
             setOperationTypeMap(newOperationTypeMap);
+
+            const processedData = cardsResponse.data.map((item: DrugLifeCycleVO) => {
+                return {
+                    ...item,
+                    operationVOList: item.operationVOList.map((operation) => {
+                        const displayType = Array.from(newOperationTypeMap.keys()).find(key => newOperationTypeMap.get(key) === operation.operationType);
+                        return {
+                            ...operation,
+                            operationType: displayType || operation.operationType
+                        }
+                    })
+                }
+            });
+
+            setData(processedData);
         });
     }, []);
 
-    // 提交数据
+
+    // Disconnect from WebSocket when the component unmounts
+    useEffect(() => {
+        return () => {
+            if (webSocket !== null) {
+                webSocket.deactivate();
+            }
+        };
+    }, [webSocket]);
+
+
+    // submit
     const handleSubmit = () => {
-        axios.post(`${BASE_URL}/web/submit`, data);
+        const processedData = data.map((item: DrugLifeCycleVO) => {
+            return {
+                ...item,
+                operationVOList: item.operationVOList.map((operation) => {
+                    const fullType = operationTypeMap.get(operation.operationType) || '';
+                    return {
+                        ...operation,
+                        operationType: fullType
+                    }
+                })
+            }
+        });
+
+        // axios.post(`${BASE_URL}/web/submit`, processedData);
+
+        const uuid = uuidv4();
+        const sock = new SockJS(`${BASE_URL_WS}/process/${uuid}`);
+        const stompClient = new Client({ webSocketFactory: () => sock });
+
+        stompClient.onConnect = (frame) => {
+            console.log("subscribe: " + `/topic/process-progress/${uuid}`);
+            stompClient.subscribe(`/topic/process-progress/${uuid}`, (message) => {
+                if (message.body) {
+                    console.log(`${message.body}`);
+                    setProgress(prevProgress => [...prevProgress, `${message.body}`]);
+                }
+            });
+        };
+
+        stompClient.onStompError = (frame) => {
+            console.log(`Broker reported error: ${frame.headers.message}`);
+            console.log(`Additional details: ${frame.body}`);
+        };
+        setWebSocket(stompClient);
+        stompClient.activate();
+
+
+        axios.post(`${BASE_URL_V1}/web/submit/${uuid}`, processedData);
+
     };
 
-    // 在列表中添加操作
-    const addOperation = (index: number, operationIndex: number) => {
+
+
+    // add operation from the list
+    const addOperation = (index: number, operationId: string) => {
         const newData = [...data];
-        // 将新条目插入到当前条目之后
-        newData[index].operationVOList.splice(operationIndex + 1, 0, {
-            operationType: operationTypes[0],
+        const newOperation = {
+            id: uuidv4(),  // 使用uuid生成新operation的唯一标识符
+            operationType: Array.from(operationTypeMap.values())[0] || '',
             operationMsg: 'Default MSG',
             operatorAdd: 'Blank',
-        });
+        };
+        const operationIndex = newData[index].operationVOList.findIndex(operation => operation.id === operationId);
+        newData[index].operationVOList.splice(operationIndex + 1, 0, newOperation);
         setData(newData);
     };
 
 
-    // 在列表中删除操作
-    const deleteOperation = (index: number, operationIndex: number) => {
+    // Delete operation from the list
+    const deleteOperation = (index: number, operationId: string) => {
         const newData = [...data];
-        newData[index].operationVOList.splice(operationIndex, 1);
+        newData[index].operationVOList = newData[index].operationVOList.filter(operation => operation.id !== operationId);
         setData(newData);
     };
 
@@ -137,14 +207,13 @@ export function CardPage() {
                         </Grid>
 
                         {item.operationVOList.map((operation, operationIndex) => (
-                            <Grid container spacing={2} key={operationIndex}>
+                            <Grid container spacing={2} key={operation.id}>
                                 <Grid item xs={3}>
                                     <StyledSelect
-                                        value={operationTypeMap.get(operation.operationType)}
+                                        value={operation.operationType}
                                         onChange={(e) => {
                                             const newData = [...data];
-                                            // 当选中值改变时，保存fullType而不是displayType
-                                            newData[index].operationVOList[operationIndex].operationType = operationTypeMap.get(e.target.value as string) || '';
+                                            newData[index].operationVOList[operationIndex].operationType = e.target.value as string;
                                             setData(newData);
                                         }}
                                         fullWidth
@@ -181,10 +250,10 @@ export function CardPage() {
                                     />
                                 </Grid>
                                 <Grid item xs={3}>
-                                    <IconButton onClick={() => addOperation(index, operationIndex)}>
+                                    <IconButton onClick={() => addOperation(index, operation.id)}>
                                         <AddCircleOutline />
                                     </IconButton>
-                                    <IconButton onClick={() => deleteOperation(index, operationIndex)}>
+                                    <IconButton onClick={() => deleteOperation(index, operation.id)}>
                                         <RemoveCircleOutline />
                                     </IconButton>
                                 </Grid>
@@ -194,7 +263,9 @@ export function CardPage() {
                 </StyledCard>
             ))}
             <Button onClick={handleSubmit} variant="contained" style={{ backgroundColor: '#0070c9', color: 'white', marginTop: '16px' }}>Submit</Button>
-
+            {progress.map((prog, index) => (
+                <TextField disabled value={prog} fullWidth key={index} />
+            ))}
         </Container>
     );
 }

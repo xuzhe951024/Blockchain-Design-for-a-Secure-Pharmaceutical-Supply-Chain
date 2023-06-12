@@ -5,6 +5,7 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import com.rbpsc.ctp.api.entities.configs.ExperimentConfig;
 import com.rbpsc.ctp.api.entities.dto.OperationDTO;
 import com.rbpsc.ctp.api.entities.dto.webview.DrugLifeCycleVO;
+import com.rbpsc.ctp.api.entities.supplychain.SupplyChainBaseEntity;
 import com.rbpsc.ctp.api.entities.supplychain.drug.DrugInfo;
 import com.rbpsc.ctp.api.entities.supplychain.drug.DrugLifeCycle;
 import com.rbpsc.ctp.api.entities.supplychain.operations.DrugOrderStep;
@@ -13,7 +14,7 @@ import com.rbpsc.ctp.api.entities.supplychain.roles.Institution;
 
 import java.util.*;
 
-public class FunctionEntityFactory {
+public class ModelEntityFactory {
     public static List<DrugLifeCycle> createDrugLifeCycleView(ExperimentConfig experimentConfig, List<Consumer> consumerList, List<List<Institution>> institutionTree) throws JsonProcessingException {
         DrugLifeCycleVO drugLifeCycleVO = new DrugLifeCycleVO();
         drugLifeCycleVO.setBatchId(experimentConfig.getExperimentName());
@@ -35,6 +36,7 @@ public class FunctionEntityFactory {
                 DrugOrderStep drugOrderStep = DataEntityFactory.createDrugOrderStep(drugLifeCycleVO, institutionList.get(randInt));
 
                 OperationDTO operationDTO = new OperationDTO();
+                operationDTO.setId(UUID.randomUUID().toString());
                 operationDTO.setOperationType(drugOrderStep.getClass().getName());
                 operationDTO.setOperation(new ObjectMapper().writeValueAsString(drugOrderStep));
 
@@ -50,4 +52,13 @@ public class FunctionEntityFactory {
 
         return drugLifeCycleList;
     }
+
+//    public static DrugLifeCycle buildDrugLifeCycleFromVOList(List<DrugLifeCycleVO> drugLifeCycleVOList, String batchId){
+//        SupplyChainBaseEntity supplyChainBaseEntity = new SupplyChainBaseEntity();
+//        supplyChainBaseEntity.setBatchId();
+//        DrugLifeCycle drugLifeCycle = new DrugLifeCycle();
+//        drugLifeCycle.setId(UUID.randomUUID().toString());
+//        DrugInfo drugInfo = new DrugInfo();
+//        DataEntityFactory.createDrugInfo()
+//    }
 }

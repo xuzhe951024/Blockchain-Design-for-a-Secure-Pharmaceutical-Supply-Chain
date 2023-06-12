@@ -22,6 +22,7 @@ public class DrugLifeCycleVO extends SupplyChainBaseEntity {
     String targetConsumer;
     List<OperationVO> operationVOList;
 
+    // This method is for test only
     public void createSelf(DrugLifeCycle drugLifeCycle, List<OperationVO> operationVOList){
         DrugInfo drugInfo = drugLifeCycle.getDrug();
         this.drugName = drugInfo.getDrugName();

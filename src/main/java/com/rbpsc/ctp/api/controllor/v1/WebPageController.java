@@ -2,25 +2,30 @@ package com.rbpsc.ctp.api.controllor.v1;
 
 
 import com.fasterxml.jackson.core.JsonProcessingException;
-import com.rbpsc.ctp.api.entities.dto.OperationDTO;
 import com.rbpsc.ctp.api.entities.dto.webview.DrugLifeCycleVO;
 import com.rbpsc.ctp.api.entities.supplychain.drug.DrugLifeCycle;
-import com.rbpsc.ctp.api.entities.supplychain.operations.DrugOrderStep;
-import com.rbpsc.ctp.api.entities.supplychain.operations.attack.AttackModelBase;
-import com.rbpsc.ctp.common.utiles.ParentToChildConvertor;
 import com.rbpsc.ctp.common.utiles.TestDataGenerator;
 import com.rbpsc.ctp.configuration.v1prefix.V1RestController;
+import io.github.classgraph.ClassGraph;
+import io.github.classgraph.ScanResult;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.messaging.simp.SimpMessagingTemplate;
 import org.springframework.web.bind.annotation.*;
 
-import javax.servlet.http.HttpServletRequest;
+import java.util.ArrayList;
 import java.util.List;
+
+import static com.rbpsc.ctp.common.Constant.EntityConstants.OPERATION_TYPE_PACKAGE_NAME;
 
 @V1RestController
 @RequestMapping("/web")
 @CrossOrigin(origins = "http://localhost:3000")
 @Slf4j
 public class WebPageController {
+
+    @Autowired
+    private SimpMessagingTemplate simpMessagingTemplate;
 
 
     @GetMapping("/cards")
@@ -34,35 +39,30 @@ public class WebPageController {
 
 
     @GetMapping("/operationTypes")
-    public List<DrugLifeCycleVO> getOperationTypes() throws JsonProcessingException {
+    public List<String> getOperationTypes() throws JsonProcessingException {
+        List<String> typeList = new ArrayList<String>(){{
+            try (ScanResult scanResult = new ClassGraph().whitelistPackages(OPERATION_TYPE_PACKAGE_NAME).scan()) {
+                scanResult.getAllClasses().forEach(classInfo -> add(classInfo.getName()));
+            }
+        }};
 
-
-        List<DrugLifeCycle> drugLifeCycleList = TestDataGenerator.generateDrugLifeCycleViewRandom();
-
-        return TestDataGenerator.generateDrugLifeCycleVO(drugLifeCycleList);
+        return typeList;
     }
 
-    @PostMapping("/submit")
-    public String processCards(@ModelAttribute("data") List<DrugLifeCycleVO> drugLifeCycleVOList) {
+    @PostMapping("/submit/{uuid}")
+    public void processCards(@PathVariable("uuid") String uuid, @RequestBody List<DrugLifeCycleVO> drugLifeCycleVOList) throws InterruptedException {
 
-//        List<DrugLifeCycle> drugLifeCycleList = drugLifeCycleVO.getDrugLifeCycleList();
-//
-//        // 打印 cards 以便于调试
-//        for (DrugLifeCycle lifeCycle :
-//                drugLifeCycleList) {
-//            log.debug("Drug Info: \n" + lifeCycle.getDrug().toString());
-//            OperationDTO operationDTO = lifeCycle.pollOperationVOQ();
-//            if (DrugOrderStep.class.getName().equals(operationDTO.getOperationType())){
-//                log.debug("Normal Step:\n" + ParentToChildConvertor.convert(operationDTO, DrugOrderStep.class).toString());
-//            } else {
-//                log.debug("Attack:\n" + ParentToChildConvertor.convert(operationDTO, AttackModelBase.class));
-//            }
-//        }
 
-        log.info(drugLifeCycleVOList.toString());
+        // Process data...
 
-        // 在这里执行其他操作，例如保存更新后的数据到数据库
-        return "redirect:/cards";
+
+        for (int i = 0; i <= 5; i++) {
+            // Assume this is the processing progress
+            Thread.sleep(500);
+            log.info("destination: /topic/process-progress/" + uuid);
+            simpMessagingTemplate.convertAndSend("/topic/process-progress/" + uuid, "MSG:" + i);
+        }
+
     }
 
 }

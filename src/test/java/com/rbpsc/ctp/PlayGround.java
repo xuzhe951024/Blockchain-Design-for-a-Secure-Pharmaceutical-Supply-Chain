@@ -9,10 +9,15 @@ import com.rbpsc.ctp.api.entities.supplychain.drug.DrugInfo;
 import com.rbpsc.ctp.api.entities.supplychain.operations.attack.AttackAvailability;
 import com.rbpsc.ctp.api.entities.supplychain.roles.Consumer;
 import com.rbpsc.ctp.common.utiles.WebClientUtil;
+import io.github.classgraph.ClassGraph;
+import io.github.classgraph.ScanResult;
 import lombok.extern.slf4j.Slf4j;
-import org.reflections.Reflections;
+
 import org.springframework.util.LinkedMultiValueMap;
 import org.springframework.util.MultiValueMap;
+import oshi.SystemInfo;
+import oshi.hardware.CentralProcessor;
+import oshi.hardware.GlobalMemory;
 import reactor.core.publisher.Mono;
 
 import java.util.*;
@@ -45,12 +50,29 @@ public class PlayGround {
 //        attackAvailability.setRoleName("1");
 //        attackAvailability.setTargetDrugId("2");
 
-        Reflections reflections = new Reflections("com.rbpsc.ctp.api.entities.supplychain.operations.attack");
-        Set<Class<?>> allClasses = reflections.getSubTypesOf(Object.class);
+//        try (ScanResult scanResult = new ClassGraph().whitelistPackages("com.rbpsc.ctp.api.entities.supplychain.operations").scan()) {
+//            scanResult.getAllClasses().forEach(classInfo -> System.out.println(classInfo.getName()));
+//        }
 
-        for (Class<?> clazz : allClasses) {
-            System.out.println(clazz.getName());
-        }
+        SystemInfo si = new SystemInfo();
+        CentralProcessor processor = si.getHardware().getProcessor();
+        System.out.println(processor);
+        int cores = Runtime.getRuntime().availableProcessors();
+        System.out.println("Available cores: " + cores);
+        GlobalMemory memory = si.getHardware().getMemory();
+
+        long totalMemory = memory.getTotal();
+        long availableMemory = memory.getAvailable();
+
+        System.out.println("Total Memory: " + totalMemory/(1024*1024));
+        System.out.println("Available Memory: " + availableMemory/(1024*1024));
+
+        long swapUsed = memory.getVirtualMemory().getSwapUsed();
+        long swapTotal = memory.getVirtualMemory().getSwapTotal();
+
+        System.out.println("Swap used: " + swapUsed/(1024*1024));
+        System.out.println("Swap total: " + swapTotal/(1024*1024));
+
 
     }
 }

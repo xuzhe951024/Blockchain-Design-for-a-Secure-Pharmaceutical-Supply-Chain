@@ -7,17 +7,18 @@ import com.rbpsc.ctp.api.entities.dto.OperationDTO;
 import com.rbpsc.ctp.api.entities.dto.webview.DrugLifeCycleVO;
 import com.rbpsc.ctp.api.entities.dto.webview.OperationVO;
 import com.rbpsc.ctp.api.entities.factories.DataEntityFactory;
-import com.rbpsc.ctp.api.entities.factories.FunctionEntityFactory;
+import com.rbpsc.ctp.api.entities.factories.ModelEntityFactory;
 import com.rbpsc.ctp.api.entities.supplychain.drug.DrugLifeCycle;
 import com.rbpsc.ctp.api.entities.supplychain.operations.attack.AttackAvailability;
 import com.rbpsc.ctp.api.entities.supplychain.operations.attack.AttackConfidentiality;
 import com.rbpsc.ctp.api.entities.supplychain.operations.attack.AttackIntegrity;
-import com.rbpsc.ctp.api.entities.supplychain.operations.attack.AttackModelBase;
+import com.rbpsc.ctp.api.entities.supplychain.operations.OperationBase;
 import com.rbpsc.ctp.api.entities.supplychain.roles.Consumer;
 import com.rbpsc.ctp.api.entities.supplychain.roles.Institution;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.UUID;
 
 public class TestDataGenerator {
     private static ObjectMapper objectMapper;
@@ -55,27 +56,30 @@ public class TestDataGenerator {
             }
         }};
 
-        return FunctionEntityFactory.createDrugLifeCycleView(experimentConfig, consumerList, institutionTree);
+        return ModelEntityFactory.createDrugLifeCycleView(experimentConfig, consumerList, institutionTree);
     }
 
     public static List<DrugLifeCycle> addAttacks(List<DrugLifeCycle> drugLifeCycleList) throws JsonProcessingException {
-        AttackModelBase attackModelBase = new AttackModelBase();
-        attackModelBase.setAddress("127.0.0.1");
-        attackModelBase.setTargetBatchId(drugLifeCycleList.get(0).getBatchId());
+        OperationBase operationBase = new OperationBase();
+        operationBase.setAddress("127.0.0.1");
+        operationBase.setTargetBatchId(drugLifeCycleList.get(0).getBatchId());
 
-        AttackAvailability attackAvailability = DataEntityFactory.createAttackAvailability(attackModelBase);
-        AttackConfidentiality attackConfidentiality = DataEntityFactory.createAttackConfidentiality(attackModelBase);
-        AttackIntegrity attackIntegrity = DataEntityFactory.createAttackIntegrity(attackModelBase);
+        AttackAvailability attackAvailability = DataEntityFactory.createAttackAvailability(operationBase);
+        AttackConfidentiality attackConfidentiality = DataEntityFactory.createAttackConfidentiality(operationBase);
+        AttackIntegrity attackIntegrity = DataEntityFactory.createAttackIntegrity(operationBase);
 
         OperationDTO operationVOC = new OperationDTO();
+        operationVOC.setId(UUID.randomUUID().toString());
         operationVOC.setOperationType(AttackConfidentiality.class.getName());
         operationVOC.setOperation(objectMapper.writeValueAsString(attackConfidentiality));
 
         OperationDTO operationVOI = new OperationDTO();
+        operationVOI.setId(UUID.randomUUID().toString());
         operationVOI.setOperationType(AttackIntegrity.class.getName());
         operationVOI.setOperation(objectMapper.writeValueAsString(attackIntegrity));
 
         OperationDTO operationVOA = new OperationDTO();
+        operationVOA.setId(UUID.randomUUID().toString());
         operationVOA.setOperationType(AttackAvailability.class.getName());
         operationVOA.setOperation(objectMapper.writeValueAsString(attackAvailability));
 
@@ -97,6 +101,7 @@ public class TestDataGenerator {
                 List<OperationVO> operationVOList = new ArrayList<OperationVO>(){{
                     drugLifeCycle.getOperationDTOQueue().forEach(operationDTO -> {
                         OperationVO operationVO = new OperationVO();
+                        operationVO.setId(operationDTO.getId());
                         operationVO.setOperationMsg("Default MSG");
                         operationVO.setOperatorAdd("127.0.0.1");
                         operationVO.setOperationType(operationDTO.getOperationType());

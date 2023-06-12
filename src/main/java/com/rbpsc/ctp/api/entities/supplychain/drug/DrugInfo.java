@@ -14,4 +14,5 @@ public class DrugInfo extends SupplyChainBaseEntity {
     String drugTagTagId;
     String drugName;
     boolean isFake = false;
+    boolean isRecalled = false;
 }

@@ -23,6 +23,8 @@ public class ServiceConstants {
 
     public static final String SERVICE_NAME_TOGGLE_API = "/v1/drugLifeCycle/drugOrderStep/toggle";
 
+    public static final String WEB_SOCKET_ENDPOINT = "/websocket";
+
     public static final AtomicBoolean API_ENABLED = new AtomicBoolean(true);
 
     public static final int RESPONSE_CODE_SUCCESS = 202;

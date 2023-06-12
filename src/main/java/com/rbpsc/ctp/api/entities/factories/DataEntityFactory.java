@@ -4,7 +4,7 @@ import com.rbpsc.ctp.api.entities.dto.webview.DrugLifeCycleVO;
 import com.rbpsc.ctp.api.entities.supplychain.operations.attack.AttackAvailability;
 import com.rbpsc.ctp.api.entities.supplychain.operations.attack.AttackConfidentiality;
 import com.rbpsc.ctp.api.entities.supplychain.operations.attack.AttackIntegrity;
-import com.rbpsc.ctp.api.entities.supplychain.operations.attack.AttackModelBase;
+import com.rbpsc.ctp.api.entities.supplychain.operations.OperationBase;
 import com.rbpsc.ctp.api.entities.base.BaseEntity;
 import com.rbpsc.ctp.api.entities.supplychain.SupplyChainBaseEntity;
 import com.rbpsc.ctp.api.entities.supplychain.drug.DrugInfo;
@@ -43,29 +43,29 @@ public class DataEntityFactory {
         target.setBatchId(source.getBatchId());
     }
 
-    public static void setAttackModelBase(AttackModelBase attackModelBaseSource, AttackModelBase attackModelBaseTarget){
-        attackModelBaseTarget.setTargetDrugId(attackModelBaseSource.getTargetDrugId());
-        attackModelBaseTarget.setRoleName(ROLE_NAME_ATTACKER);
+    public static void setAttackModelBase(OperationBase operationBaseSource, OperationBase operationBaseTarget){
+        operationBaseTarget.setTargetDrugId(operationBaseSource.getTargetDrugId());
+        operationBaseTarget.setRoleName(ROLE_NAME_ATTACKER);
     }
 
-    public static AttackAvailability createAttackAvailability(AttackModelBase attackModelBase) {
+    public static AttackAvailability createAttackAvailability(OperationBase operationBase) {
         AttackAvailability attackAvailability = new AttackAvailability();
         setId(attackAvailability);
-        setAttackModelBase(attackModelBase, attackAvailability);
+        setAttackModelBase(operationBase, attackAvailability);
         return attackAvailability;
     }
 
-    public static AttackConfidentiality createAttackConfidentiality(AttackModelBase attackModelBase) {
+    public static AttackConfidentiality createAttackConfidentiality(OperationBase operationBase) {
         AttackConfidentiality attackConfidentiality = new AttackConfidentiality();
         setId(attackConfidentiality);
-        setAttackModelBase(attackModelBase, attackConfidentiality);
+        setAttackModelBase(operationBase, attackConfidentiality);
         return attackConfidentiality;
     }
 
-    public static AttackIntegrity createAttackIntegrity(AttackModelBase attackModelBase){
+    public static AttackIntegrity createAttackIntegrity(OperationBase operationBase){
         AttackIntegrity attackIntegrity = new AttackIntegrity();
         setId(attackIntegrity);
-        setAttackModelBase(attackModelBase, attackIntegrity);
+        setAttackModelBase(operationBase, attackIntegrity);
         return attackIntegrity;
     }
 
