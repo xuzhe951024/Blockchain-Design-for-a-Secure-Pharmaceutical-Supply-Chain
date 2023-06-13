@@ -11,8 +11,8 @@ import org.springframework.data.mongodb.core.mapping.Document;
 @EqualsAndHashCode(callSuper = true)
 @ToString(callSuper = true)
 public class DrugInfo extends SupplyChainBaseEntity {
-    String drugTagTagId;
-    String drugName;
-    boolean isFake = false;
-    boolean isRecalled = false;
+    private String drugTagTagId;
+    private String drugName;
+    private boolean isFake = false;
+    private boolean isRecalled = false;
 }

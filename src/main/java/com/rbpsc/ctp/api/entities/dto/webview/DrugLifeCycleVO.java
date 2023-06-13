@@ -16,11 +16,11 @@ import java.util.UUID;
 @Document
 @ToString(callSuper = true)
 public class DrugLifeCycleVO extends SupplyChainBaseEntity {
-    String drugName;
-    String drugId;
-    String physicalMarking;
-    String targetConsumer;
-    List<OperationVO> operationVOList;
+    private String drugName;
+    private String drugId;
+    private String physicalMarking;
+    private String targetConsumer;
+    private List<OperationVO> operationVOList;
 
     // This method is for test only
     public void createSelf(DrugLifeCycle drugLifeCycle, List<OperationVO> operationVOList){
@@ -34,5 +34,21 @@ public class DrugLifeCycleVO extends SupplyChainBaseEntity {
 
         this.setBatchId(drugLifeCycle.getBatchId());
         this.setId(UUID.randomUUID().toString());
+    }
+
+    public void addOperationVO(OperationVO operationVO){
+        this.operationVOList.add(operationVO);
+    }
+
+    public OperationVO peakOperationVO(){
+        return this.operationVOList.get(0);
+    }
+
+    public OperationVO pollOperationVO(){
+        return this.operationVOList.remove(0);
+    }
+
+    public int getOperationVOListSize(){
+        return this.operationVOList.size();
     }
 }

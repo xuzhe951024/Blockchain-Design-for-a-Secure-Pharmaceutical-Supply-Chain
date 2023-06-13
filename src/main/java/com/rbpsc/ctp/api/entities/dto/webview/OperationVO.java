@@ -9,7 +9,7 @@ import lombok.ToString;
 @EqualsAndHashCode(callSuper = true)
 @ToString(callSuper = true)
 public class OperationVO extends BaseEntity<String> {
-    String operationType;
-    String operationMsg;
-    String operatorAdd;
+    private String operationType;
+    private String operationMsg;
+    private String operatorAdd;
 }

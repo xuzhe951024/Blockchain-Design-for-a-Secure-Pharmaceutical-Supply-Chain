@@ -9,6 +9,6 @@ import lombok.ToString;
 @EqualsAndHashCode(callSuper = true)
 @ToString(callSuper = true)
 public class RoleBase extends BaseEntity<String> {
-    String roleName;
-    String address;
+    private String roleName;
+    private String address;
 }

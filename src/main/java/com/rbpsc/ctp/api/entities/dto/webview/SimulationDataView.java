@@ -20,17 +20,17 @@ import java.util.List;
 @ToString(callSuper = true)
 @Slf4j
 public class SimulationDataView extends SupplyChainBaseEntity {
-    List<DrugLifeCycle> drugLifeCycleList;
-    Long simulationCreateTime;
-    String osName;
-    String osVersion;
-    int osBitness;
-    String cpuInfo;
-    int availableCPUCoreNum;
-    long freeMem;
-    long totalMem;
-    long swapMemTotal;
-    long swapMemUsed;
+    private List<DrugLifeCycle> drugLifeCycleList;
+    private Long simulationCreateTime;
+    private String osName;
+    private String osVersion;
+    private int osBitness;
+    private String cpuInfo;
+    private int availableCPUCoreNum;
+    private long freeMem;
+    private long totalMem;
+    private long swapMemTotal;
+    private long swapMemUsed;
 
     public void detectEnvironment(){
         this.simulationCreateTime = System.currentTimeMillis();

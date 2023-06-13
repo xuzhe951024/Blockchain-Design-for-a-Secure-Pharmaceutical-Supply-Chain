@@ -66,7 +66,8 @@ public class ModelEntityFactory {
                 DrugInfo drugInfo = DataEntityFactory.createDrugInfo(simulationDataView, drugLifeCycleVO.getDrugName());
                 drugInfo.setId(drugLifeCycleVO.getDrugId());
 
-//                Consumer targetConsumer = DataEntityFactory.createConsumer()
+//                TODO: Reminder: do not forget to add consumer to the operation queue first when building the operationVO queue
+
 
                 DrugLifeCycle drugLifeCycle = DataEntityFactory.createDrugLifeCycle(simulationDataView, drugInfo);
 

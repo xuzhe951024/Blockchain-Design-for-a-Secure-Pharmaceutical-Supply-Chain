@@ -23,12 +23,10 @@ public class DrugLifeCycle extends SupplyChainBaseEntity {
     Consumer expectedReceiver;
 
     public OperationDTO pollOperationVOQ(){
-        OperationDTO operationDTO = this.operationDTOQueue.get(0);
         return operationDTOQueue.remove(0);
     }
 
     public Receipt pollReceipt(){
-        Receipt receipt = this.receiptQueue.get(0);
         return receiptQueue.remove(0);
     }
 

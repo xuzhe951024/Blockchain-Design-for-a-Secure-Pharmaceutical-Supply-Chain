@@ -9,5 +9,5 @@ import lombok.ToString;
 @Data
 @ToString(callSuper = true)
 public class SupplyChainBaseEntity extends BaseEntity<String> {
-    String batchId;
+    private String batchId;
 }

@@ -10,6 +10,6 @@ import lombok.ToString;
 @EqualsAndHashCode(callSuper = true)
 @ToString(callSuper = true)
 public class OperationDTO extends BaseEntity<String> {
-    String operationType;
-    String operation;
+    private String operationType;
+    private String operation;
 }

@@ -14,12 +14,12 @@ import java.util.List;
 @EqualsAndHashCode(callSuper = true)
 @ToString(callSuper = true)
 public class ExperimentConfig extends BaseEntity<String> {
-    String experimentName;
-    String experimentDescription;
-    String drugName;
-    int maxThreadCount;
-    int manufacturerCount;
-    List<Integer> distributorsForEachLevel;
-    int consumerCount;
-    int doesForEachConsumer;
+    private String experimentName;
+    private String experimentDescription;
+    private String drugName;
+    private int maxThreadCount;
+    private int manufacturerCount;
+    private List<Integer> distributorsForEachLevel;
+    private int consumerCount;
+    private int doesForEachConsumer;
 }

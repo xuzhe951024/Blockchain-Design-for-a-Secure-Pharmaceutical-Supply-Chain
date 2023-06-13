@@ -10,5 +10,5 @@ import org.springframework.data.mongodb.core.mapping.Document;
 @EqualsAndHashCode(callSuper = true)
 @ToString(callSuper = true)
 public class Receipt extends OperationBase {
-    boolean isProcessed = true;
+    private boolean isProcessed = true;
 }

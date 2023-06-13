@@ -9,7 +9,7 @@ import lombok.ToString;
 @Data
 @ToString(callSuper = true)
 public class OperationBase extends RoleBase {
-    String targetBatchId;
-    String targetDrugId;
-    String operationMSG;
+    private String targetBatchId;
+    private String targetDrugId;
+    private String operationMSG;
 }
