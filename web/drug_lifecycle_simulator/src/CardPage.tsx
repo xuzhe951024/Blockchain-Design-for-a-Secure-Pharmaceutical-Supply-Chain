@@ -11,6 +11,7 @@ import { Client } from '@stomp/stompjs';
 
 // Define data type
 type DrugLifeCycleVO = {
+    batchId: string;
     drugName: string;
     drugId: string;
     physicalMarking: string;

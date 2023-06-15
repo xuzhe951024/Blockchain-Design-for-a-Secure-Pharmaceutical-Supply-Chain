@@ -3,6 +3,7 @@ package com.rbpsc.ctp.api.controllor.v1;
 
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.rbpsc.ctp.api.entities.dto.webview.DrugLifeCycleVO;
+import com.rbpsc.ctp.api.entities.factories.ModelEntityFactory;
 import com.rbpsc.ctp.api.entities.supplychain.drug.DrugLifeCycle;
 import com.rbpsc.ctp.common.utiles.TestDataGenerator;
 import com.rbpsc.ctp.configuration.v1prefix.V1RestController;
@@ -54,7 +55,7 @@ public class WebPageController {
 
 
         // Process data...
-
+        List<DrugLifeCycle> drugLifeCycleList = ModelEntityFactory.buildDrugLifeCycleFromVOList(drugLifeCycleVOList, drugLifeCycleVOList.get(0).getBatchId());
 
         for (int i = 0; i <= 5; i++) {
             // Assume this is the processing progress
