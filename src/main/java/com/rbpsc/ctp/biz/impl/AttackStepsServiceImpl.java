@@ -25,7 +25,7 @@ public class AttackStepsServiceImpl implements AttackStepsService {
     public boolean attackAvailability(AttackAvailability attackAvailability) {
 
         webClientUtil.postWithParams(
-                        attackAvailability.getTargetAddress(),
+                        attackAvailability.getAddress(),
                         true,
                         Boolean.class,
                         DrugLifeCycleResponse.class)

@@ -15,6 +15,7 @@ type DrugLifeCycleVO = {
     drugId: string;
     physicalMarking: string;
     targetConsumer: string;
+    expectedDose: number;
     operationVOList: {
         id: string;
         operationType: string;
@@ -189,8 +190,8 @@ export function CardPage() {
                         <Box component="h2" sx={{ fontSize: '1.5em', color: 'grey.900' }}>{item.drugName}</Box>
                         <Box component="h3" sx={{ color: 'grey.700' }}>Drug Id: {item.drugId}</Box>
                         <Box component="h3" sx={{ color: 'grey.700' }}>Drug Physical Marking: {item.physicalMarking}</Box>
-                        <Box component="h3" sx={{ color: 'grey.700', mb: 5}}>Expected Buyer: {item.targetConsumer}</Box>
-
+                        <Box component="h3" sx={{ color: 'grey.700'}}>Expected Buyer: {item.targetConsumer}</Box>
+                        <Box component="h3" sx={{ color: 'grey.700', mb: 5}}> Expected Dose: {item.expectedDose}</Box>
                         <Grid container spacing={2}>
                             <Grid item xs={3}>
                                 <Box component="h4" sx={{ color: 'grey.800' }}>Operation Type</Box>

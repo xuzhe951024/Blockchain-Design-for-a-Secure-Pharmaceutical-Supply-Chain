@@ -20,6 +20,7 @@ public class DrugLifeCycleVO extends SupplyChainBaseEntity {
     private String drugId;
     private String physicalMarking;
     private String targetConsumer;
+    private int expectedDose;
     private List<OperationVO> operationVOList;
 
     // This method is for test only

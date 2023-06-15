@@ -1,5 +1,6 @@
 package com.rbpsc.ctp.api.entities.factories;
 
+import com.fasterxml.jackson.databind.ObjectMapper;
 import com.rbpsc.ctp.api.entities.base.BaseEntity;
 import com.rbpsc.ctp.api.entities.dto.OperationDTO;
 import com.rbpsc.ctp.api.entities.dto.webview.DrugLifeCycleVO;
@@ -14,6 +15,7 @@ import com.rbpsc.ctp.api.entities.supplychain.operations.attack.AttackConfidenti
 import com.rbpsc.ctp.api.entities.supplychain.operations.attack.AttackIntegrity;
 import com.rbpsc.ctp.api.entities.supplychain.roles.Consumer;
 import com.rbpsc.ctp.api.entities.supplychain.roles.Institution;
+import com.rbpsc.ctp.api.entities.supplychain.roles.RoleBase;
 import com.rbpsc.ctp.api.entities.work_request.WorkLoadRecord;
 
 import java.util.ArrayList;
@@ -28,6 +30,8 @@ import static com.rbpsc.ctp.common.Constant.EntityConstants.*;
  * @create: 5/1/23
  **/
 public class DataEntityFactory {
+
+    private static ObjectMapper objectMapper;
 
     public static void setId(BaseEntity<String> baseEntity) {
         baseEntity.setId(UUID.randomUUID().toString());
@@ -46,7 +50,6 @@ public class DataEntityFactory {
     }
 
     public static void setAttackModelBase(OperationBase operationBaseSource, OperationBase operationBaseTarget){
-        operationBaseTarget.setTargetDrugId(operationBaseSource.getTargetDrugId());
         operationBaseTarget.setRoleName(ROLE_NAME_ATTACKER);
     }
 
@@ -97,12 +100,17 @@ public class DataEntityFactory {
         return drugLifeCycle;
     }
 
-    public static DrugOrderStep createDrugOrderStep(SupplyChainBaseEntity supplyChainBaseEntity, Institution institution){
+    public static DrugOrderStep createDrugOrderStep(RoleBase role, String MSG){
         DrugOrderStep drugOrderStep = new DrugOrderStep();
         setId(drugOrderStep);
-        drugOrderStep.setAddress(institution.getAddress());
-        drugOrderStep.setRoleName(institution.getRoleName());
+        setOperationBase(role, drugOrderStep, MSG);
         return drugOrderStep;
+    }
+
+    public static void setOperationBase(RoleBase source, OperationBase dest, String MSG){
+        dest.setRoleName(source.getRoleName());
+        dest.setAddress(source.getAddress());
+        dest.setOperationMSG(MSG);
     }
 
     public static Consumer createConsumer(int dose, String address){
@@ -120,6 +128,14 @@ public class DataEntityFactory {
         institution.setAddress(address);
         institution.setRoleName(ROLE_NAME_INSTITUTION);
         return institution;
+    }
+
+    public static OperationDTO createOperationDTO(OperationBase operation, String type) {
+        OperationDTO operationDTO = new OperationDTO();
+        setId(operationDTO);
+        operationDTO.setOperationType(type);
+        operationDTO.setOperation(operation);
+        return operationDTO;
     }
 
 }

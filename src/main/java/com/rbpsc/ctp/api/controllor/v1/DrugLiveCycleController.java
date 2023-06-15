@@ -6,7 +6,6 @@ import com.rbpsc.ctp.api.entities.dto.OperationDTO;
 import com.rbpsc.ctp.api.entities.dto.response.DrugLifeCycleResponse;
 import com.rbpsc.ctp.api.entities.supplychain.drug.DrugLifeCycle;
 import com.rbpsc.ctp.api.entities.supplychain.operations.DrugOrderStep;
-import com.rbpsc.ctp.api.entities.supplychain.roles.RoleBase;
 import com.rbpsc.ctp.biz.service.SupplyChainStepsService;
 import com.rbpsc.ctp.common.utiles.WebClientUtil;
 import com.rbpsc.ctp.configuration.v1prefix.V1RestController;
@@ -144,7 +143,7 @@ public class DrugLiveCycleController {
         DrugLifeCycleResponse response = new DrugLifeCycleResponse();
 
         OperationDTO operationDTO = drugLifeCycle.peakOperationVOQ();
-        if (StringUtils.isEmpty(objectMapper.readValue(operationDTO.getOperation(), RoleBase.class).getAddress())){
+        if (StringUtils.isEmpty(operationDTO.getOperation().getAddress())){
             log.error("Address can not be empty!");
             response.setResponseWithCode(RESPONSE_CODE_FAIL_FIND_ADDRESS);
 
@@ -155,7 +154,7 @@ public class DrugLiveCycleController {
 
         WebClientUtil webClientUtil = new WebClientUtil();
 
-        Mono<DrugLifeCycleResponse> responseMono = webClientUtil.postWithParams(objectMapper.readValue(operationDTO.getOperation(), RoleBase.class).getAddress(), drugLifeCycle, DrugLifeCycle.class, DrugLifeCycleResponse.class);
+        Mono<DrugLifeCycleResponse> responseMono = webClientUtil.postWithParams(operationDTO.getOperation().getAddress(), drugLifeCycle, DrugLifeCycle.class, DrugLifeCycleResponse.class);
 
         responseMono.subscribe(result -> {
             log.info(result.toString());

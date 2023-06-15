@@ -2,6 +2,7 @@ package com.rbpsc.ctp.api.entities.dto;
 
 
 import com.rbpsc.ctp.api.entities.base.BaseEntity;
+import com.rbpsc.ctp.api.entities.supplychain.operations.OperationBase;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
 import lombok.ToString;
@@ -11,5 +12,5 @@ import lombok.ToString;
 @ToString(callSuper = true)
 public class OperationDTO extends BaseEntity<String> {
     private String operationType;
-    private String operation;
+    private OperationBase operation;
 }

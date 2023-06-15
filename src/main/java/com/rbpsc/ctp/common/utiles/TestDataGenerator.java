@@ -71,17 +71,17 @@ public class TestDataGenerator {
         OperationDTO operationVOC = new OperationDTO();
         operationVOC.setId(UUID.randomUUID().toString());
         operationVOC.setOperationType(AttackConfidentiality.class.getName());
-        operationVOC.setOperation(objectMapper.writeValueAsString(attackConfidentiality));
+        operationVOC.setOperation(attackConfidentiality);
 
         OperationDTO operationVOI = new OperationDTO();
         operationVOI.setId(UUID.randomUUID().toString());
         operationVOI.setOperationType(AttackIntegrity.class.getName());
-        operationVOI.setOperation(objectMapper.writeValueAsString(attackIntegrity));
+        operationVOI.setOperation(attackIntegrity);
 
         OperationDTO operationVOA = new OperationDTO();
         operationVOA.setId(UUID.randomUUID().toString());
         operationVOA.setOperationType(AttackAvailability.class.getName());
-        operationVOA.setOperation(objectMapper.writeValueAsString(attackAvailability));
+        operationVOA.setOperation(attackAvailability);
 
         drugLifeCycleList.get(0).addOperation(operationVOC);
         drugLifeCycleList.get(1).addOperation(operationVOI);
