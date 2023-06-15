@@ -62,7 +62,6 @@ public class TestDataGenerator {
     public static List<DrugLifeCycle> addAttacks(List<DrugLifeCycle> drugLifeCycleList) throws JsonProcessingException {
         OperationBase operationBase = new OperationBase();
         operationBase.setAddress("127.0.0.1");
-        operationBase.setTargetBatchId(drugLifeCycleList.get(0).getBatchId());
 
         AttackAvailability attackAvailability = DataEntityFactory.createAttackAvailability(operationBase);
         AttackConfidentiality attackConfidentiality = DataEntityFactory.createAttackConfidentiality(operationBase);
