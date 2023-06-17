@@ -78,7 +78,7 @@ class CTPApplicationTests {
     @Test
     void basicProcessesTest() throws JsonProcessingException {
 
-        List<DrugLifeCycle> drugLifeCycleList = TestDataGenerator.generateDrugLifeCycleWithAttack();
+        List<DrugLifeCycle<OperationDTO>> drugLifeCycleList = TestDataGenerator.generateDrugLifeCycleWithAttack();
 
         List<DrugInfo> consumerReceivedList = new ArrayList<>();
 

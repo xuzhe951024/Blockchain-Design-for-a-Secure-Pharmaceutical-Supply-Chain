@@ -133,13 +133,13 @@ export function CardPage() {
 
         // axios.post(`${BASE_URL}/web/submit`, processedData);
 
-        const uuid = uuidv4();
-        const sock = new SockJS(`${BASE_URL_WS}/process/${uuid}`);
+        const wsUuid = uuidv4();
+        const sock = new SockJS(`${BASE_URL_WS}/process/${wsUuid}`);
         const stompClient = new Client({ webSocketFactory: () => sock });
 
         stompClient.onConnect = (frame) => {
-            console.log("subscribe: " + `/topic/process-progress/${uuid}`);
-            stompClient.subscribe(`/topic/process-progress/${uuid}`, (message) => {
+            console.log("subscribe: " + `/topic/process-progress/${wsUuid}`);
+            stompClient.subscribe(`/topic/process-progress/${wsUuid}`, (message) => {
                 if (message.body) {
                     console.log(`${message.body}`);
                     setProgress(prevProgress => [...prevProgress, `${message.body}`]);
@@ -155,7 +155,7 @@ export function CardPage() {
         stompClient.activate();
 
 
-        axios.post(`${BASE_URL_V1}/web/submit/${uuid}`, processedData);
+        axios.post(`${BASE_URL_V1}/web/submit/${wsUuid}`, processedData);
 
     };
 

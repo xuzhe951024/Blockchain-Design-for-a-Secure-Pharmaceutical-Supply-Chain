@@ -2,21 +2,16 @@ package com.rbpsc.ctp.api.controllor.v1;
 
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
-import com.rbpsc.ctp.api.entities.dto.OperationDTO;
 import com.rbpsc.ctp.api.entities.dto.response.DrugLifeCycleResponse;
 import com.rbpsc.ctp.api.entities.supplychain.drug.DrugLifeCycle;
-import com.rbpsc.ctp.api.entities.supplychain.operations.DrugOrderStep;
 import com.rbpsc.ctp.biz.service.SupplyChainStepsService;
-import com.rbpsc.ctp.common.utiles.WebClientUtil;
 import com.rbpsc.ctp.configuration.v1prefix.V1RestController;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.MediaType;
-import org.springframework.util.StringUtils;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
-import reactor.core.publisher.Mono;
 
 import static com.rbpsc.ctp.common.Constant.ServiceConstants.*;
 
@@ -77,7 +72,8 @@ public class DrugLiveCycleController {
 
         log.info("Step:\n " + drugLifeCycle.pollOperationVOQ().toString() + "\n has been well processed!");
 
-        return sendToNextStep(drugLifeCycle);
+//        return sendToNextStep(drugLifeCycle);
+        return null;
     }
 
     @PostMapping("/distributor")
@@ -96,7 +92,8 @@ public class DrugLiveCycleController {
 
         log.info("Step:\n " + drugLifeCycle.pollOperationVOQ().toString() + "\n has been well processed!");
 
-        return sendToNextStep(drugLifeCycle);
+//        return sendToNextStep(drugLifeCycle);
+        return null;
     }
 
     @PostMapping("/consumer")
@@ -121,7 +118,8 @@ public class DrugLiveCycleController {
 
         log.info("Step:\n " + drugLifeCycle.pollOperationVOQ().toString() + "\n has been well processed!");
 
-        return sendToNextStep(drugLifeCycle);
+//        return sendToNextStep(drugLifeCycle);
+        return null;
     }
 
     private DrugLifeCycleResponse checkBeforeServe(DrugLifeCycle drugLifeCycle) {
@@ -133,42 +131,16 @@ public class DrugLiveCycleController {
             return response;
         }
 
-        // TODO: add role check for self
-        OperationDTO operationDTO = drugLifeCycle.peakOperationVOQ();
-        if (!DrugOrderStep.class.getName().equals(operationDTO.getOperationType())){
-            response.setResponseWithCode(RESPONSE_CODE_FAIL_OPERATION_TYPE_NOT_MATCH);
-            response.setDescribe(String.format("check if operation type{%s} matches node role{%s}.",
-                    operationDTO.getOperationType(),
-                    "TODO:Role"));
-
-            return response;
-        }
-
-        return response;
-    }
-
-    private DrugLifeCycleResponse sendToNextStep(DrugLifeCycle drugLifeCycle) throws JsonProcessingException {
-        DrugLifeCycleResponse response = new DrugLifeCycleResponse();
-
-        OperationDTO operationDTO = drugLifeCycle.peakOperationVOQ();
-        if (StringUtils.isEmpty(operationDTO.getOperation().getAddress())){
-            log.error("Address can not be empty!");
-            response.setResponseWithCode(RESPONSE_CODE_FAIL_FIND_ADDRESS);
-
-            response.setDescribe(String.format("Please check address for operation:{%s}", operationDTO));
-
-            return response;
-        }
-
-        WebClientUtil webClientUtil = new WebClientUtil();
-
-        Mono<DrugLifeCycleResponse> responseMono = webClientUtil.postWithParams(operationDTO.getOperation().getAddress(), drugLifeCycle, DrugLifeCycle.class, DrugLifeCycleResponse.class);
-
-        responseMono.subscribe(result -> {
-            log.info(result.toString());
-        }, error -> {
-            throw new RuntimeException(error);
-        });
+//        // TODO: add role check for self
+//        OperationDTO operationDTO = drugLifeCycle.peakOperationVOQ();
+//        if (!DrugOrderStep.class.getName().equals(operationDTO.getOperationType())){
+//            response.setResponseWithCode(RESPONSE_CODE_FAIL_OPERATION_TYPE_NOT_MATCH);
+//            response.setDescribe(String.format("check if operation type{%s} matches node role{%s}.",
+//                    operationDTO.getOperationType(),
+//                    "TODO:Role"));
+//
+//            return response;
+//        }
 
         return response;
     }

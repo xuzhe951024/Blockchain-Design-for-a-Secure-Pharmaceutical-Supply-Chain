@@ -1,7 +1,5 @@
 package com.rbpsc.ctp.common.Constant;
 
-import com.rbpsc.ctp.api.entities.supplychain.operations.DrugOrderStep;
-
 import java.util.HashMap;
 import java.util.Map;
 import java.util.concurrent.atomic.AtomicBoolean;
@@ -24,6 +22,7 @@ public class ServiceConstants {
     public static final String SERVICE_NAME_TOGGLE_API = "/v1/drugLifeCycle/drugOrderStep/toggle";
 
     public static final String WEB_SOCKET_ENDPOINT = "/websocket";
+    public static final String WEB_SCOKET_TOPIC_PROGRESS = "/topic/process-progress/";
 
     public static final AtomicBoolean API_ENABLED = new AtomicBoolean(true);
 

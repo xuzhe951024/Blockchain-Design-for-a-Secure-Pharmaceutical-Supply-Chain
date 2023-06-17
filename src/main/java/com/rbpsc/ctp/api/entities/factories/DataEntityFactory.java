@@ -9,7 +9,6 @@ import com.rbpsc.ctp.api.entities.supplychain.drug.DrugInfo;
 import com.rbpsc.ctp.api.entities.supplychain.drug.DrugLifeCycle;
 import com.rbpsc.ctp.api.entities.supplychain.operations.DrugOrderStep;
 import com.rbpsc.ctp.api.entities.supplychain.operations.OperationBase;
-import com.rbpsc.ctp.api.entities.supplychain.operations.Receipt;
 import com.rbpsc.ctp.api.entities.supplychain.operations.attack.AttackAvailability;
 import com.rbpsc.ctp.api.entities.supplychain.operations.attack.AttackConfidentiality;
 import com.rbpsc.ctp.api.entities.supplychain.operations.attack.AttackIntegrity;
@@ -94,9 +93,7 @@ public class DataEntityFactory {
         setSupplyChainBase(supplyChainBaseEntity, drugLifeCycle);
         drugLifeCycle.setDrug(drugInfo);
         ArrayList<OperationDTO> operationQueue = new ArrayList<>();
-        ArrayList<Receipt> receiptArrayQueue = new ArrayList<>();
         drugLifeCycle.setOperationDTOQueue(operationQueue);
-        drugLifeCycle.setReceiptQueue(receiptArrayQueue);
         return drugLifeCycle;
     }
 

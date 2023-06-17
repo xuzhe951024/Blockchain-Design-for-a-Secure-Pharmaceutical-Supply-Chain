@@ -2,6 +2,7 @@ package com.rbpsc.ctp.api.controllor.v1;
 
 
 import com.fasterxml.jackson.core.JsonProcessingException;
+import com.rbpsc.ctp.api.entities.dto.OperationDTO;
 import com.rbpsc.ctp.api.entities.dto.webview.DrugLifeCycleVO;
 import com.rbpsc.ctp.api.entities.dto.webview.SimulationDataView;
 import com.rbpsc.ctp.api.entities.factories.ModelEntityFactory;
@@ -39,7 +40,7 @@ public class WebPageController {
     public List<DrugLifeCycleVO> getCards() throws JsonProcessingException {
 
 
-        List<DrugLifeCycle> drugLifeCycleList = TestDataGenerator.generateDrugLifeCycleViewRandom();
+        List<DrugLifeCycle<OperationDTO>> drugLifeCycleList = TestDataGenerator.generateDrugLifeCycleViewRandom();
 
         return TestDataGenerator.generateDrugLifeCycleVO(drugLifeCycleList);
     }
@@ -62,7 +63,7 @@ public class WebPageController {
         // Process data...
         List<DrugLifeCycle> drugLifeCycleList = ModelEntityFactory.buildDrugLifeCycleFromVOList(drugLifeCycleVOList, drugLifeCycleVOList.get(0).getBatchId());
 
-        simulatorDispatcherService.startRequesting(new SimulationDataView(), 10, uuid);
+        simulatorDispatcherService.startRequesting(new SimulationDataView(), uuid);
 
 //        for (int i = 0; i <= 5; i++) {
 //            // Assume this is the processing progress

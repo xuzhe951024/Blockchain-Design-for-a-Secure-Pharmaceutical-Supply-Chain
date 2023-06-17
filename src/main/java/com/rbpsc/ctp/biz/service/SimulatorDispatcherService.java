@@ -9,5 +9,5 @@ import com.rbpsc.ctp.api.entities.dto.webview.SimulationDataView;
  * @create: 6/16/23
  **/
 public interface SimulatorDispatcherService {
-    public void startRequesting(SimulationDataView simulationDataView, int threadNum, String wsUUID);
+    public void startRequesting(SimulationDataView simulationDataView, String wsUUID);
 }

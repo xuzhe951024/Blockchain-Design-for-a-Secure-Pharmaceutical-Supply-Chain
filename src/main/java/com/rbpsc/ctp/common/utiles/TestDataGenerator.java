@@ -23,7 +23,7 @@ import java.util.UUID;
 public class TestDataGenerator {
     private static ObjectMapper objectMapper;
 
-    public static List<DrugLifeCycle> generateDrugLifeCycleViewRandom() throws JsonProcessingException {
+    public static List<DrugLifeCycle<OperationDTO>> generateDrugLifeCycleViewRandom() throws JsonProcessingException {
         ExperimentConfig experimentConfig = new ExperimentConfig();
         experimentConfig.setExperimentName("TestPage");
         experimentConfig.setConsumerCount(10);
@@ -59,7 +59,7 @@ public class TestDataGenerator {
         return ModelEntityFactory.createDrugLifeCycleView(experimentConfig, consumerList, institutionTree);
     }
 
-    public static List<DrugLifeCycle> addAttacks(List<DrugLifeCycle> drugLifeCycleList) throws JsonProcessingException {
+    public static List<DrugLifeCycle<OperationDTO>> addAttacks(List<DrugLifeCycle<OperationDTO>> drugLifeCycleList) throws JsonProcessingException {
         OperationBase operationBase = new OperationBase();
         operationBase.setAddress("127.0.0.1");
 
@@ -89,11 +89,11 @@ public class TestDataGenerator {
         return drugLifeCycleList;
     }
 
-    public static List<DrugLifeCycle> generateDrugLifeCycleWithAttack() throws JsonProcessingException {
+    public static List<DrugLifeCycle<OperationDTO>> generateDrugLifeCycleWithAttack() throws JsonProcessingException {
         return  TestDataGenerator.addAttacks(TestDataGenerator.generateDrugLifeCycleViewRandom());
     }
 
-    public static List<DrugLifeCycleVO> generateDrugLifeCycleVO(List<DrugLifeCycle> drugLifeCycleList) {
+    public static List<DrugLifeCycleVO> generateDrugLifeCycleVO(List<DrugLifeCycle<OperationDTO>> drugLifeCycleList) {
         List<DrugLifeCycleVO> drugLifeCycleVOList = new ArrayList<DrugLifeCycleVO>(){{
             drugLifeCycleList.forEach(drugLifeCycle -> {
                 DrugLifeCycleVO drugLifeCycleVO = new DrugLifeCycleVO();

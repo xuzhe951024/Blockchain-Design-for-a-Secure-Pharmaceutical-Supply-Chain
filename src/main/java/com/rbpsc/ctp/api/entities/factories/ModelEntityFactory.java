@@ -20,7 +20,7 @@ import java.util.UUID;
 import static com.rbpsc.ctp.common.Constant.EntityConstants.DEFAULT_OPERATION_MSG;
 
 public class ModelEntityFactory {
-    public static List<DrugLifeCycle> createDrugLifeCycleView(ExperimentConfig experimentConfig, List<Consumer> consumerList, List<List<Institution>> institutionTree) throws JsonProcessingException {
+    public static List<DrugLifeCycle<OperationDTO>> createDrugLifeCycleView(ExperimentConfig experimentConfig, List<Consumer> consumerList, List<List<Institution>> institutionTree) throws JsonProcessingException {
         DrugLifeCycleVO drugLifeCycleVO = new DrugLifeCycleVO();
         drugLifeCycleVO.setBatchId(experimentConfig.getExperimentName());
         DataEntityFactory.setId(drugLifeCycleVO);
@@ -28,7 +28,7 @@ public class ModelEntityFactory {
 
         int numberOfDrugs = experimentConfig.getConsumerCount() * experimentConfig.getDoesForEachConsumer();
         String drugName = experimentConfig.getDrugName();
-        List<DrugLifeCycle> drugLifeCycleList = new ArrayList<>();
+        List<DrugLifeCycle<OperationDTO>> drugLifeCycleList = new ArrayList<>();
         for (int i = 0; i < numberOfDrugs; i++) {
             DrugInfo drugInfo = DataEntityFactory.createDrugInfo(drugLifeCycleVO, drugName);
 

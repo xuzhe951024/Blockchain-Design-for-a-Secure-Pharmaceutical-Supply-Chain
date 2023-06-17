@@ -1,5 +1,6 @@
 package com.rbpsc.ctp.api.entities.dto.webview;
 
+import com.rbpsc.ctp.api.entities.dto.OperationDTO;
 import com.rbpsc.ctp.api.entities.supplychain.SupplyChainBaseEntity;
 import com.rbpsc.ctp.api.entities.supplychain.drug.DrugLifeCycle;
 import lombok.Data;
@@ -20,7 +21,7 @@ import java.util.List;
 @ToString(callSuper = true)
 @Slf4j
 public class SimulationDataView extends SupplyChainBaseEntity {
-    private List<DrugLifeCycle> drugLifeCycleList;
+    private List<DrugLifeCycle<OperationDTO>> drugLifeCycleList;
     private Long simulationCreateTime;
     private String osName;
     private String osVersion;
