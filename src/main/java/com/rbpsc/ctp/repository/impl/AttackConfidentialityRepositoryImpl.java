@@ -3,7 +3,6 @@ package com.rbpsc.ctp.repository.impl;
 import com.rbpsc.ctp.api.entities.supplychain.operations.attack.AttackConfidentiality;
 import com.rbpsc.ctp.repository.impl.base.BaseAttackConfidentialityRepositoryForMongoDBImpl;
 import com.rbpsc.ctp.repository.service.AttackConfidentialityRepository;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Repository;
 
 import java.util.List;
@@ -16,8 +15,12 @@ import java.util.List;
  **/
 @Repository
 public class AttackConfidentialityRepositoryImpl implements AttackConfidentialityRepository {
-    @Autowired
+    final
     BaseAttackConfidentialityRepositoryForMongoDBImpl baseAttackConfidentialityRepositoryForMongoDB;
+
+    public AttackConfidentialityRepositoryImpl(BaseAttackConfidentialityRepositoryForMongoDBImpl baseAttackConfidentialityRepositoryForMongoDB) {
+        this.baseAttackConfidentialityRepositoryForMongoDB = baseAttackConfidentialityRepositoryForMongoDB;
+    }
 
     @Override
     public void insertAttack(AttackConfidentiality attackConfidentiality) {

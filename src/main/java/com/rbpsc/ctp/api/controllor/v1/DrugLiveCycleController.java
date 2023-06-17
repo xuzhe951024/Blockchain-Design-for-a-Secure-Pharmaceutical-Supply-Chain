@@ -10,7 +10,6 @@ import com.rbpsc.ctp.biz.service.SupplyChainStepsService;
 import com.rbpsc.ctp.common.utiles.WebClientUtil;
 import com.rbpsc.ctp.configuration.v1prefix.V1RestController;
 import lombok.extern.slf4j.Slf4j;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.MediaType;
 import org.springframework.util.StringUtils;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -26,11 +25,18 @@ import static com.rbpsc.ctp.common.Constant.ServiceConstants.*;
 @Slf4j
 public class DrugLiveCycleController {
 
-    @Autowired
+    //TODO read self roleName from ENV
+
+    final
     SupplyChainStepsService supplyChainStepsService;
 
-    @Autowired
+    final
     ObjectMapper objectMapper;
+
+    public DrugLiveCycleController(SupplyChainStepsService supplyChainStepsService, ObjectMapper objectMapper) {
+        this.supplyChainStepsService = supplyChainStepsService;
+        this.objectMapper = objectMapper;
+    }
 
     @GetMapping(value = "/checkAvailable")
     public DrugLifeCycleResponse checkAvailable(){
@@ -49,6 +55,8 @@ public class DrugLiveCycleController {
 
     @PostMapping(value = "/toggle")
     public DrugLifeCycleResponse toggle(@RequestBody boolean enable){
+        //TODO control each service API here independently
+
         DrugLifeCycleResponse response = new DrugLifeCycleResponse();
         API_ENABLED.set(enable);
         response.setDescribe("API is now " + (API_ENABLED.get() ? "enabled" : "disabled") + ".");

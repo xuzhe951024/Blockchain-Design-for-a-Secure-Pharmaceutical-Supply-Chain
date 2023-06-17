@@ -1,9 +1,8 @@
 package com.rbpsc.ctp.repository.impl;
 
+import com.rbpsc.ctp.api.entities.work_request.WorkLoadRecord;
 import com.rbpsc.ctp.repository.impl.base.BaseWorkLoadRecordRepositoryForMongoDBImpl;
 import com.rbpsc.ctp.repository.service.WorkLoadRecordRepository;
-import com.rbpsc.ctp.api.entities.work_request.WorkLoadRecord;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Repository;
 
 /**
@@ -14,8 +13,11 @@ import org.springframework.stereotype.Repository;
  **/
 @Repository
 public class WorkLoadRecordRepositoryImpl implements WorkLoadRecordRepository {
-    @Autowired
-    private BaseWorkLoadRecordRepositoryForMongoDBImpl baseRepositoryForMongoDB;
+    private final BaseWorkLoadRecordRepositoryForMongoDBImpl baseRepositoryForMongoDB;
+
+    public WorkLoadRecordRepositoryImpl(BaseWorkLoadRecordRepositoryForMongoDBImpl baseRepositoryForMongoDB) {
+        this.baseRepositoryForMongoDB = baseRepositoryForMongoDB;
+    }
 
     @Override
     public void insertWorkLoadRecord(WorkLoadRecord workLoadRecord) {

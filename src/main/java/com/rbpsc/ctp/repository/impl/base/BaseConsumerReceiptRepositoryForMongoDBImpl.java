@@ -2,7 +2,6 @@ package com.rbpsc.ctp.repository.impl.base;
 
 import com.rbpsc.ctp.api.entities.supplychain.roles.Consumer;
 import com.rbpsc.ctp.repository.service.base.BaseConsumerReceiptRepository;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Repository;
 
 import java.util.List;
@@ -12,11 +11,15 @@ import java.util.Optional;
 
 public class BaseConsumerReceiptRepositoryForMongoDBImpl {
 
-    @Autowired
-    private MongoDBUtil<String, Consumer> mongoDBUtil;
+    private final MongoDBUtil<String, Consumer> mongoDBUtil;
 
-    @Autowired
+    final
     BaseConsumerReceiptRepository baseConsumerReceiptRepository;
+
+    public BaseConsumerReceiptRepositoryForMongoDBImpl(MongoDBUtil<String, Consumer> mongoDBUtil, BaseConsumerReceiptRepository baseConsumerReceiptRepository) {
+        this.mongoDBUtil = mongoDBUtil;
+        this.baseConsumerReceiptRepository = baseConsumerReceiptRepository;
+    }
 
     public Consumer save(Consumer entity) {
         return baseConsumerReceiptRepository.save(entity);

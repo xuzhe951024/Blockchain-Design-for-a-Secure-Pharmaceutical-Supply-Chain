@@ -7,7 +7,6 @@ import com.rbpsc.ctp.biz.service.SupplyChainStepsService;
 import com.rbpsc.ctp.repository.service.ConsumerReceiptRepository;
 import com.rbpsc.ctp.repository.service.DrugInfoRepository;
 import lombok.extern.slf4j.Slf4j;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.util.UUID;
@@ -16,11 +15,16 @@ import java.util.UUID;
 @Slf4j
 public class SupplyChainStepsServiceImpl implements SupplyChainStepsService {
 
-    @Autowired
+    final
     DrugInfoRepository drugInfoRepository;
 
-    @Autowired
+    final
     ConsumerReceiptRepository consumerReceiptRepository;
+
+    public SupplyChainStepsServiceImpl(DrugInfoRepository drugInfoRepository, ConsumerReceiptRepository consumerReceiptRepository) {
+        this.drugInfoRepository = drugInfoRepository;
+        this.consumerReceiptRepository = consumerReceiptRepository;
+    }
 
     @Override
     public DrugInfo manufacture(DrugInfo drug) {

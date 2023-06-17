@@ -1,13 +1,12 @@
 package com.rbpsc.ctp.biz.impl;
 
+import com.github.kevinsawicki.http.HttpRequest;
 import com.rbpsc.ctp.api.entities.factories.DataEntityFactory;
-import com.rbpsc.ctp.biz.service.WorkLoadService;
 import com.rbpsc.ctp.api.entities.work_request.WorkLoadRecord;
 import com.rbpsc.ctp.api.entities.work_request.WorkLoadReq;
-import com.github.kevinsawicki.http.HttpRequest;
+import com.rbpsc.ctp.biz.service.WorkLoadService;
 import com.rbpsc.ctp.repository.impl.WorkLoadRecordRepositoryImpl;
 import lombok.extern.slf4j.Slf4j;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 /**
@@ -20,8 +19,11 @@ import org.springframework.stereotype.Service;
 @Slf4j
 public class WorkLoadServiceImpl implements WorkLoadService {
 
-    @Autowired
-    private WorkLoadRecordRepositoryImpl workLoadRecordRepository;
+    private final WorkLoadRecordRepositoryImpl workLoadRecordRepository;
+
+    public WorkLoadServiceImpl(WorkLoadRecordRepositoryImpl workLoadRecordRepository) {
+        this.workLoadRecordRepository = workLoadRecordRepository;
+    }
 
     @Override
     public String generateWorkLoad(WorkLoadReq workLoadReq) throws InterruptedException {

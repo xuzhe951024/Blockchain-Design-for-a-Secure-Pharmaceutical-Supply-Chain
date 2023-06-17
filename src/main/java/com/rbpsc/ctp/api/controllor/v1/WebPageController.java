@@ -3,14 +3,15 @@ package com.rbpsc.ctp.api.controllor.v1;
 
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.rbpsc.ctp.api.entities.dto.webview.DrugLifeCycleVO;
+import com.rbpsc.ctp.api.entities.dto.webview.SimulationDataView;
 import com.rbpsc.ctp.api.entities.factories.ModelEntityFactory;
 import com.rbpsc.ctp.api.entities.supplychain.drug.DrugLifeCycle;
+import com.rbpsc.ctp.biz.service.SimulatorDispatcherService;
 import com.rbpsc.ctp.common.utiles.TestDataGenerator;
 import com.rbpsc.ctp.configuration.v1prefix.V1RestController;
 import io.github.classgraph.ClassGraph;
 import io.github.classgraph.ScanResult;
 import lombok.extern.slf4j.Slf4j;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.messaging.simp.SimpMessagingTemplate;
 import org.springframework.web.bind.annotation.*;
 
@@ -25,8 +26,13 @@ import static com.rbpsc.ctp.common.Constant.EntityConstants.OPERATION_TYPE_PACKA
 @Slf4j
 public class WebPageController {
 
-    @Autowired
-    private SimpMessagingTemplate simpMessagingTemplate;
+    private final SimpMessagingTemplate simpMessagingTemplate;
+    private final SimulatorDispatcherService simulatorDispatcherService;
+
+    public WebPageController(SimpMessagingTemplate simpMessagingTemplate, SimulatorDispatcherService simulatorDispatcherService) {
+        this.simpMessagingTemplate = simpMessagingTemplate;
+        this.simulatorDispatcherService = simulatorDispatcherService;
+    }
 
 
     @GetMapping("/cards")
@@ -41,13 +47,12 @@ public class WebPageController {
 
     @GetMapping("/operationTypes")
     public List<String> getOperationTypes() throws JsonProcessingException {
-        List<String> typeList = new ArrayList<String>(){{
+
+        return new ArrayList<String>(){{
             try (ScanResult scanResult = new ClassGraph().whitelistPackages(OPERATION_TYPE_PACKAGE_NAME).scan()) {
                 scanResult.getAllClasses().forEach(classInfo -> add(classInfo.getName()));
             }
         }};
-
-        return typeList;
     }
 
     @PostMapping("/submit/{uuid}")
@@ -57,12 +62,14 @@ public class WebPageController {
         // Process data...
         List<DrugLifeCycle> drugLifeCycleList = ModelEntityFactory.buildDrugLifeCycleFromVOList(drugLifeCycleVOList, drugLifeCycleVOList.get(0).getBatchId());
 
-        for (int i = 0; i <= 5; i++) {
-            // Assume this is the processing progress
-            Thread.sleep(500);
-            log.info("destination: /topic/process-progress/" + uuid);
-            simpMessagingTemplate.convertAndSend("/topic/process-progress/" + uuid, "MSG:" + i);
-        }
+        simulatorDispatcherService.startRequesting(new SimulationDataView(), 10, uuid);
+
+//        for (int i = 0; i <= 5; i++) {
+//            // Assume this is the processing progress
+//            Thread.sleep(500);
+//            log.info("destination: /topic/process-progress/" + uuid);
+//            simpMessagingTemplate.convertAndSend("/topic/process-progress/" + uuid, "MSG:" + i);
+//        }
 
     }
 

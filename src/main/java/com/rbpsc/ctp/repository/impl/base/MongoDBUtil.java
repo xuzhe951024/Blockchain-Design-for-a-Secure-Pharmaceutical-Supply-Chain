@@ -3,7 +3,6 @@ package com.rbpsc.ctp.repository.impl.base;
 import com.mongodb.bulk.BulkWriteResult;
 import com.mongodb.client.result.UpdateResult;
 import com.rbpsc.ctp.api.entities.base.BaseEntity;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.mongodb.core.BulkOperations;
 import org.springframework.data.mongodb.core.MongoTemplate;
 import org.springframework.data.mongodb.core.query.Criteria;
@@ -17,8 +16,11 @@ import java.util.List;
 
 @Repository
 public class MongoDBUtil<T, E> {
-    @Autowired
-    private MongoTemplate mongoTemplate;
+    private final MongoTemplate mongoTemplate;
+
+    public MongoDBUtil(MongoTemplate mongoTemplate) {
+        this.mongoTemplate = mongoTemplate;
+    }
 
     public boolean autoUpdateMongoDB(BaseEntity<T> entity){
         Query query = new Query(Criteria.where(entity.getIdFieldName()).is(entity.getId()));

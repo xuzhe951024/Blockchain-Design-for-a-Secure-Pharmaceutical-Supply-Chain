@@ -8,18 +8,22 @@ import com.rbpsc.ctp.biz.service.AttackStepsService;
 import com.rbpsc.ctp.common.utiles.WebClientUtil;
 import com.rbpsc.ctp.repository.service.AttackConfidentialityRepository;
 import lombok.extern.slf4j.Slf4j;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 @Service
 @Slf4j
 public class AttackStepsServiceImpl implements AttackStepsService {
 
-    @Autowired
+    final
     WebClientUtil webClientUtil;
 
-    @Autowired
+    final
     AttackConfidentialityRepository attackConfidentialityRepository;
+
+    public AttackStepsServiceImpl(WebClientUtil webClientUtil, AttackConfidentialityRepository attackConfidentialityRepository) {
+        this.webClientUtil = webClientUtil;
+        this.attackConfidentialityRepository = attackConfidentialityRepository;
+    }
 
     @Override
     public boolean attackAvailability(AttackAvailability attackAvailability) {
