@@ -13,7 +13,7 @@ public interface ConsumerReceiptRepository {
 
     boolean modifyConsumerReceipt(Consumer consumer);
 
-    Consumer selectConsumerReceiptById(Consumer consumer);
+    Consumer selectConsumerReceiptById(String id);
 
     public List<Consumer> findAll();
 }

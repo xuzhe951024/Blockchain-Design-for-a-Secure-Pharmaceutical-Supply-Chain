@@ -35,8 +35,8 @@ public class WorkLoadRecordRepositoryImpl implements WorkLoadRecordRepository {
     }
 
     @Override
-    public WorkLoadRecord selectWorkLoadRecordById(WorkLoadRecord workLoadRecord) {
-        return (WorkLoadRecord) baseRepositoryForMongoDB.findById(workLoadRecord.getId()).orElse(null);
+    public WorkLoadRecord selectWorkLoadRecordById(String id) {
+        return (WorkLoadRecord) baseRepositoryForMongoDB.findById(id).orElse(null);
     }
 
 }

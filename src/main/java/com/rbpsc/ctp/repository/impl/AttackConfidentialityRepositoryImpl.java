@@ -33,8 +33,8 @@ public class AttackConfidentialityRepositoryImpl implements AttackConfidentialit
     }
 
     @Override
-    public AttackConfidentiality selectAttackById(AttackConfidentiality attackConfidentiality) {
-        return baseAttackConfidentialityRepositoryForMongoDB.findById(attackConfidentiality.getId()).orElse(null);
+    public AttackConfidentiality selectAttackById(String id) {
+        return baseAttackConfidentialityRepositoryForMongoDB.findById(id).orElse(null);
     }
 
     @Override

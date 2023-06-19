@@ -16,19 +16,19 @@ import java.util.List;
 @ToString(callSuper = true)
 public class DrugLifeCycle <T> extends SupplyChainBaseEntity {
     DrugInfo drug;
-    List<T> operationDTOQueue;
+    List<T> lifeCycleQueue;
     Consumer expectedReceiver;
 
     public T pollOperationVOQ(){
-        return operationDTOQueue.remove(0);
+        return lifeCycleQueue.remove(0);
     }
 
     public T peakOperationVOQ(){
-        return this.operationDTOQueue.get(0);
+        return this.lifeCycleQueue.get(0);
     }
 
     public void addOperation(T operationDTO){
-        this.operationDTOQueue.add(operationDTO);
+        this.lifeCycleQueue.add(operationDTO);
     }
 
     public void setTagTagId(String tagTagId){
@@ -36,7 +36,7 @@ public class DrugLifeCycle <T> extends SupplyChainBaseEntity {
     }
 
     public int getOperationQueueSize(){
-        return this.operationDTOQueue.size();
+        return this.lifeCycleQueue.size();
     }
 
     public boolean isProduced(){

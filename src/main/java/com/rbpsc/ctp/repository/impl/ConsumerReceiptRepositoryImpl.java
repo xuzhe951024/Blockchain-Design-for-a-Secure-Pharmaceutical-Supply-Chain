@@ -33,8 +33,8 @@ public class ConsumerReceiptRepositoryImpl implements ConsumerReceiptRepository 
     }
 
     @Override
-    public Consumer selectConsumerReceiptById(Consumer consumer) {
-        return baseConsumerReceiptRepositoryForMongoDB.findById(consumer.getId()).orElse(null);
+    public Consumer selectConsumerReceiptById(String id) {
+        return baseConsumerReceiptRepositoryForMongoDB.findById(id).orElse(null);
     }
 
     @Override

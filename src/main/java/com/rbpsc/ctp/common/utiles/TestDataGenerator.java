@@ -98,7 +98,7 @@ public class TestDataGenerator {
             drugLifeCycleList.forEach(drugLifeCycle -> {
                 DrugLifeCycleVO drugLifeCycleVO = new DrugLifeCycleVO();
                 List<OperationVO> operationVOList = new ArrayList<OperationVO>(){{
-                    drugLifeCycle.getOperationDTOQueue().forEach(operationDTO -> {
+                    drugLifeCycle.getLifeCycleQueue().forEach(operationDTO -> {
                         OperationVO operationVO = new OperationVO();
                         operationVO.setId(operationDTO.getId());
                         operationVO.setOperationMsg("Default MSG");

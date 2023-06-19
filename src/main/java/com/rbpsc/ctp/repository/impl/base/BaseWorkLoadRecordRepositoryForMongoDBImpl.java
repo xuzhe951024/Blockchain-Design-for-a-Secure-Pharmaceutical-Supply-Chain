@@ -2,6 +2,7 @@ package com.rbpsc.ctp.repository.impl.base;
 
 import com.mongodb.bulk.BulkWriteResult;
 import com.rbpsc.ctp.api.entities.work_request.WorkLoadRecord;
+import com.rbpsc.ctp.common.utiles.MongoDBUtil;
 import com.rbpsc.ctp.repository.service.base.BaseWorkLoadRecordRepository;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageImpl;

@@ -26,8 +26,8 @@ public class DrugInfoRepositoryImpl implements DrugInfoRepository {
     }
 
     @Override
-    public DrugInfo selectDrugInfoById(DrugInfo drugInfo) {
-        return (DrugInfo) baseRepositoryForMongoDB.findById(drugInfo.getId()).orElse(null);
+    public DrugInfo selectDrugInfoById(String id) {
+        return (DrugInfo) baseRepositoryForMongoDB.findById(id).orElse(null);
     }
 
     @Override

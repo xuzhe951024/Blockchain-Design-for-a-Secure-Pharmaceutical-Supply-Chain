@@ -11,7 +11,7 @@ public interface DrugInfoRepository {
 
     void deleteDrugInfo(DrugInfo drugInfo);
 
-    DrugInfo selectDrugInfoById(DrugInfo drugInfo);
+    DrugInfo selectDrugInfoById(String id);
 
     public List<DrugInfo> findAll();
 }

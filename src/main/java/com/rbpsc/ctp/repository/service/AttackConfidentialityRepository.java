@@ -17,7 +17,7 @@ public interface AttackConfidentialityRepository {
 
     void deleteAttack(AttackConfidentiality attackConfidentiality);
 
-    AttackConfidentiality selectAttackById(AttackConfidentiality attackConfidentiality);
+    AttackConfidentiality selectAttackById(String id);
 
     public List<AttackConfidentiality> findAll();
 }

@@ -9,6 +9,7 @@ import com.rbpsc.ctp.api.entities.supplychain.drug.DrugInfo;
 import com.rbpsc.ctp.api.entities.supplychain.drug.DrugLifeCycle;
 import com.rbpsc.ctp.api.entities.supplychain.operations.DrugOrderStep;
 import com.rbpsc.ctp.api.entities.supplychain.operations.OperationBase;
+import com.rbpsc.ctp.api.entities.supplychain.operations.Receipt;
 import com.rbpsc.ctp.api.entities.supplychain.operations.attack.AttackAvailability;
 import com.rbpsc.ctp.api.entities.supplychain.operations.attack.AttackConfidentiality;
 import com.rbpsc.ctp.api.entities.supplychain.operations.attack.AttackIntegrity;
@@ -16,6 +17,7 @@ import com.rbpsc.ctp.api.entities.supplychain.roles.Consumer;
 import com.rbpsc.ctp.api.entities.supplychain.roles.Institution;
 import com.rbpsc.ctp.api.entities.supplychain.roles.RoleBase;
 import com.rbpsc.ctp.api.entities.work_request.WorkLoadRecord;
+import org.springframework.util.StringUtils;
 
 import java.util.ArrayList;
 import java.util.UUID;
@@ -87,13 +89,23 @@ public class DataEntityFactory {
         return drugLifeCycleVO;
     }
 
-    public static DrugLifeCycle createDrugLifeCycle(SupplyChainBaseEntity supplyChainBaseEntity, DrugInfo drugInfo){
-        DrugLifeCycle drugLifeCycle = new DrugLifeCycle();
+    public static DrugLifeCycle<OperationDTO> createDrugLifeCycleOperationDTO(SupplyChainBaseEntity supplyChainBaseEntity, DrugInfo drugInfo){
+        DrugLifeCycle<OperationDTO> drugLifeCycle = new DrugLifeCycle<>();
         setId(drugLifeCycle);
         setSupplyChainBase(supplyChainBaseEntity, drugLifeCycle);
         drugLifeCycle.setDrug(drugInfo);
         ArrayList<OperationDTO> operationQueue = new ArrayList<>();
-        drugLifeCycle.setOperationDTOQueue(operationQueue);
+        drugLifeCycle.setLifeCycleQueue(operationQueue);
+        return drugLifeCycle;
+    }
+
+    public static DrugLifeCycle<Receipt> createDrugLifeCycleReceipt(DrugInfo drugInfo){
+        DrugLifeCycle<Receipt> drugLifeCycle = new DrugLifeCycle<>();
+        drugLifeCycle.setId(drugInfo.getId());
+        setSupplyChainBase(drugInfo, drugLifeCycle);
+        drugLifeCycle.setDrug(drugInfo);
+        ArrayList<Receipt> receiptArrayQueue = new ArrayList<>();
+        drugLifeCycle.setLifeCycleQueue(receiptArrayQueue);
         return drugLifeCycle;
     }
 
@@ -133,6 +145,17 @@ public class DataEntityFactory {
         operationDTO.setOperationType(type);
         operationDTO.setOperation(operation);
         return operationDTO;
+    }
+
+    public static Receipt createReceipt(OperationBase operation){
+        Receipt receipt = new Receipt();
+        setId(receipt);
+
+        receipt.setAddress(operation.getAddress());
+        receipt.setRoleName(operation.getRoleName());
+        receipt.setOperationMSG(operation.getOperationMSG());
+
+        return receipt;
     }
 
 }

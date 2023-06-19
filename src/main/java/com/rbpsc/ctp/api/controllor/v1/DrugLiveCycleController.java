@@ -8,11 +8,13 @@ import com.rbpsc.ctp.biz.service.SupplyChainStepsService;
 import com.rbpsc.ctp.configuration.v1prefix.V1RestController;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.MediaType;
+import org.springframework.util.StringUtils;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 
+import static com.rbpsc.ctp.common.Constant.EntityConstants.ROLE_NAME;
 import static com.rbpsc.ctp.common.Constant.ServiceConstants.*;
 
 @V1RestController
@@ -68,7 +70,17 @@ public class DrugLiveCycleController {
             return response;
         }
 
-        drugLifeCycle.setDrug(supplyChainStepsService.manufacture(drugLifeCycle.getDrug()));
+        //TODO: Check if Operation is valid
+
+        String selfRole = System.getenv(ROLE_NAME);
+        if (StringUtils.isEmpty(selfRole)) {
+            throw new NullPointerException("Null selfRole value!");
+        }
+
+
+        //TODO: Add operation here(replace "null")
+        //TODO: Function "manufacture" returns a boolean now
+        supplyChainStepsService.manufacture(drugLifeCycle.getDrug(), null);
 
         log.info("Step:\n " + drugLifeCycle.pollOperationVOQ().toString() + "\n has been well processed!");
 

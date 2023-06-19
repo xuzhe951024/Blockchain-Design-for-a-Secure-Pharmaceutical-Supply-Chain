@@ -1,4 +1,4 @@
-package com.rbpsc.ctp.repository.impl.base;
+package com.rbpsc.ctp.common.utiles;
 
 import com.mongodb.bulk.BulkWriteResult;
 import com.mongodb.client.result.UpdateResult;

@@ -61,16 +61,16 @@ class CTPApplicationTests {
         WorkLoadRecord workLoadRecord = DataEntityFactory.createWorkLoadRecord();
         workLoadRecordRepository.insertWorkLoadRecord(workLoadRecord);
 
-        WorkLoadRecord workLoadRecordSelected = workLoadRecordRepository.selectWorkLoadRecordById(workLoadRecord);
+        WorkLoadRecord workLoadRecordSelected = workLoadRecordRepository.selectWorkLoadRecordById(workLoadRecord.getId());
         assert workLoadRecordSelected.getId().equals(workLoadRecord.getId());
 
         workLoadRecordSelected.addResponseTime(1);
         assert workLoadRecordRepository.updateWorkLoadRecord(workLoadRecordSelected);
-        WorkLoadRecord workLoadRecordUpdated = workLoadRecordRepository.selectWorkLoadRecordById(workLoadRecord);
+        WorkLoadRecord workLoadRecordUpdated = workLoadRecordRepository.selectWorkLoadRecordById(workLoadRecord.getId());
         assert workLoadRecordUpdated.getAverageResponseTime() == 1;
 
         workLoadRecordRepository.deleteWorkLoadRecord(workLoadRecordUpdated);
-        WorkLoadRecord workLoadRecordDeleted = workLoadRecordRepository.selectWorkLoadRecordById(workLoadRecord);
+        WorkLoadRecord workLoadRecordDeleted = workLoadRecordRepository.selectWorkLoadRecordById(workLoadRecord.getId());
         assert workLoadRecordDeleted == null;
 
     }
@@ -83,7 +83,7 @@ class CTPApplicationTests {
         List<DrugInfo> consumerReceivedList = new ArrayList<>();
 
         lifeCycleLoop:
-        for (DrugLifeCycle drugLifeCycle :
+        for (DrugLifeCycle<OperationDTO> drugLifeCycle :
                 drugLifeCycleList) {
             while (drugLifeCycle.getOperationQueueSize() > 0){
                 if (StringUtils.isEmpty(drugLifeCycle.getDrug().getDrugTagTagId())){

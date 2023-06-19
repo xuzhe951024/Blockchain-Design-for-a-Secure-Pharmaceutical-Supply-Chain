@@ -48,8 +48,8 @@ public class ModelEntityFactory {
                 operationDTOQueue.add(operationDTO);
             }
 
-            DrugLifeCycle drugLifeCycle = DataEntityFactory.createDrugLifeCycle(drugLifeCycleVO, drugInfo);
-            drugLifeCycle.setOperationDTOQueue(operationDTOQueue);
+            DrugLifeCycle drugLifeCycle = DataEntityFactory.createDrugLifeCycleOperationDTO(drugLifeCycleVO, drugInfo);
+            drugLifeCycle.setLifeCycleQueue(operationDTOQueue);
             drugLifeCycle.setExpectedReceiver(consumerList.get(i / experimentConfig.getDoesForEachConsumer()));
             drugLifeCycle.setTagTagId(UUID.randomUUID().toString());
             drugLifeCycleList.add(drugLifeCycle);
@@ -88,9 +88,9 @@ public class ModelEntityFactory {
                     });
                 }};
 
-                DrugLifeCycle drugLifeCycle = DataEntityFactory.createDrugLifeCycle(simulationDataView, drugInfo);
+                DrugLifeCycle drugLifeCycle = DataEntityFactory.createDrugLifeCycleOperationDTO(simulationDataView, drugInfo);
                 drugLifeCycle.setExpectedReceiver(consumer);
-                drugLifeCycle.setOperationDTOQueue(operationDTOList);
+                drugLifeCycle.setLifeCycleQueue(operationDTOList);
                 drugLifeCycle.setDrug(drugInfo);
 
                 add(drugLifeCycle);

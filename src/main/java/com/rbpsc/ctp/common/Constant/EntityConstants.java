@@ -13,4 +13,6 @@ public class EntityConstants {
     public static final String OPERATION_TYPE_PACKAGE_NAME = "com.rbpsc.ctp.api.entities.supplychain.operations";
 
     public static final String DEFAULT_OPERATION_MSG = "Default MSG";
+
+    public static final String ROLE_NAME = "ROLE_NAME";
 }

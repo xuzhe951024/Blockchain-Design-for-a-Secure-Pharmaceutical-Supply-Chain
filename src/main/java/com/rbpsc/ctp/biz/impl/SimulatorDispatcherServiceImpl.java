@@ -65,17 +65,13 @@ public class SimulatorDispatcherServiceImpl implements SimulatorDispatcherServic
                 drugOperationDTO.setOperationDTO(operationDTO);
 
                 // Send to database-based system
-                try {
-                    sendToNextStepBaseLine(drugOperationDTO);
-                } catch (JsonProcessingException e) {
-                    throw new RuntimeException(e);
-                }
+                sendToNextStepBaseLine(drugOperationDTO);
                 //TODO send to blockchain-based system(s)
             }
         });
     }
 
-    private boolean sendToNextStepBaseLine(DrugOperationDTO drugOperationDTO) throws JsonProcessingException {
+    private boolean sendToNextStepBaseLine(DrugOperationDTO drugOperationDTO)  {
         DrugLifeCycleResponse response = new DrugLifeCycleResponse();
 
         OperationDTO operationDTO = drugOperationDTO.getOperationDTO();
@@ -84,8 +80,6 @@ public class SimulatorDispatcherServiceImpl implements SimulatorDispatcherServic
             log.error("Address can not be empty!");
             return false;
         }
-
-
 
         WebClientUtil webClientUtil = new WebClientUtil();
 

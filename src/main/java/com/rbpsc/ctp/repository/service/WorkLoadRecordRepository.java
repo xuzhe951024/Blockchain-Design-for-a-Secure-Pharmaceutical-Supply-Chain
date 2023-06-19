@@ -17,5 +17,5 @@ public interface WorkLoadRecordRepository {
 
     boolean updateWorkLoadRecord(WorkLoadRecord workLoadRecord);
 
-    WorkLoadRecord selectWorkLoadRecordById(WorkLoadRecord workLoadRecord);
+    WorkLoadRecord selectWorkLoadRecordById(String id);
 }
