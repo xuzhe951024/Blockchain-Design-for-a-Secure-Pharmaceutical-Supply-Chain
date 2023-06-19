@@ -3,7 +3,7 @@ package com.rbpsc.ctp.biz.impl;
 import com.rbpsc.ctp.api.entities.factories.DataEntityFactory;
 import com.rbpsc.ctp.api.entities.supplychain.drug.DrugInfo;
 import com.rbpsc.ctp.api.entities.supplychain.drug.DrugLifeCycle;
-import com.rbpsc.ctp.api.entities.supplychain.operations.OperationBase;
+import com.rbpsc.ctp.api.entities.supplychain.operations.DrugOrderStep;
 import com.rbpsc.ctp.api.entities.supplychain.operations.Receipt;
 import com.rbpsc.ctp.api.entities.supplychain.roles.Consumer;
 import com.rbpsc.ctp.biz.service.SupplyChainStepsService;
@@ -32,7 +32,7 @@ public class SupplyChainStepsServiceImpl implements SupplyChainStepsService {
     }
 
     @Override
-    public boolean manufacture(DrugInfo drug, OperationBase operation) {
+    public boolean manufacture(DrugInfo drug, DrugOrderStep drugOrderStep) {
         drugInfoRepository.insertDrugInfo(drug);
 
         DrugLifeCycle<Receipt> receiptDrugLifeCycle = drugLifeCycleReceiptRepository.selectDrugLifeCycleReceiptById(drug.getId());
@@ -40,7 +40,7 @@ public class SupplyChainStepsServiceImpl implements SupplyChainStepsService {
             receiptDrugLifeCycle =  DataEntityFactory.createDrugLifeCycleReceipt(drug);
         }
 
-        Receipt receipt = DataEntityFactory.createReceipt(operation);
+        Receipt receipt = DataEntityFactory.createReceipt(drugOrderStep);
 
         receiptDrugLifeCycle.addOperation(receipt);
 

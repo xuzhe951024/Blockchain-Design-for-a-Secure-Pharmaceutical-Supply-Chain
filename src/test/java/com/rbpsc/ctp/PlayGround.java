@@ -61,6 +61,6 @@ public class PlayGround {
 //
 //        System.out.println("Operating System: " + os.getFamily() + " " + os.getVersionInfo());
 
-        System.out.println(System.getenv(ROLE_NAME));
+        System.out.println("test:1".split(":")[0]);
     }
 }

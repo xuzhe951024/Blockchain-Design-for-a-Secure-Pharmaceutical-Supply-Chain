@@ -16,6 +16,6 @@ import lombok.ToString;
 @EqualsAndHashCode(callSuper = true)
 @ToString(callSuper = true)
 public class DrugOperationDTO extends BaseEntity<String> {
-    DrugInfo drugInfo;
+    DrugInfo drug;
     OperationDTO operationDTO;
 }

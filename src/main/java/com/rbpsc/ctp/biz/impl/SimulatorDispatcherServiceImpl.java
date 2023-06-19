@@ -1,6 +1,5 @@
 package com.rbpsc.ctp.biz.impl;
 
-import com.fasterxml.jackson.core.JsonProcessingException;
 import com.rbpsc.ctp.api.entities.dto.DrugOperationDTO;
 import com.rbpsc.ctp.api.entities.dto.OperationDTO;
 import com.rbpsc.ctp.api.entities.dto.response.DrugLifeCycleResponse;
@@ -61,7 +60,7 @@ public class SimulatorDispatcherServiceImpl implements SimulatorDispatcherServic
 
                 DrugOperationDTO drugOperationDTO = new DrugOperationDTO();
                 DataEntityFactory.setId(drugOperationDTO);
-                drugOperationDTO.setDrugInfo(drugLifeCycle.getDrug());
+                drugOperationDTO.setDrug(drugLifeCycle.getDrug());
                 drugOperationDTO.setOperationDTO(operationDTO);
 
                 // Send to database-based system
