@@ -1,6 +1,7 @@
-# Blockchain and RFID Synergy: An Approach to Liquid Drug Supply Chain Transparency and Integrity
+# Blockchain Design for a Secure Pharmaceutical Supply Chain
 
-This is the code repository for thesis ***"Blockchain and RFID Synergy: An Approach to Liquid Drug Supply Chain Transparency and Integrity"***
+
+This is the code repository for thesis ***"Blockchain Design for a Secure Pharmaceutical Supply Chain"***
 
 
 ## Run In Docker
