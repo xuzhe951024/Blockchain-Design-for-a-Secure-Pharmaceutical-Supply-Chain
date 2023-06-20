@@ -4,6 +4,7 @@ import com.fasterxml.jackson.core.JsonProcessingException;
 import com.rbpsc.ctp.api.entities.configs.ExperimentConfig;
 import com.rbpsc.ctp.api.entities.dto.OperationDTO;
 import com.rbpsc.ctp.api.entities.dto.webview.DrugLifeCycleVO;
+import com.rbpsc.ctp.api.entities.dto.webview.OperationVO;
 import com.rbpsc.ctp.api.entities.dto.webview.SimulationDataView;
 import com.rbpsc.ctp.api.entities.supplychain.drug.DrugInfo;
 import com.rbpsc.ctp.api.entities.supplychain.drug.DrugLifeCycle;
@@ -58,23 +59,20 @@ public class ModelEntityFactory {
         return drugLifeCycleList;
     }
 
-    public static List<DrugLifeCycle> buildDrugLifeCycleFromVOList(List<DrugLifeCycleVO> drugLifeCycleVOList, String batchId) {
+    public static List<DrugLifeCycle<OperationDTO>> buildDrugLifeCycleFromVOList(List<DrugLifeCycleVO> drugLifeCycleVOList, String batchId) {
         SimulationDataView simulationDataView = new SimulationDataView();
         simulationDataView.setId(UUID.randomUUID().toString());
         simulationDataView.setBatchId(batchId);
 
-        List<DrugLifeCycle> drugLifeCycleList = new ArrayList<DrugLifeCycle>() {{
+        return new ArrayList<DrugLifeCycle<OperationDTO>>() {{
             drugLifeCycleVOList.forEach(drugLifeCycleVO -> {
                 Consumer consumer = DataEntityFactory.createConsumer(drugLifeCycleVO.getExpectedDose(), drugLifeCycleVO.getTargetConsumer());
 
                 DrugInfo drugInfo = DataEntityFactory.createDrugInfo(simulationDataView, drugLifeCycleVO.getDrugName());
                 drugInfo.setId(drugLifeCycleVO.getDrugId());
 
-                List<OperationDTO> operationDTOList = new ArrayList<OperationDTO>() {{
-                    DrugOrderStep consumerStep = DataEntityFactory.createDrugOrderStep(consumer, DEFAULT_OPERATION_MSG);
-                    OperationDTO operationDTO = DataEntityFactory.createOperationDTO(consumerStep, consumerStep.getClass().getName());
-                    add(operationDTO);
-                    drugLifeCycleVO.getOperationVOList().forEach(operationVO -> {
+                List<OperationDTO> operationDTOList = new ArrayList<OperationDTO>() {
+                    private void transferToDTO(OperationVO operationVO) {
                         OperationBase operationBase = new OperationBase();
                         operationBase.setOperationMSG(operationVO.getOperationMsg());
                         String address = operationVO.getOperatorAdd();
@@ -85,10 +83,16 @@ public class ModelEntityFactory {
 
                         OperationDTO operationDTOFromPage = DataEntityFactory.createOperationDTO(operationBase, operationVO.getOperationType());
                         add(operationDTOFromPage);
-                    });
+                    }
+
+                    {
+                    DrugOrderStep consumerStep = DataEntityFactory.createDrugOrderStep(consumer, DEFAULT_OPERATION_MSG);
+                    OperationDTO operationDTO = DataEntityFactory.createOperationDTO(consumerStep, consumerStep.getClass().getName());
+                    add(operationDTO);
+                    drugLifeCycleVO.getOperationVOList().forEach(this::transferToDTO);
                 }};
 
-                DrugLifeCycle drugLifeCycle = DataEntityFactory.createDrugLifeCycleOperationDTO(simulationDataView, drugInfo);
+                DrugLifeCycle<OperationDTO> drugLifeCycle = DataEntityFactory.createDrugLifeCycleOperationDTO(simulationDataView, drugInfo);
                 drugLifeCycle.setExpectedReceiver(consumer);
                 drugLifeCycle.setLifeCycleQueue(operationDTOList);
                 drugLifeCycle.setDrug(drugInfo);
@@ -96,7 +100,5 @@ public class ModelEntityFactory {
                 add(drugLifeCycle);
             });
         }};
-
-        return drugLifeCycleList;
     }
 }

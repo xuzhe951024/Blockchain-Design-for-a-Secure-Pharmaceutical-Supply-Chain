@@ -19,22 +19,34 @@ import java.util.Optional;
 @Slf4j
 public class SupplyChainStepsServiceImpl implements SupplyChainStepsService {
 
-    final DrugInfoRepository drugInfoRepository;
-
     final ConsumerReceiptRepository consumerReceiptRepository;
 
     final DrugLifeCycleReceiptRepository drugLifeCycleReceiptRepository;
 
-    public SupplyChainStepsServiceImpl(DrugInfoRepository drugInfoRepository, ConsumerReceiptRepository consumerReceiptRepository, DrugLifeCycleReceiptRepository drugLifeCycleReceiptRepository) {
-        this.drugInfoRepository = drugInfoRepository;
+    public SupplyChainStepsServiceImpl(ConsumerReceiptRepository consumerReceiptRepository, DrugLifeCycleReceiptRepository drugLifeCycleReceiptRepository) {
         this.consumerReceiptRepository = consumerReceiptRepository;
         this.drugLifeCycleReceiptRepository = drugLifeCycleReceiptRepository;
     }
 
     @Override
     public boolean manufacture(DrugInfo drug, DrugOrderStep drugOrderStep) {
-        drugInfoRepository.insertDrugInfo(drug);
+        DrugLifeCycle<Receipt> receiptDrugLifeCycle = drugLifeCycleReceiptRepository.selectDrugLifeCycleReceiptById(drug.getId());
+        if (null != receiptDrugLifeCycle){
+            log.error("Drug can not be produce duplicate");
+            return false;
+        }
 
+        receiptDrugLifeCycle =  DataEntityFactory.createDrugLifeCycleReceipt(drug);
+
+        Receipt receipt = DataEntityFactory.createReceipt(drugOrderStep);
+
+        receiptDrugLifeCycle.addOperation(receipt);
+
+        return drugLifeCycleReceiptRepository.updateWithInsert(receiptDrugLifeCycle, Optional.of(drug.getId()));
+    }
+
+    @Override
+    public boolean distributor(DrugInfo drug, DrugOrderStep drugOrderStep) {
         DrugLifeCycle<Receipt> receiptDrugLifeCycle = drugLifeCycleReceiptRepository.selectDrugLifeCycleReceiptById(drug.getId());
         if (null == receiptDrugLifeCycle){
             receiptDrugLifeCycle =  DataEntityFactory.createDrugLifeCycleReceipt(drug);
@@ -48,15 +60,10 @@ public class SupplyChainStepsServiceImpl implements SupplyChainStepsService {
     }
 
     @Override
-    public boolean distributor(DrugInfo drug) {
-
-        drugInfoRepository.insertDrugInfo(drug);
-
-        return null == drugInfoRepository.selectDrugInfoById(drug.getId());
-    }
-
-    @Override
     public boolean consumer(DrugLifeCycle drugLifeCycle) {
+
+        //TODO: 1. UpdateWithInsert consumers into database(if existed, feed with dose)
+        //TODO: 2. UpdateWithInsert receiptDrugLifeCycle.
 
         Consumer consumer = consumerReceiptRepository.selectConsumerReceiptById(drugLifeCycle.getExpectedReceiver().getId());
         if (null == consumer){

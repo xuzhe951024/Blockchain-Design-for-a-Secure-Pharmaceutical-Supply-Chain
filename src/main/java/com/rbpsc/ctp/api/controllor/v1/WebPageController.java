@@ -61,7 +61,7 @@ public class WebPageController {
 
 
         // Process data...
-        List<DrugLifeCycle> drugLifeCycleList = ModelEntityFactory.buildDrugLifeCycleFromVOList(drugLifeCycleVOList, drugLifeCycleVOList.get(0).getBatchId());
+        List<DrugLifeCycle<OperationDTO>> drugLifeCycleList = ModelEntityFactory.buildDrugLifeCycleFromVOList(drugLifeCycleVOList, drugLifeCycleVOList.get(0).getBatchId());
 
         simulatorDispatcherService.startRequesting(new SimulationDataView(), uuid);
 

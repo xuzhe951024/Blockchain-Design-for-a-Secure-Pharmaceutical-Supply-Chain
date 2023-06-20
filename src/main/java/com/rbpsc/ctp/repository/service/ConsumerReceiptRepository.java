@@ -16,4 +16,6 @@ public interface ConsumerReceiptRepository {
     Consumer selectConsumerReceiptById(String id);
 
     public List<Consumer> findAll();
+
+    public boolean updateWithInsert(Consumer consumer);
 }

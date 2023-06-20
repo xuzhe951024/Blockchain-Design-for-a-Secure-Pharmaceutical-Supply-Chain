@@ -4,6 +4,7 @@ import com.rbpsc.ctp.api.entities.supplychain.roles.Consumer;
 import com.rbpsc.ctp.repository.impl.base.BaseConsumerReceiptRepositoryForMongoDBImpl;
 import com.rbpsc.ctp.repository.service.ConsumerReceiptRepository;
 import org.springframework.stereotype.Repository;
+import org.springframework.util.StringUtils;
 
 import java.util.List;
 
@@ -40,5 +41,20 @@ public class ConsumerReceiptRepositoryImpl implements ConsumerReceiptRepository 
     @Override
     public List<Consumer> findAll() {
         return baseConsumerReceiptRepositoryForMongoDB.findAll();
+    }
+
+    @Override
+    public boolean updateWithInsert(Consumer consumer) {
+
+        if (StringUtils.isEmpty(consumer.getId())) {
+            return false;
+        }
+
+        if (this.selectConsumerReceiptById(consumer.getId()) == null) {
+            this.insertConsumerReceipt(consumer);
+            return true;
+        }
+
+        return baseConsumerReceiptRepositoryForMongoDB.update(consumer);
     }
 }

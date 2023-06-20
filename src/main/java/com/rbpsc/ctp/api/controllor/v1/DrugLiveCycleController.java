@@ -73,8 +73,6 @@ public class DrugLiveCycleController {
             return response;
         }
 
-        //TODO: Add operation here(replace "null")
-        //TODO: Function "manufacture" returns a boolean now
         DrugOrderStep drugOrderStep =  (DrugOrderStep) drugOperationDTO.getOperationDTO().getOperation();
         if (!supplyChainStepsService.manufacture(drugOperationDTO.getDrug(), drugOrderStep)){
             response.setResponseWithCode(RESPONSE_CODE_FAIL_BAD_GATEWAY);
@@ -88,23 +86,24 @@ public class DrugLiveCycleController {
     }
 
     @PostMapping("/distributor")
-    public DrugLifeCycleResponse nextStepDistributor(@RequestBody DrugLifeCycle drugLifeCycle) throws JsonProcessingException {
+    public DrugLifeCycleResponse nextStepDistributor(@RequestBody DrugOperationDTO drugOperationDTO){
 
-//        DrugLifeCycleResponse response = checkBeforeServe(drugLifeCycle);
-//
-//        if (!response.isSuccess()){
-//            return response;
-//        }
-//
-//        if (!supplyChainStepsService.distributor(drugLifeCycle.getDrug())){
-//            response.setResponseWithCode(RESPONSE_CODE_FAIL_BAD_GATEWAY);
-//            return response;
-//        }
-//
-//        log.info("Step:\n " + drugLifeCycle.pollOperationVOQ().toString() + "\n has been well processed!");
+        DrugLifeCycleResponse response = checkBeforeServe(drugOperationDTO);
 
-//        return sendToNextStep(drugLifeCycle);
-        return null;
+        if (!response.isSuccess()){
+            return response;
+        }
+
+        DrugOrderStep drugOrderStep =  (DrugOrderStep) drugOperationDTO.getOperationDTO().getOperation();
+        if (!supplyChainStepsService.manufacture(drugOperationDTO.getDrug(), drugOrderStep)){
+            response.setResponseWithCode(RESPONSE_CODE_FAIL_BAD_GATEWAY);
+            response.setDescribe("Manufacturing failed!");
+            return response;
+        }
+
+        log.info("Step:\n " + drugOperationDTO + "\n has been well processed!");
+
+        return response;
     }
 
     @PostMapping("/consumer")
