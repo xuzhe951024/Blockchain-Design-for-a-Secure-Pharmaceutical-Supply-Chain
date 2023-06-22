@@ -8,7 +8,6 @@ import com.rbpsc.ctp.api.entities.supplychain.operations.Receipt;
 import com.rbpsc.ctp.api.entities.supplychain.roles.Consumer;
 import com.rbpsc.ctp.biz.service.SupplyChainStepsService;
 import com.rbpsc.ctp.repository.service.ConsumerReceiptRepository;
-import com.rbpsc.ctp.repository.service.DrugInfoRepository;
 import com.rbpsc.ctp.repository.service.DrugLifeCycleReceiptRepository;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
@@ -60,14 +59,13 @@ public class SupplyChainStepsServiceImpl implements SupplyChainStepsService {
     }
 
     @Override
-    public boolean consumer(DrugLifeCycle drugLifeCycle) {
+    public boolean consumer(DrugInfo drug, DrugOrderStep drugOrderStep) {
 
-        //TODO: 1. UpdateWithInsert consumers into database(if existed, feed with dose)
-        //TODO: 2. UpdateWithInsert receiptDrugLifeCycle.
+        String targetConsumerId = drugOrderStep.getId();
 
-        Consumer consumer = consumerReceiptRepository.selectConsumerReceiptById(drugLifeCycle.getExpectedReceiver().getId());
+        Consumer consumer = consumerReceiptRepository.selectConsumerReceiptById(targetConsumerId);
         if (null == consumer){
-            log.error(String.format("No consumer information in database: \n {%s}", drugLifeCycle.getExpectedReceiver()));
+            log.error(String.format("No consumer information in database: \n {%s}", targetConsumerId));
             return false;
         }
 
@@ -78,6 +76,16 @@ public class SupplyChainStepsServiceImpl implements SupplyChainStepsService {
 
         consumer.satisfyDosage();
 
-        return consumerReceiptRepository.modifyConsumerReceipt(consumer);
+        DrugLifeCycle<Receipt> receiptDrugLifeCycle = drugLifeCycleReceiptRepository.selectDrugLifeCycleReceiptById(drug.getId());
+        if (null == receiptDrugLifeCycle){
+            receiptDrugLifeCycle =  DataEntityFactory.createDrugLifeCycleReceipt(drug);
+        }
+
+        Receipt receipt = DataEntityFactory.createReceipt(drugOrderStep);
+
+        receiptDrugLifeCycle.addOperation(receipt);
+
+        return consumerReceiptRepository.modifyConsumerReceipt(consumer)
+                && drugLifeCycleReceiptRepository.updateWithInsert(receiptDrugLifeCycle, Optional.of(drug.getId()));
     }
 }

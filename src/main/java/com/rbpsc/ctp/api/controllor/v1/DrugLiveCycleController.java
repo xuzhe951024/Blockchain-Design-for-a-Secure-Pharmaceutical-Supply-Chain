@@ -4,8 +4,6 @@ import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.rbpsc.ctp.api.entities.dto.DrugOperationDTO;
 import com.rbpsc.ctp.api.entities.dto.response.DrugLifeCycleResponse;
-import com.rbpsc.ctp.api.entities.factories.DataEntityFactory;
-import com.rbpsc.ctp.api.entities.supplychain.drug.DrugLifeCycle;
 import com.rbpsc.ctp.api.entities.supplychain.operations.DrugOrderStep;
 import com.rbpsc.ctp.biz.service.SupplyChainStepsService;
 import com.rbpsc.ctp.configuration.v1prefix.V1RestController;
@@ -107,29 +105,23 @@ public class DrugLiveCycleController {
     }
 
     @PostMapping("/consumer")
-    public DrugLifeCycleResponse nextStepConsumer(@RequestBody DrugLifeCycle drugLifeCycle) throws JsonProcessingException {
+    public DrugLifeCycleResponse nextStepConsumer(@RequestBody DrugOperationDTO drugOperationDTO) throws JsonProcessingException {
 
-//        DrugLifeCycleResponse response = checkBeforeServe(drugLifeCycle);
-//
-//        if (!response.isSuccess()){
-//            return response;
-//        }
-//
-//        if (drugLifeCycle.getOperationQueueSize() != 0){
-//            log.error(String.format("Operation queue size is {%d} instead of 0, no permission for the current operation!", drugLifeCycle.getOperationQueueSize()));
-//            response.setResponseWithCode(RESPONSE_CODE_FAIL_OPERATION_TYPE_NOT_MATCH);
-//            return response;
-//        }
-//
-//        if (!supplyChainStepsService.consumer(drugLifeCycle)){
-//            response.setResponseWithCode(RESPONSE_CODE_FAIL_BAD_GATEWAY);
-//            return response;
-//        }
-//
-//        log.info("Step:\n " + drugLifeCycle.pollOperationVOQ().toString() + "\n has been well processed!");
+        DrugLifeCycleResponse response = checkBeforeServe(drugOperationDTO);
 
-//        return sendToNextStep(drugLifeCycle);
-        return null;
+        if (!response.isSuccess()){
+            return response;
+        }
+
+        DrugOrderStep drugOrderStep =  (DrugOrderStep) drugOperationDTO.getOperationDTO().getOperation();
+        if (!supplyChainStepsService.consumer(drugOperationDTO.getDrug(), drugOrderStep)){
+            response.setResponseWithCode(RESPONSE_CODE_FAIL_BAD_GATEWAY);
+            return response;
+        }
+
+        log.info("Step:\n " + drugOperationDTO + "\n has been well processed!");
+
+        return response;
     }
 
     private DrugLifeCycleResponse checkBeforeServe(DrugOperationDTO drugOperationDTO) {
@@ -141,27 +133,28 @@ public class DrugLiveCycleController {
             return response;
         }
 
-        String selfRole = System.getenv(ROLE_NAME);
-        if (StringUtils.isEmpty(selfRole)) {
-            response.setResponseWithCode(RESPONSE_CODE_FAIL_BAD_GATEWAY);
-            response.setDescribe("SelfRole is empty!");
-            throw new NullPointerException("Null selfRole value!");
-        }
+//        TODO: use check here when deploy in docker containers
+//        String selfRole = System.getenv(ROLE_NAME);
+//        if (StringUtils.isEmpty(selfRole)) {
+//            response.setResponseWithCode(RESPONSE_CODE_FAIL_BAD_GATEWAY);
+//            response.setDescribe("SelfRole is empty!");
+//            throw new NullPointerException("Null selfRole value!");
+//        }
+//
+//        if (!selfRole.equals(drugOperationDTO.getOperationDTO().getOperation().getAddress())){
+//            response.setResponseWithCode(RESPONSE_CODE_FAIL_OPERATION_TYPE_NOT_MATCH);
+//            response.setDescribe(String.format("check if operation add{%s} matches node role{%s}.",
+//                    drugOperationDTO.getOperationDTO().getOperation().getAddress().split(":")[0],
+//                    selfRole));
+//
+//            return response;
+//        }
 
         if (!DrugOrderStep.class.getName().equals(drugOperationDTO.getOperationDTO().getOperationType())){
             response.setResponseWithCode(RESPONSE_CODE_FAIL_OPERATION_TYPE_NOT_MATCH);
             response.setDescribe(String.format("check if operation type{%s} matches node role{%s}.",
                     drugOperationDTO.getOperationDTO().getOperationType(),
                     DrugOrderStep.class.getName()));
-
-            return response;
-        }
-
-        if (!selfRole.equals(drugOperationDTO.getOperationDTO().getOperation().getAddress())){
-            response.setResponseWithCode(RESPONSE_CODE_FAIL_OPERATION_TYPE_NOT_MATCH);
-            response.setDescribe(String.format("check if operation add{%s} matches node role{%s}.",
-                    drugOperationDTO.getOperationDTO().getOperation().getAddress().split(":")[0],
-                    selfRole));
 
             return response;
         }

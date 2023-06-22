@@ -4,6 +4,7 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import com.rbpsc.ctp.api.entities.base.BaseEntity;
 import com.rbpsc.ctp.api.entities.dto.OperationDTO;
 import com.rbpsc.ctp.api.entities.dto.webview.DrugLifeCycleVO;
+import com.rbpsc.ctp.api.entities.dto.webview.OperationVO;
 import com.rbpsc.ctp.api.entities.supplychain.SupplyChainBaseEntity;
 import com.rbpsc.ctp.api.entities.supplychain.drug.DrugInfo;
 import com.rbpsc.ctp.api.entities.supplychain.drug.DrugLifeCycle;
@@ -20,6 +21,7 @@ import com.rbpsc.ctp.api.entities.work_request.WorkLoadRecord;
 import org.springframework.util.StringUtils;
 
 import java.util.ArrayList;
+import java.util.List;
 import java.util.UUID;
 
 import static com.rbpsc.ctp.common.Constant.EntityConstants.*;
@@ -86,6 +88,8 @@ public class DataEntityFactory {
     public static DrugLifeCycleVO createDrugLifeCycleView(){
         DrugLifeCycleVO drugLifeCycleVO = new DrugLifeCycleVO();
         setId(drugLifeCycleVO);
+        List<OperationVO> operationVOList = new ArrayList<>();
+        drugLifeCycleVO.setOperationVOList(operationVOList);
         return drugLifeCycleVO;
     }
 

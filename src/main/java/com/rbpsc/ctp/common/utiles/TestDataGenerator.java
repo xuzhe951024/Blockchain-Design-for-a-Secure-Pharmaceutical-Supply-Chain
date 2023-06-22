@@ -23,7 +23,7 @@ import java.util.UUID;
 public class TestDataGenerator {
     private static ObjectMapper objectMapper;
 
-    public static List<DrugLifeCycle<OperationDTO>> generateDrugLifeCycleViewRandom() throws JsonProcessingException {
+    public static List<DrugLifeCycle<OperationDTO>> generateDrugLifeCycleViewRandom()  {
         ExperimentConfig experimentConfig = new ExperimentConfig();
         experimentConfig.setExperimentName("TestPage");
         experimentConfig.setConsumerCount(10);

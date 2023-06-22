@@ -21,7 +21,7 @@ import java.util.UUID;
 import static com.rbpsc.ctp.common.Constant.EntityConstants.DEFAULT_OPERATION_MSG;
 
 public class ModelEntityFactory {
-    public static List<DrugLifeCycle<OperationDTO>> createDrugLifeCycleView(ExperimentConfig experimentConfig, List<Consumer> consumerList, List<List<Institution>> institutionTree) throws JsonProcessingException {
+    public static List<DrugLifeCycle<OperationDTO>> createDrugLifeCycleView(ExperimentConfig experimentConfig, List<Consumer> consumerList, List<List<Institution>> institutionTree) {
         DrugLifeCycleVO drugLifeCycleVO = new DrugLifeCycleVO();
         drugLifeCycleVO.setBatchId(experimentConfig.getExperimentName());
         DataEntityFactory.setId(drugLifeCycleVO);
@@ -59,6 +59,21 @@ public class ModelEntityFactory {
         return drugLifeCycleList;
     }
 
+    public static List<DrugLifeCycleVO> createDrugLifeCycleVOList(ExperimentConfig experimentConfig){
+        List<Consumer> consumerList = createAndSaveConsumers(experimentConfig.getConsumerCount(), experimentConfig.getDoesForEachConsumer());
+        List<DrugLifeCycleVO> drugLifeCycleVOList = new ArrayList<DrugLifeCycleVO>(){{
+            consumerList.forEach(consumer -> {
+                DrugLifeCycleVO drugLifeCycleVO = DataEntityFactory.createDrugLifeCycleView();
+                drugLifeCycleVO
+            });
+        }};
+    }
+
+    private static List<Consumer> createAndSaveConsumers(int consumerCount, int doesForEachConsumer) {
+        // TODO: fill this method
+        return null;
+    }
+
     public static List<DrugLifeCycle<OperationDTO>> buildDrugLifeCycleFromVOList(List<DrugLifeCycleVO> drugLifeCycleVOList, String batchId) {
         SimulationDataView simulationDataView = new SimulationDataView();
         simulationDataView.setId(UUID.randomUUID().toString());
@@ -86,11 +101,12 @@ public class ModelEntityFactory {
                     }
 
                     {
-                    DrugOrderStep consumerStep = DataEntityFactory.createDrugOrderStep(consumer, DEFAULT_OPERATION_MSG);
-                    OperationDTO operationDTO = DataEntityFactory.createOperationDTO(consumerStep, consumerStep.getClass().getName());
-                    add(operationDTO);
-                    drugLifeCycleVO.getOperationVOList().forEach(this::transferToDTO);
-                }};
+                        DrugOrderStep consumerStep = DataEntityFactory.createDrugOrderStep(consumer, DEFAULT_OPERATION_MSG);
+                        OperationDTO operationDTO = DataEntityFactory.createOperationDTO(consumerStep, consumerStep.getClass().getName());
+                        add(operationDTO);
+                        drugLifeCycleVO.getOperationVOList().forEach(this::transferToDTO);
+                    }
+                };
 
                 DrugLifeCycle<OperationDTO> drugLifeCycle = DataEntityFactory.createDrugLifeCycleOperationDTO(simulationDataView, drugInfo);
                 drugLifeCycle.setExpectedReceiver(consumer);
