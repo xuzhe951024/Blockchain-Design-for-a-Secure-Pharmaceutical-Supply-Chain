@@ -64,9 +64,10 @@ public class ModelEntityFactory {
         List<DrugLifeCycleVO> drugLifeCycleVOList = new ArrayList<DrugLifeCycleVO>(){{
             consumerList.forEach(consumer -> {
                 DrugLifeCycleVO drugLifeCycleVO = DataEntityFactory.createDrugLifeCycleView();
-                drugLifeCycleVO
+//                drugLifeCycleVO
             });
         }};
+        return drugLifeCycleVOList;
     }
 
     private static List<Consumer> createAndSaveConsumers(int consumerCount, int doesForEachConsumer) {
