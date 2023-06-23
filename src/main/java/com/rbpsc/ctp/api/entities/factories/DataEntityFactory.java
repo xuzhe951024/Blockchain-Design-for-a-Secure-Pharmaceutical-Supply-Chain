@@ -151,6 +151,15 @@ public class DataEntityFactory {
         return operationDTO;
     }
 
+    public static OperationVO createOperationVO(String operationType, String operationAdd){
+        OperationVO operationVO = new OperationVO();
+        setId(operationVO);
+        operationVO.setOperationMsg(DEFAULT_OPERATION_MSG);
+        operationVO.setOperatorAdd(operationAdd);
+        operationVO.setOperationType(operationType);
+        return operationVO;
+    }
+
     public static Receipt createReceipt(OperationBase operation){
         Receipt receipt = new Receipt();
         setId(receipt);

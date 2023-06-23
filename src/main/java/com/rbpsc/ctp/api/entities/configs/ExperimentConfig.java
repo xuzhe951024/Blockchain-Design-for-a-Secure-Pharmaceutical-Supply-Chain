@@ -19,7 +19,7 @@ public class ExperimentConfig extends BaseEntity<String> {
     private String drugName;
     private int maxThreadCount;
     private int manufacturerCount;
-    private List<Integer> distributorsForEachLevel;
+    private int distributorsCount;
     private int consumerCount;
     private int doesForEachConsumer;
 }

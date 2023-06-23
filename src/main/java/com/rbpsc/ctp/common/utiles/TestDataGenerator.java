@@ -29,34 +29,36 @@ public class TestDataGenerator {
         experimentConfig.setConsumerCount(10);
         experimentConfig.setDoesForEachConsumer(2);
         experimentConfig.setDrugName("Covid-Vaccine");
-        experimentConfig.setDistributorsForEachLevel(new ArrayList<Integer>(){{
-            add(1);
-            add(2);
-            add(3);
-        }});
-
-        List<Consumer> consumerList = new ArrayList<Consumer>(){{
-            for (int i = 0; i < experimentConfig.getConsumerCount(); i++) {
-                Consumer consumer = DataEntityFactory.createConsumer(experimentConfig.getDoesForEachConsumer(), "127.0.0.1");
-                add(consumer);
-            }
-        }};
-
-        List<List<Institution>> institutionTree = new ArrayList<List<Institution>>(){{
-            for (int institudNum :
-                    experimentConfig.getDistributorsForEachLevel()) {
-                List<Institution> institutionList = new ArrayList<Institution>(){{
-                    for (int i = 0; i < institudNum; i++) {
-                        Institution institution = DataEntityFactory.createInstitution("127.0.0.1");
-                        add(institution);
-                    }
-                }};
-
-                add(institutionList);
-            }
-        }};
-
-        return ModelEntityFactory.createDrugLifeCycleView(experimentConfig, consumerList, institutionTree);
+        //TODO: Fill here
+//        experimentConfig.setDistributorsForEachLevel(new ArrayList<Integer>(){{
+//            add(1);
+//            add(2);
+//            add(3);
+//        }});
+//
+//        List<Consumer> consumerList = new ArrayList<Consumer>(){{
+//            for (int i = 0; i < experimentConfig.getConsumerCount(); i++) {
+//                Consumer consumer = DataEntityFactory.createConsumer(experimentConfig.getDoesForEachConsumer(), "127.0.0.1");
+//                add(consumer);
+//            }
+//        }};
+//
+//        List<List<Institution>> institutionTree = new ArrayList<List<Institution>>(){{
+//            for (int institudNum :
+//                    experimentConfig.getDistributorsForEachLevel()) {
+//                List<Institution> institutionList = new ArrayList<Institution>(){{
+//                    for (int i = 0; i < institudNum; i++) {
+//                        Institution institution = DataEntityFactory.createInstitution("127.0.0.1");
+//                        add(institution);
+//                    }
+//                }};
+//
+//                add(institutionList);
+//            }
+//        }};
+//
+//        return ModelEntityFactory.createDrugLifeCycleView(experimentConfig, consumerList, institutionTree);
+        return null;
     }
 
     public static List<DrugLifeCycle<OperationDTO>> addAttacks(List<DrugLifeCycle<OperationDTO>> drugLifeCycleList) throws JsonProcessingException {
