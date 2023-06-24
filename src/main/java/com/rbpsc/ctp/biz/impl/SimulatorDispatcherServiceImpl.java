@@ -18,7 +18,7 @@ import reactor.core.publisher.Mono;
 
 import java.util.List;
 
-import static com.rbpsc.ctp.common.Constant.ServiceConstants.WEB_SCOKET_TOPIC_PROGRESS;
+import static com.rbpsc.ctp.common.Constant.ServiceConstants.RESPONSE_CODE_FAIL_FIND_ADDRESS;
 
 /**
  * @project: WorkLoad
@@ -41,17 +41,17 @@ public class SimulatorDispatcherServiceImpl implements SimulatorDispatcherServic
 
     @Override
     public void startRequesting(SimulationDataView simulationDataView, String wsUUID) {
-        for (int i = 0; i < 10; i++) {
-            int finalI = i;
-            taskExecutor.execute(() -> {
-                try {
-                    Thread.sleep(500);
-                } catch (InterruptedException e) {
-                    throw new RuntimeException(e);
-                }
-                simpMessagingTemplate.convertAndSend(WEB_SCOKET_TOPIC_PROGRESS + wsUUID, "MSG:" + finalI);
-            });
-        }
+//        for (int i = 0; i < 10; i++) {
+//            int finalI = i;
+//            taskExecutor.execute(() -> {
+//                try {
+//                    Thread.sleep(500);
+//                } catch (InterruptedException e) {
+//                    throw new RuntimeException(e);
+//                }
+//                simpMessagingTemplate.convertAndSend(WEB_SCOKET_TOPIC_PROGRESS + wsUUID, "MSG:" + finalI);
+//            });
+//        }
 
         List<DrugLifeCycle<OperationDTO>> drugLifeCycleList = simulationDataView.getDrugLifeCycleList();
         drugLifeCycleList.forEach(drugLifeCycle -> {
@@ -63,33 +63,43 @@ public class SimulatorDispatcherServiceImpl implements SimulatorDispatcherServic
                 drugOperationDTO.setDrug(drugLifeCycle.getDrug());
                 drugOperationDTO.setOperationDTO(operationDTO);
 
-                // Send to database-based system
-                sendToNextStepBaseLine(drugOperationDTO);
+                taskExecutor.execute(() -> {
+                    try {
+                        Thread.sleep(500);
+                    } catch (InterruptedException e) {
+                        throw new RuntimeException(e);
+                    }
+
+                    // Send to database-based system
+                    simpMessagingTemplate.convertAndSend(sendToNextStepBaseLine(drugOperationDTO));
+                });
                 //TODO send to blockchain-based system(s)
             }
         });
     }
 
-    private boolean sendToNextStepBaseLine(DrugOperationDTO drugOperationDTO)  {
+    private DrugLifeCycleResponse sendToNextStepBaseLine(DrugOperationDTO drugOperationDTO)  {
         DrugLifeCycleResponse response = new DrugLifeCycleResponse();
 
         OperationDTO operationDTO = drugOperationDTO.getOperationDTO();
 
         if (StringUtils.isEmpty(operationDTO.getOperation().getAddress())){
+            response.setResponseWithCode(RESPONSE_CODE_FAIL_FIND_ADDRESS);
+            response.setDescribe("Address can not be empty!");
             log.error("Address can not be empty!");
-            return false;
+            return response;
         }
 
         WebClientUtil webClientUtil = new WebClientUtil();
 
         Mono<DrugLifeCycleResponse> responseMono = webClientUtil.postWithParams(operationDTO.getOperation().getAddress(), drugOperationDTO, DrugOperationDTO.class, DrugLifeCycleResponse.class);
 
-        responseMono.subscribe(result -> {
-            log.info(result.toString());
-        }, error -> {
-            throw new RuntimeException(error);
-        });
+//        responseMono.subscribe(result -> {
+//            log.info(result.toString());
+//        }, error -> {
+//            throw new RuntimeException(error);
+//        });
 
-        return true;
+        return responseMono.block();
     }
 }

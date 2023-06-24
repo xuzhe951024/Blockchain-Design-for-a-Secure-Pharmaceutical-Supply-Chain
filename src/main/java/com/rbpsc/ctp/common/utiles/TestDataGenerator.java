@@ -7,14 +7,11 @@ import com.rbpsc.ctp.api.entities.dto.OperationDTO;
 import com.rbpsc.ctp.api.entities.dto.webview.DrugLifeCycleVO;
 import com.rbpsc.ctp.api.entities.dto.webview.OperationVO;
 import com.rbpsc.ctp.api.entities.factories.DataEntityFactory;
-import com.rbpsc.ctp.api.entities.factories.ModelEntityFactory;
 import com.rbpsc.ctp.api.entities.supplychain.drug.DrugLifeCycle;
 import com.rbpsc.ctp.api.entities.supplychain.operations.attack.AttackAvailability;
 import com.rbpsc.ctp.api.entities.supplychain.operations.attack.AttackConfidentiality;
 import com.rbpsc.ctp.api.entities.supplychain.operations.attack.AttackIntegrity;
 import com.rbpsc.ctp.api.entities.supplychain.operations.OperationBase;
-import com.rbpsc.ctp.api.entities.supplychain.roles.Consumer;
-import com.rbpsc.ctp.api.entities.supplychain.roles.Institution;
 
 import java.util.ArrayList;
 import java.util.List;

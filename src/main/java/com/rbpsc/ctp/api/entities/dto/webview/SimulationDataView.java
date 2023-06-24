@@ -53,7 +53,7 @@ public class SimulationDataView extends SupplyChainBaseEntity {
         GlobalMemory memory = si.getHardware().getMemory();
 
         long totalMemory = memory.getTotal();
-        this.totalMem = totalMem;
+        this.totalMem = totalMemory;
         long availableMemory = memory.getAvailable();
         this.freeMem = availableMemory;
 

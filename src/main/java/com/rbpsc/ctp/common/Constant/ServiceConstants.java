@@ -19,7 +19,13 @@ public class ServiceConstants {
 
     public static final String DRUG_LIFECYCLE_REQUEST_PARAM_NAMES = "drugLifeCycle";
 
-    public static final String SERVICE_NAME_TOGGLE_API = "/v1/drugLifeCycle/drugOrderStep/toggle";
+    public static final String V1_SERVICE_NAME_BASE = "/v1/drugLifeCycle/drugOrderStep";
+
+    public static final String V1_SERVICE_NAME_CONSUMER_API = V1_SERVICE_NAME_BASE + "/consumer";
+    public static final String V1_SERVICE_NAME_MANUFACTURE_API = V1_SERVICE_NAME_BASE + "/manufacture";
+    public static final String V1_SERVICE_NAME_DISTRIBUTOR_API = V1_SERVICE_NAME_BASE + "/distributor";
+
+    public static final String V1_SERVICE_NAME_TOGGLE_API = V1_SERVICE_NAME_BASE + "/toggle";
 
     public static final String WEB_SOCKET_ENDPOINT = "/websocket";
     public static final String WEB_SCOKET_TOPIC_PROGRESS = "/topic/process-progress/";

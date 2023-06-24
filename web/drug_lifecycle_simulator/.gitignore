@@ -28,4 +28,5 @@ yarn-error.log*
 # TypeScript
 tsconfig.json
 tslint.json
+package-lock.json
 

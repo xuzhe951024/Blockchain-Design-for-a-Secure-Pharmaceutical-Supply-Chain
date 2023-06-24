@@ -18,7 +18,6 @@ import com.rbpsc.ctp.api.entities.supplychain.roles.Consumer;
 import com.rbpsc.ctp.api.entities.supplychain.roles.Institution;
 import com.rbpsc.ctp.api.entities.supplychain.roles.RoleBase;
 import com.rbpsc.ctp.api.entities.work_request.WorkLoadRecord;
-import org.springframework.util.StringUtils;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -126,20 +125,22 @@ public class DataEntityFactory {
         dest.setOperationMSG(MSG);
     }
 
-    public static Consumer createConsumer(int dose, String address){
+    public static Consumer createConsumer(int dose, String address, String batchId){
         Consumer consumer = new Consumer();
         setId(consumer);
         consumer.setExpectedDose(dose);
         consumer.setAddress(address);
         consumer.setRoleName(ROLE_NAME_CONSUMER);
+        consumer.setBatchId(batchId);
         return consumer;
     }
 
-    public static Institution createInstitution(String address){
+    public static Institution createInstitution(String address, String roleName, String batchId){
         Institution institution = new Institution();
         setId(institution);
         institution.setAddress(address);
-        institution.setRoleName(ROLE_NAME_INSTITUTION);
+        institution.setRoleName(roleName);
+        institution.setBatchId(batchId);
         return institution;
     }
 
