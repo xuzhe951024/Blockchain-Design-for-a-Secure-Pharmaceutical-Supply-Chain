@@ -71,8 +71,7 @@ public class DrugLiveCycleController {
             return response;
         }
 
-        DrugOrderStep drugOrderStep =  (DrugOrderStep) drugOperationDTO.getOperationDTO().getOperation();
-        if (!supplyChainStepsService.manufacture(drugOperationDTO.getDrug(), drugOrderStep)){
+        if (!supplyChainStepsService.manufacture(drugOperationDTO.getDrug(), drugOperationDTO.getOperationDTO().getOperation())){
             response.setResponseWithCode(RESPONSE_CODE_FAIL_BAD_GATEWAY);
             response.setDescribe("Manufacturing failed!");
             return response;
@@ -92,10 +91,9 @@ public class DrugLiveCycleController {
             return response;
         }
 
-        DrugOrderStep drugOrderStep =  (DrugOrderStep) drugOperationDTO.getOperationDTO().getOperation();
-        if (!supplyChainStepsService.manufacture(drugOperationDTO.getDrug(), drugOrderStep)){
+        if (!supplyChainStepsService.distributor(drugOperationDTO.getDrug(), drugOperationDTO.getOperationDTO().getOperation())){
             response.setResponseWithCode(RESPONSE_CODE_FAIL_BAD_GATEWAY);
-            response.setDescribe("Manufacturing failed!");
+            response.setDescribe("Distributing failed!");
             return response;
         }
 
@@ -105,7 +103,7 @@ public class DrugLiveCycleController {
     }
 
     @PostMapping("/consumer")
-    public DrugLifeCycleResponse nextStepConsumer(@RequestBody DrugOperationDTO drugOperationDTO) throws JsonProcessingException {
+    public DrugLifeCycleResponse nextStepConsumer(@RequestBody DrugOperationDTO drugOperationDTO) {
 
         DrugLifeCycleResponse response = checkBeforeServe(drugOperationDTO);
 
@@ -113,9 +111,9 @@ public class DrugLiveCycleController {
             return response;
         }
 
-        DrugOrderStep drugOrderStep =  (DrugOrderStep) drugOperationDTO.getOperationDTO().getOperation();
-        if (!supplyChainStepsService.consumer(drugOperationDTO.getDrug(), drugOrderStep)){
+        if (!supplyChainStepsService.consumer(drugOperationDTO.getDrug(), drugOperationDTO.getOperationDTO().getOperation(), drugOperationDTO.getExpectedReceiver())){
             response.setResponseWithCode(RESPONSE_CODE_FAIL_BAD_GATEWAY);
+            response.setDescribe("Consuming failed!");
             return response;
         }
 

@@ -42,6 +42,7 @@ public class WebPageController {
 
         ExperimentConfig experimentConfig = new ExperimentConfig();
         experimentConfig.setId(UUID.randomUUID().toString());
+        experimentConfig.setExperimentName("T");
         experimentConfig.setExperimentDescription("Test experiment");
         experimentConfig.setDrugName("Covid-Vaccine");
         experimentConfig.setMaxThreadCount(10);
@@ -70,7 +71,7 @@ public class WebPageController {
 
 
         // Process data...
-        SimulationDataView simulationDataView = modelEntityFactory.buildDrugLifeCycleFromVOList(drugLifeCycleVOList);
+        SimulationDataView simulationDataView = modelEntityFactory.buildSimulationDataViewFromVOList(drugLifeCycleVOList);
 
         simulatorDispatcherService.startRequesting(simulationDataView, uuid);
 

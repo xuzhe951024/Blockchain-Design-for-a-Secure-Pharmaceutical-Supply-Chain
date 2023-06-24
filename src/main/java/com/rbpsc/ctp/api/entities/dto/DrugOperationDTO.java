@@ -18,4 +18,5 @@ import lombok.ToString;
 public class DrugOperationDTO extends BaseEntity<String> {
     DrugInfo drug;
     OperationDTO operationDTO;
+    String expectedReceiver;
 }

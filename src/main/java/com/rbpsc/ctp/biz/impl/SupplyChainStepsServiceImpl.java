@@ -3,7 +3,7 @@ package com.rbpsc.ctp.biz.impl;
 import com.rbpsc.ctp.api.entities.factories.DataEntityFactory;
 import com.rbpsc.ctp.api.entities.supplychain.drug.DrugInfo;
 import com.rbpsc.ctp.api.entities.supplychain.drug.DrugLifeCycle;
-import com.rbpsc.ctp.api.entities.supplychain.operations.DrugOrderStep;
+import com.rbpsc.ctp.api.entities.supplychain.operations.OperationBase;
 import com.rbpsc.ctp.api.entities.supplychain.operations.Receipt;
 import com.rbpsc.ctp.api.entities.supplychain.roles.Consumer;
 import com.rbpsc.ctp.biz.service.SupplyChainStepsService;
@@ -28,7 +28,7 @@ public class SupplyChainStepsServiceImpl implements SupplyChainStepsService {
     }
 
     @Override
-    public boolean manufacture(DrugInfo drug, DrugOrderStep drugOrderStep) {
+    public boolean manufacture(DrugInfo drug, OperationBase operationBase) {
         DrugLifeCycle<Receipt> receiptDrugLifeCycle = drugLifeCycleReceiptRepository.selectDrugLifeCycleReceiptById(drug.getId());
         if (null != receiptDrugLifeCycle){
             log.error("Drug can not be produce duplicate");
@@ -37,7 +37,7 @@ public class SupplyChainStepsServiceImpl implements SupplyChainStepsService {
 
         receiptDrugLifeCycle =  DataEntityFactory.createDrugLifeCycleReceipt(drug);
 
-        Receipt receipt = DataEntityFactory.createReceipt(drugOrderStep);
+        Receipt receipt = DataEntityFactory.createReceipt(operationBase);
 
         receiptDrugLifeCycle.addOperation(receipt);
 
@@ -45,13 +45,13 @@ public class SupplyChainStepsServiceImpl implements SupplyChainStepsService {
     }
 
     @Override
-    public boolean distributor(DrugInfo drug, DrugOrderStep drugOrderStep) {
+    public boolean distributor(DrugInfo drug, OperationBase operationBase) {
         DrugLifeCycle<Receipt> receiptDrugLifeCycle = drugLifeCycleReceiptRepository.selectDrugLifeCycleReceiptById(drug.getId());
         if (null == receiptDrugLifeCycle){
             receiptDrugLifeCycle =  DataEntityFactory.createDrugLifeCycleReceipt(drug);
         }
 
-        Receipt receipt = DataEntityFactory.createReceipt(drugOrderStep);
+        Receipt receipt = DataEntityFactory.createReceipt(operationBase);
 
         receiptDrugLifeCycle.addOperation(receipt);
 
@@ -59,9 +59,7 @@ public class SupplyChainStepsServiceImpl implements SupplyChainStepsService {
     }
 
     @Override
-    public boolean consumer(DrugInfo drug, DrugOrderStep drugOrderStep) {
-
-        String targetConsumerId = drugOrderStep.getId();
+    public boolean consumer(DrugInfo drug, OperationBase operationBase, String targetConsumerId) {
 
         Consumer consumer = consumerReceiptRepository.selectConsumerReceiptById(targetConsumerId);
         if (null == consumer){
@@ -81,7 +79,7 @@ public class SupplyChainStepsServiceImpl implements SupplyChainStepsService {
             receiptDrugLifeCycle =  DataEntityFactory.createDrugLifeCycleReceipt(drug);
         }
 
-        Receipt receipt = DataEntityFactory.createReceipt(drugOrderStep);
+        Receipt receipt = DataEntityFactory.createReceipt(operationBase);
 
         receiptDrugLifeCycle.addOperation(receipt);
 

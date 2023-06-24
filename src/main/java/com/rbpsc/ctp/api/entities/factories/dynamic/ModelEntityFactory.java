@@ -41,7 +41,7 @@ public class ModelEntityFactory {
                     drugLifeCycleVO.setBatchId(experimentConfig.getExperimentName());
                     drugLifeCycleVO.setDrugId(UUID.randomUUID().toString());
                     drugLifeCycleVO.setPhysicalMarking(UUID.randomUUID().toString());
-                    drugLifeCycleVO.setTargetConsumer(consumer.toString());
+                    drugLifeCycleVO.setTargetConsumer(consumer.getAddress());
                     drugLifeCycleVO.setExpectedDose(consumer.getExpectedDose());
 
                     OperationVO manufactureOperationVO = DataEntityFactory.createOperationVO(DrugOrderStep.class.getName(), manufactureList.get(random.nextInt(manufactureList.size() - 1)).getAddress());
@@ -96,7 +96,7 @@ public class ModelEntityFactory {
         }});
     }
 
-    public SimulationDataView buildDrugLifeCycleFromVOList(List<DrugLifeCycleVO> drugLifeCycleVOList) {
+    public SimulationDataView buildSimulationDataViewFromVOList(List<DrugLifeCycleVO> drugLifeCycleVOList) {
         String batchId = drugLifeCycleVOList.get(0).getBatchId();
         SimulationDataView simulationDataView = new SimulationDataView();
         simulationDataView.setId(UUID.randomUUID().toString());
@@ -104,6 +104,7 @@ public class ModelEntityFactory {
         simulationDataView.detectEnvironment();
         simulationDataView.setDrugLifeCycleList(Collections.unmodifiableList(new ArrayList<DrugLifeCycle<OperationDTO>>() {{
             drugLifeCycleVOList.forEach(drugLifeCycleVO -> {
+                //TODO: consumer id is not match
                 Consumer consumer = DataEntityFactory.createConsumer(drugLifeCycleVO.getExpectedDose(), drugLifeCycleVO.getTargetConsumer(), batchId);
 
                 DrugInfo drugInfo = DataEntityFactory.createDrugInfo(simulationDataView, drugLifeCycleVO.getDrugName());
@@ -117,7 +118,7 @@ public class ModelEntityFactory {
                         operationBase.setAddress(address);
 
                         String[] name = address.split("\\.");
-                        operationBase.setRoleName(name[name.length - 1]);
+                        operationBase.setRoleName(name[0]);
 
                         OperationDTO operationDTOFromPage = DataEntityFactory.createOperationDTO(operationBase, operationVO.getOperationType());
                         add(operationDTOFromPage);

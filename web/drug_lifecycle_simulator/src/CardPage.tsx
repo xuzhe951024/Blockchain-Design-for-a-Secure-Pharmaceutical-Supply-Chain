@@ -27,7 +27,7 @@ type DrugLifeCycleVO = {
 
 // Define data type
 const operationTypes = ["Normal_Step", "Attack_Availability", "Attack_Confidentiality", "Attack_Integrity"];
-const operatorAddList = ["Normal_Step", "Attack_Availability", "Attack_Confidentiality", "Attack_Integrity"];
+const operatorAddList = ["http://localhost:8090/v1/drugLifeCycle/drugOrderStep/manufacture", "http://localhost:8090/v1/drugLifeCycle/drugOrderStep/distributor", "http://localhost:8090/v1/drugLifeCycle/drugOrderStep/consumer", "Attack_Integrity"];
 
 const StyledCard = styled(Card)(({ theme }) => ({
     marginTop: theme.spacing(2),

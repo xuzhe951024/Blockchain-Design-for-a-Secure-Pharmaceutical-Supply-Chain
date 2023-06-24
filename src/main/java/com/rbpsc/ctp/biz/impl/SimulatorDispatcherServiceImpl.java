@@ -19,6 +19,7 @@ import reactor.core.publisher.Mono;
 import java.util.List;
 
 import static com.rbpsc.ctp.common.Constant.ServiceConstants.RESPONSE_CODE_FAIL_FIND_ADDRESS;
+import static com.rbpsc.ctp.common.Constant.ServiceConstants.WEB_SCOKET_TOPIC_PROGRESS;
 
 /**
  * @project: WorkLoad
@@ -62,6 +63,7 @@ public class SimulatorDispatcherServiceImpl implements SimulatorDispatcherServic
                 DataEntityFactory.setId(drugOperationDTO);
                 drugOperationDTO.setDrug(drugLifeCycle.getDrug());
                 drugOperationDTO.setOperationDTO(operationDTO);
+                drugOperationDTO.setExpectedReceiver(drugLifeCycle.getExpectedReceiver().getId());
 
                 taskExecutor.execute(() -> {
                     try {
@@ -71,7 +73,7 @@ public class SimulatorDispatcherServiceImpl implements SimulatorDispatcherServic
                     }
 
                     // Send to database-based system
-                    simpMessagingTemplate.convertAndSend(sendToNextStepBaseLine(drugOperationDTO));
+                    simpMessagingTemplate.convertAndSend(WEB_SCOKET_TOPIC_PROGRESS + wsUUID, sendToNextStepBaseLine(drugOperationDTO));
                 });
                 //TODO send to blockchain-based system(s)
             }
