@@ -21,6 +21,7 @@ import com.rbpsc.ctp.api.entities.work_request.WorkLoadRecord;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Optional;
 import java.util.UUID;
 
 import static com.rbpsc.ctp.common.Constant.EntityConstants.*;
@@ -125,9 +126,9 @@ public class DataEntityFactory {
         dest.setOperationMSG(MSG);
     }
 
-    public static Consumer createConsumer(int dose, String address, String batchId){
+    public static Consumer createConsumer(int dose, String address, String batchId, Optional<String> consumerId){
         Consumer consumer = new Consumer();
-        setId(consumer);
+        consumer.setId(consumerId.orElse(UUID.randomUUID().toString()));
         consumer.setExpectedDose(dose);
         consumer.setAddress(address);
         consumer.setRoleName(ROLE_NAME_CONSUMER);

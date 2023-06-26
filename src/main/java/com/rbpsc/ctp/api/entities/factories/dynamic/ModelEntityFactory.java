@@ -41,7 +41,7 @@ public class ModelEntityFactory {
                     drugLifeCycleVO.setBatchId(experimentConfig.getExperimentName());
                     drugLifeCycleVO.setDrugId(UUID.randomUUID().toString());
                     drugLifeCycleVO.setPhysicalMarking(UUID.randomUUID().toString());
-                    drugLifeCycleVO.setTargetConsumer(consumer.getAddress());
+                    drugLifeCycleVO.setTargetConsumer(consumer.getId());
                     drugLifeCycleVO.setExpectedDose(consumer.getExpectedDose());
 
                     OperationVO manufactureOperationVO = DataEntityFactory.createOperationVO(DrugOrderStep.class.getName(), manufactureList.get(random.nextInt(manufactureList.size() - 1)).getAddress());
@@ -89,7 +89,7 @@ public class ModelEntityFactory {
             for (int i = 0; i < consumerCount; i++) {
                 Consumer consumer = DataEntityFactory.createConsumer(doesForEachConsumer, ROLE_NAME_CONSUMER
                                 + i + DOT + batchId + V1_SERVICE_NAME_CONSUMER_API
-                        , batchId);
+                        , batchId, Optional.empty());
                 consumerReceiptRepository.insertConsumerReceipt(consumer);
                 add(consumer);
             }
@@ -104,8 +104,7 @@ public class ModelEntityFactory {
         simulationDataView.detectEnvironment();
         simulationDataView.setDrugLifeCycleList(Collections.unmodifiableList(new ArrayList<DrugLifeCycle<OperationDTO>>() {{
             drugLifeCycleVOList.forEach(drugLifeCycleVO -> {
-                //TODO: consumer id is not match
-                Consumer consumer = DataEntityFactory.createConsumer(drugLifeCycleVO.getExpectedDose(), drugLifeCycleVO.getTargetConsumer(), batchId);
+                Consumer consumer = DataEntityFactory.createConsumer(drugLifeCycleVO.getExpectedDose(), drugLifeCycleVO.getTargetConsumer(), batchId, Optional.of(drugLifeCycleVO.getTargetConsumer()));
 
                 DrugInfo drugInfo = DataEntityFactory.createDrugInfo(simulationDataView, drugLifeCycleVO.getDrugName());
                 drugInfo.setId(drugLifeCycleVO.getDrugId());
