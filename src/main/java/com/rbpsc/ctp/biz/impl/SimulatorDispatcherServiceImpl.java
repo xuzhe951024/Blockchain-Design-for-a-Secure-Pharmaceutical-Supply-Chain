@@ -56,27 +56,30 @@ public class SimulatorDispatcherServiceImpl implements SimulatorDispatcherServic
 
         List<DrugLifeCycle<OperationDTO>> drugLifeCycleList = simulationDataView.getDrugLifeCycleList();
         drugLifeCycleList.forEach(drugLifeCycle -> {
-            while (drugLifeCycle.getOperationQueueSize() > 0){
-                OperationDTO operationDTO = drugLifeCycle.pollOperationVOQ();
 
-                DrugOperationDTO drugOperationDTO = new DrugOperationDTO();
-                DataEntityFactory.setId(drugOperationDTO);
-                drugOperationDTO.setDrug(drugLifeCycle.getDrug());
-                drugOperationDTO.setOperationDTO(operationDTO);
-                drugOperationDTO.setExpectedReceiver(drugLifeCycle.getExpectedReceiver().getId());
+            taskExecutor.execute(() -> {
+                try {
+                    Thread.sleep(500);
+                } catch (InterruptedException e) {
+                    throw new RuntimeException(e);
+                }
 
-                taskExecutor.execute(() -> {
-                    try {
-                        Thread.sleep(500);
-                    } catch (InterruptedException e) {
-                        throw new RuntimeException(e);
-                    }
+                while (drugLifeCycle.getOperationQueueSize() > 0){
+                    OperationDTO operationDTO = drugLifeCycle.pollOperationVOQ();
+
+                    DrugOperationDTO drugOperationDTO = new DrugOperationDTO();
+                    DataEntityFactory.setId(drugOperationDTO);
+                    drugOperationDTO.setDrug(drugLifeCycle.getDrug());
+                    drugOperationDTO.setOperationDTO(operationDTO);
+                    drugOperationDTO.setExpectedReceiver(drugLifeCycle.getExpectedReceiver().getId());
 
                     // Send to database-based system
                     simpMessagingTemplate.convertAndSend(WEB_SCOKET_TOPIC_PROGRESS + wsUUID, sendToNextStepBaseLine(drugOperationDTO));
-                });
-                //TODO send to blockchain-based system(s)
-            }
+
+                    //TODO send to blockchain-based system(s)
+                }
+            });
+
         });
     }
 

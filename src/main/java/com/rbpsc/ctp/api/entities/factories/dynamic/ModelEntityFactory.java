@@ -74,6 +74,8 @@ public class ModelEntityFactory {
 
         return Collections.unmodifiableList(new ArrayList<Institution>() {{
             for (int i = 0; i < institutionCount; i++) {
+
+                //TODO: Modify the method of address generation
                 Institution institution = DataEntityFactory.createInstitution(roleName + i + DOT + batchId + serviceName
                         , roleName
                         , batchId);
@@ -87,6 +89,8 @@ public class ModelEntityFactory {
 
         return Collections.unmodifiableList(new ArrayList<Consumer>() {{
             for (int i = 0; i < consumerCount; i++) {
+
+                //TODO: Modify the method of address generation
                 Consumer consumer = DataEntityFactory.createConsumer(doesForEachConsumer, ROLE_NAME_CONSUMER
                                 + i + DOT + batchId + V1_SERVICE_NAME_CONSUMER_API
                         , batchId, Optional.empty());
@@ -102,10 +106,9 @@ public class ModelEntityFactory {
         simulationDataView.setId(UUID.randomUUID().toString());
         simulationDataView.setBatchId(batchId);
         simulationDataView.detectEnvironment();
-        simulationDataView.setDrugLifeCycleList(Collections.unmodifiableList(new ArrayList<DrugLifeCycle<OperationDTO>>() {{
-            drugLifeCycleVOList.forEach(drugLifeCycleVO -> {
-                Consumer consumer = DataEntityFactory.createConsumer(drugLifeCycleVO.getExpectedDose(), drugLifeCycleVO.getTargetConsumer(), batchId, Optional.of(drugLifeCycleVO.getTargetConsumer()));
-
+        simulationDataView.setDrugLifeCycleList(Collections.unmodifiableList(new ArrayList<DrugLifeCycle<OperationDTO>>() {
+            private void build(DrugLifeCycleVO drugLifeCycleVO) {
+                Consumer consumer = consumerReceiptRepository.selectConsumerReceiptById(drugLifeCycleVO.getTargetConsumer());
                 DrugInfo drugInfo = DataEntityFactory.createDrugInfo(simulationDataView, drugLifeCycleVO.getDrugName());
                 drugInfo.setId(drugLifeCycleVO.getDrugId());
 
@@ -124,9 +127,6 @@ public class ModelEntityFactory {
                     }
 
                     {
-                        DrugOrderStep consumerStep = DataEntityFactory.createDrugOrderStep(consumer, DEFAULT_OPERATION_MSG);
-                        OperationDTO operationDTO = DataEntityFactory.createOperationDTO(consumerStep, consumerStep.getClass().getName());
-                        add(operationDTO);
                         drugLifeCycleVO.getOperationVOList().forEach(this::transferToDTO);
                     }
                 };
@@ -137,7 +137,10 @@ public class ModelEntityFactory {
                 drugLifeCycle.setDrug(drugInfo);
 
                 add(drugLifeCycle);
-            });
+            }
+
+            {
+            drugLifeCycleVOList.forEach(this::build);
         }}));
 
         return simulationDataView;
