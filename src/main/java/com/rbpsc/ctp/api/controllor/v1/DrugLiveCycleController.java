@@ -1,21 +1,17 @@
 package com.rbpsc.ctp.api.controllor.v1;
 
-import com.fasterxml.jackson.core.JsonProcessingException;
-import com.fasterxml.jackson.databind.ObjectMapper;
 import com.rbpsc.ctp.api.entities.dto.DrugOperationDTO;
 import com.rbpsc.ctp.api.entities.dto.response.DrugLifeCycleResponse;
-import com.rbpsc.ctp.api.entities.supplychain.operations.DrugOrderStep;
+import com.rbpsc.ctp.biz.service.AttackStepsService;
 import com.rbpsc.ctp.biz.service.SupplyChainStepsService;
 import com.rbpsc.ctp.configuration.v1prefix.V1RestController;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.MediaType;
-import org.springframework.util.StringUtils;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 
-import static com.rbpsc.ctp.common.Constant.EntityConstants.ROLE_NAME;
 import static com.rbpsc.ctp.common.Constant.ServiceConstants.*;
 
 @V1RestController
@@ -28,12 +24,11 @@ public class DrugLiveCycleController {
     final
     SupplyChainStepsService supplyChainStepsService;
 
-    final
-    ObjectMapper objectMapper;
+    final AttackStepsService attackStepsService;
 
-    public DrugLiveCycleController(SupplyChainStepsService supplyChainStepsService, ObjectMapper objectMapper) {
+    public DrugLiveCycleController(SupplyChainStepsService supplyChainStepsService, AttackStepsService attackStepsService) {
         this.supplyChainStepsService = supplyChainStepsService;
-        this.objectMapper = objectMapper;
+        this.attackStepsService = attackStepsService;
     }
 
     @GetMapping(value = "/checkAvailable")
@@ -122,6 +117,66 @@ public class DrugLiveCycleController {
         return response;
     }
 
+    @PostMapping("/attack_confidentiality")
+    public DrugLifeCycleResponse attackConfidentiality(@RequestBody DrugOperationDTO drugOperationDTO) {
+
+        DrugLifeCycleResponse response = checkBeforeServe(drugOperationDTO);
+
+        if (!response.isSuccess()){
+            return response;
+        }
+
+        if (!attackStepsService.attackConfidentiality(drugOperationDTO.getDrug(), drugOperationDTO.getOperationDTO().getOperation())){
+            response.setResponseWithCode(RESPONSE_CODE_FAIL_BAD_GATEWAY);
+            response.setDescribe("Attack failed!");
+            return response;
+        }
+
+        log.info("Step:\n " + drugOperationDTO + "\n has been well processed!");
+
+        return response;
+    }
+
+    @PostMapping("/attack_Integrity")
+    public DrugLifeCycleResponse attackIntegrity(@RequestBody DrugOperationDTO drugOperationDTO) {
+
+        DrugLifeCycleResponse response = checkBeforeServe(drugOperationDTO);
+
+        if (!response.isSuccess()){
+            return response;
+        }
+
+        if (!attackStepsService.attackIntegrity(drugOperationDTO.getDrug(), drugOperationDTO.getOperationDTO().getOperation())){
+            response.setResponseWithCode(RESPONSE_CODE_FAIL_BAD_GATEWAY);
+            response.setDescribe("Attack failed!");
+            return response;
+        }
+
+        log.info("Step:\n " + drugOperationDTO + "\n has been well processed!");
+
+        return response;
+    }
+
+    @PostMapping("/attack_availability")
+    public DrugLifeCycleResponse attackAvailability(@RequestBody DrugOperationDTO drugOperationDTO) {
+
+        DrugLifeCycleResponse response = checkBeforeServe(drugOperationDTO);
+
+        if (!response.isSuccess()){
+            return response;
+        }
+
+        if (!attackStepsService.attackAvailability(drugOperationDTO.getOperationDTO().getOperation())){
+            response.setResponseWithCode(RESPONSE_CODE_FAIL_BAD_GATEWAY);
+            response.setDescribe("Attack failed!");
+            return response;
+        }
+
+        log.info("Step:\n " + drugOperationDTO + "\n has been well processed!");
+
+        return response;
+    }
+
     private DrugLifeCycleResponse checkBeforeServe(DrugOperationDTO drugOperationDTO) {
         DrugLifeCycleResponse response = new DrugLifeCycleResponse();
 
@@ -147,15 +202,6 @@ public class DrugLiveCycleController {
 //
 //            return response;
 //        }
-
-        if (!DrugOrderStep.class.getName().equals(drugOperationDTO.getOperationDTO().getOperationType())){
-            response.setResponseWithCode(RESPONSE_CODE_FAIL_OPERATION_TYPE_NOT_MATCH);
-            response.setDescribe(String.format("check if operation type{%s} matches node role{%s}.",
-                    drugOperationDTO.getOperationDTO().getOperationType(),
-                    DrugOrderStep.class.getName()));
-
-            return response;
-        }
 
         return response;
     }

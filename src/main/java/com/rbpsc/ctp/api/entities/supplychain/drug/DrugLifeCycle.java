@@ -18,6 +18,7 @@ public class DrugLifeCycle <T> extends SupplyChainBaseEntity {
     DrugInfo drug;
     List<T> lifeCycleQueue;
     Consumer expectedReceiver;
+    Boolean isAttacked = false;
 
     public T pollOperationVOQ(){
         return lifeCycleQueue.remove(0);
@@ -28,7 +29,9 @@ public class DrugLifeCycle <T> extends SupplyChainBaseEntity {
     }
 
     public void addOperation(T operationDTO){
-        this.lifeCycleQueue.add(operationDTO);
+        if (!this.isAttacked){
+            this.lifeCycleQueue.add(operationDTO);
+        }
     }
 
     public void setTagTagId(String tagTagId){

@@ -21,4 +21,6 @@ public class EntityConstants {
     public static final String DEFAULT_OPERATION_MSG = "Default MSG";
 
     public static final String ROLE_NAME = "ROLE_NAME";
+
+    public static final String ATTACK_CONFIDENTIALITY_MSG_SUFFIX = ": Intercepted!";
 }

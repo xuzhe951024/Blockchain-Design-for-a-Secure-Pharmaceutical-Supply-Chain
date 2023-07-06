@@ -4,6 +4,7 @@ import com.rbpsc.ctp.api.entities.dto.response.DrugLifeCycleResponse;
 import com.rbpsc.ctp.api.entities.factories.DataEntityFactory;
 import com.rbpsc.ctp.api.entities.supplychain.drug.DrugInfo;
 import com.rbpsc.ctp.api.entities.supplychain.drug.DrugLifeCycle;
+import com.rbpsc.ctp.api.entities.supplychain.operations.OperationBase;
 import com.rbpsc.ctp.api.entities.supplychain.operations.Receipt;
 import com.rbpsc.ctp.api.entities.supplychain.operations.attack.AttackAvailability;
 import com.rbpsc.ctp.api.entities.supplychain.operations.attack.AttackConfidentiality;
@@ -14,6 +15,10 @@ import com.rbpsc.ctp.repository.service.AttackConfidentialityRepository;
 import com.rbpsc.ctp.repository.service.DrugLifeCycleReceiptRepository;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
+
+import java.util.Optional;
+
+import static com.rbpsc.ctp.common.Constant.EntityConstants.ATTACK_CONFIDENTIALITY_MSG_SUFFIX;
 
 @Service
 @Slf4j
@@ -30,7 +35,7 @@ public class AttackStepsServiceImpl implements AttackStepsService {
     }
 
     @Override
-    public boolean attackAvailability(AttackAvailability attackAvailability) {
+    public boolean attackAvailability(OperationBase attackAvailability) {
 
         webClientUtil.postWithParams(
                         attackAvailability.getAddress(),
@@ -45,23 +50,36 @@ public class AttackStepsServiceImpl implements AttackStepsService {
     }
 
     @Override
-    public boolean attackConfidentiality(DrugInfo drug, AttackConfidentiality attackConfidentiality) {
-
-        // TODO: add "receipt queue"
-        // TODO: put fake receipt back in the receipt queue
-        // TODO: replace ExampleMsg here
+    public boolean attackConfidentiality(DrugInfo drug, OperationBase attackConfidentiality) {
 
         DrugLifeCycle<Receipt> receiptDrugLifeCycle = drugLifeCycleReceiptRepository.selectDrugLifeCycleReceiptById(drug.getId());
         if (null == receiptDrugLifeCycle){
             receiptDrugLifeCycle =  DataEntityFactory.createDrugLifeCycleReceipt(drug);
         }
 
-        return false;
+        attackConfidentiality.setOperationMSG(attackConfidentiality.getOperationMSG() + ATTACK_CONFIDENTIALITY_MSG_SUFFIX);
+
+        Receipt receipt = DataEntityFactory.createReceipt(attackConfidentiality);
+
+        receiptDrugLifeCycle.addOperation(receipt);
+
+        return drugLifeCycleReceiptRepository.updateWithInsert(receiptDrugLifeCycle, Optional.of(drug.getId()));
     }
 
     @Override
-    public boolean attackIntegrity(DrugInfo drug, AttackIntegrity attackIntegrity) {
-        // TODO: Make the selling chain stop here and store "DrugLifeCycle" object
-        return false;
+    public boolean attackIntegrity(DrugInfo drug, OperationBase attackIntegrity) {
+
+        DrugLifeCycle<Receipt> receiptDrugLifeCycle = drugLifeCycleReceiptRepository.selectDrugLifeCycleReceiptById(drug.getId());
+        if (null == receiptDrugLifeCycle){
+            receiptDrugLifeCycle =  DataEntityFactory.createDrugLifeCycleReceipt(drug);
+        }
+
+        Receipt receipt = DataEntityFactory.createReceipt(attackIntegrity);
+
+        receiptDrugLifeCycle.addOperation(receipt);
+
+        receiptDrugLifeCycle.setIsAttacked(true);
+
+        return drugLifeCycleReceiptRepository.updateWithInsert(receiptDrugLifeCycle, Optional.of(drug.getId()));
     }
 }

@@ -48,7 +48,8 @@ public class SupplyChainStepsServiceImpl implements SupplyChainStepsService {
     public boolean distributor(DrugInfo drug, OperationBase operationBase) {
         DrugLifeCycle<Receipt> receiptDrugLifeCycle = drugLifeCycleReceiptRepository.selectDrugLifeCycleReceiptById(drug.getId());
         if (null == receiptDrugLifeCycle){
-            receiptDrugLifeCycle =  DataEntityFactory.createDrugLifeCycleReceipt(drug);
+            log.error("Products must be produced before selling!");
+            return false;
         }
 
         Receipt receipt = DataEntityFactory.createReceipt(operationBase);
@@ -76,7 +77,8 @@ public class SupplyChainStepsServiceImpl implements SupplyChainStepsService {
 
         DrugLifeCycle<Receipt> receiptDrugLifeCycle = drugLifeCycleReceiptRepository.selectDrugLifeCycleReceiptById(drug.getId());
         if (null == receiptDrugLifeCycle){
-            receiptDrugLifeCycle =  DataEntityFactory.createDrugLifeCycleReceipt(drug);
+            log.error("Products must be produced before selling!");
+            return false;
         }
 
         Receipt receipt = DataEntityFactory.createReceipt(operationBase);
