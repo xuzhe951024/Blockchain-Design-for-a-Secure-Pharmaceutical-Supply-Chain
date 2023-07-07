@@ -88,9 +88,7 @@ class CTPApplicationTests {
         responseMono.subscribe(result -> {
             assert result.isSuccess();
             log.info("switch off success!");
-        }, error -> {
-            error.printStackTrace();
-        });
+        }, Throwable::printStackTrace);
         Thread.sleep(500);
 
         webClientUtil.getWithoutParams("http://127.0.0.1:8090/v1/drugLifeCycle/drugOrderStep/checkAvailable"
@@ -98,9 +96,7 @@ class CTPApplicationTests {
                 .subscribe(resultCheckAvailable -> {
                     assert resultCheckAvailable.getResponseCode() == RESPONSE_CODE_FAIL_SERVICE_DISABLED;
                     log.info("service has been switched off!");
-                }, error -> {
-                    error.printStackTrace();
-                });
+                }, Throwable::printStackTrace);
         Thread.sleep(500);
 
         webClientUtil.postWithParams(
@@ -111,9 +107,7 @@ class CTPApplicationTests {
                 .subscribe(result -> {
                     assert result.isSuccess();
                     log.info("switch on success!");
-                }, error -> {
-                    error.printStackTrace();
-                });
+                }, Throwable::printStackTrace);
         Thread.sleep(500);
 
         webClientUtil.getWithoutParams("http://127.0.0.1:8090/v1/drugLifeCycle/drugOrderStep/checkAvailable"
@@ -121,9 +115,7 @@ class CTPApplicationTests {
                 .subscribe(resultCheckAvailable -> {
                     assert resultCheckAvailable.isSuccess();
                     log.info("service has been switched on!");
-                }, error -> {
-                    error.printStackTrace();
-                });
+                }, Throwable::printStackTrace);
 
         Thread.sleep(500);
     }
