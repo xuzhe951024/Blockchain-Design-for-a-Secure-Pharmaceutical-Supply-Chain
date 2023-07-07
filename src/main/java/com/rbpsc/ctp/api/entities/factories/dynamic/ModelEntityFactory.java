@@ -13,6 +13,7 @@ import com.rbpsc.ctp.api.entities.supplychain.operations.OperationBase;
 import com.rbpsc.ctp.api.entities.supplychain.roles.Consumer;
 import com.rbpsc.ctp.api.entities.supplychain.roles.Institution;
 import com.rbpsc.ctp.repository.service.ConsumerReceiptRepository;
+import com.rbpsc.ctp.repository.service.RoleBaseRepository;
 import org.springframework.stereotype.Service;
 
 import java.util.*;
@@ -22,16 +23,29 @@ import static com.rbpsc.ctp.common.Constant.ServiceConstants.*;
 
 @Service
 public class ModelEntityFactory {
-    private final ConsumerReceiptRepository consumerReceiptRepository;
+    final ConsumerReceiptRepository consumerReceiptRepository;
+    final RoleBaseRepository roleBaseRepository;
 
-    public ModelEntityFactory(ConsumerReceiptRepository consumerReceiptRepository) {
+    public ModelEntityFactory(ConsumerReceiptRepository consumerReceiptRepository, RoleBaseRepository roleBaseRepository) {
         this.consumerReceiptRepository = consumerReceiptRepository;
+        this.roleBaseRepository = roleBaseRepository;
     }
 
     public List<DrugLifeCycleVO> createDrugLifeCycleVOList(ExperimentConfig experimentConfig) {
         List<Consumer> consumerList = createAndSaveConsumers(experimentConfig.getConsumerCount(), experimentConfig.getDoesForEachConsumer(), experimentConfig.getExperimentName());
         List<Institution> manufactureList = createInstituteList(experimentConfig.getManufacturerCount(), V1_SERVICE_NAME_MANUFACTURE_API, ROLE_NAME_MANUFACTURE, experimentConfig.getExperimentName());
         List<Institution> distributorList = createInstituteList(experimentConfig.getDistributorsCount(), V1_SERVICE_NAME_DISTRIBUTOR_API, ROLE_NAME_DISTRIBUTOR, experimentConfig.getExperimentName());
+
+        // Create & Save attackers
+        createInstituteList(experimentConfig.getManufacturerCount(), V1_SERVICE_NAME_ATTACK_INTEGRITY_API, ROLE_NAME_MANUFACTURE, experimentConfig.getExperimentName());
+        createInstituteList(experimentConfig.getDistributorsCount(), V1_SERVICE_NAME_ATTACK_INTEGRITY_API, ROLE_NAME_DISTRIBUTOR, experimentConfig.getExperimentName());
+
+        createInstituteList(experimentConfig.getManufacturerCount(), V1_SERVICE_NAME_ATTACK_AVAILABILITY_API, ROLE_NAME_MANUFACTURE, experimentConfig.getExperimentName());
+        createInstituteList(experimentConfig.getDistributorsCount(), V1_SERVICE_NAME_ATTACK_AVAILABILITY_API, ROLE_NAME_DISTRIBUTOR, experimentConfig.getExperimentName());
+
+        createInstituteList(1, V1_SERVICE_NAME_ATTACK_CONFIDENTIALITY_API, ROLE_NAME_ATTACKER, experimentConfig.getExperimentName());
+
+
         Random random = new Random();
         return Collections.unmodifiableList(new ArrayList<DrugLifeCycleVO>() {{
             consumerList.forEach(consumer -> {
@@ -81,6 +95,8 @@ public class ModelEntityFactory {
                         , batchId);
 
                 add(institution);
+
+                roleBaseRepository.insertRoleBase(institution);
             }
         }});
     }
@@ -96,6 +112,8 @@ public class ModelEntityFactory {
                         , batchId, Optional.empty());
                 consumerReceiptRepository.insertConsumerReceipt(consumer);
                 add(consumer);
+
+                roleBaseRepository.insertRoleBase(consumer);
             }
         }});
     }

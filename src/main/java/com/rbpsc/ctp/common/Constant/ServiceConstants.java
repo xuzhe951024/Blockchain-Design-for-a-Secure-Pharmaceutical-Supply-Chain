@@ -24,6 +24,9 @@ public class ServiceConstants {
     public static final String V1_SERVICE_NAME_CONSUMER_API = V1_SERVICE_NAME_BASE + "/consumer";
     public static final String V1_SERVICE_NAME_MANUFACTURE_API = V1_SERVICE_NAME_BASE + "/manufacture";
     public static final String V1_SERVICE_NAME_DISTRIBUTOR_API = V1_SERVICE_NAME_BASE + "/distributor";
+    public static final String V1_SERVICE_NAME_ATTACK_CONFIDENTIALITY_API = V1_SERVICE_NAME_BASE + "/attack_confidentiality";
+    public static final String V1_SERVICE_NAME_ATTACK_INTEGRITY_API = V1_SERVICE_NAME_BASE + "/attack_Integrity";
+    public static final String V1_SERVICE_NAME_ATTACK_AVAILABILITY_API = V1_SERVICE_NAME_BASE + "/attack_availability";
 
     public static final String V1_SERVICE_NAME_TOGGLE_API = V1_SERVICE_NAME_BASE + "/toggle";
 

@@ -7,11 +7,13 @@ import com.rbpsc.ctp.biz.service.SupplyChainStepsService;
 import com.rbpsc.ctp.configuration.v1prefix.V1RestController;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.MediaType;
+import org.springframework.util.StringUtils;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 
+import static com.rbpsc.ctp.common.Constant.EntityConstants.ROLE_NAME;
 import static com.rbpsc.ctp.common.Constant.ServiceConstants.*;
 
 @V1RestController
@@ -160,21 +162,21 @@ public class DrugLiveCycleController {
     @PostMapping("/attack_availability")
     public DrugLifeCycleResponse attackAvailability(@RequestBody DrugOperationDTO drugOperationDTO) {
 
-        DrugLifeCycleResponse response = checkBeforeServe(drugOperationDTO);
+//        DrugLifeCycleResponse response = checkBeforeServe(drugOperationDTO);
+//
+//        if (!response.isSuccess()){
+//            return response;
+//        }
+//
+//        if (!attackStepsService.attackAvailability(drugOperationDTO.getOperationDTO().getOperation())){
+//            response.setResponseWithCode(RESPONSE_CODE_FAIL_BAD_GATEWAY);
+//            response.setDescribe("Attack failed!");
+//            return response;
+//        }
+//
+//        log.info("Step:\n " + drugOperationDTO + "\n has been well processed!");
 
-        if (!response.isSuccess()){
-            return response;
-        }
-
-        if (!attackStepsService.attackAvailability(drugOperationDTO.getOperationDTO().getOperation())){
-            response.setResponseWithCode(RESPONSE_CODE_FAIL_BAD_GATEWAY);
-            response.setDescribe("Attack failed!");
-            return response;
-        }
-
-        log.info("Step:\n " + drugOperationDTO + "\n has been well processed!");
-
-        return response;
+        return toggle(false);
     }
 
     private DrugLifeCycleResponse checkBeforeServe(DrugOperationDTO drugOperationDTO) {
@@ -194,10 +196,10 @@ public class DrugLiveCycleController {
 //            throw new NullPointerException("Null selfRole value!");
 //        }
 //
-//        if (!selfRole.equals(drugOperationDTO.getOperationDTO().getOperation().getAddress())){
+//        if (!selfRole.equals(drugOperationDTO.getOperationDTO().getOperation().getAddress().split("\\.")[0])){
 //            response.setResponseWithCode(RESPONSE_CODE_FAIL_OPERATION_TYPE_NOT_MATCH);
 //            response.setDescribe(String.format("check if operation add{%s} matches node role{%s}.",
-//                    drugOperationDTO.getOperationDTO().getOperation().getAddress().split(":")[0],
+//                    drugOperationDTO.getOperationDTO().getOperation().getAddress().split("\\.")[0],
 //                    selfRole));
 //
 //            return response;
