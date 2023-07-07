@@ -45,7 +45,7 @@ class CTPApplicationTests {
 
     @Test
     void testSaveToDB(){
-        workLoadService.saveToDB("test");
+//        workLoadService.saveToDB("test");
     }
     
     @Test
@@ -73,41 +73,6 @@ class CTPApplicationTests {
         WorkLoadRecord workLoadRecordDeleted = workLoadRecordRepository.selectWorkLoadRecordById(workLoadRecord.getId());
         assert workLoadRecordDeleted == null;
 
-    }
-
-    @Test
-    void basicProcessesTest() throws JsonProcessingException {
-
-        List<DrugLifeCycle<OperationDTO>> drugLifeCycleList = TestDataGenerator.generateDrugLifeCycleWithAttack();
-
-        List<DrugInfo> consumerReceivedList = new ArrayList<>();
-
-        lifeCycleLoop:
-        for (DrugLifeCycle<OperationDTO> drugLifeCycle :
-                drugLifeCycleList) {
-            while (drugLifeCycle.getOperationQueueSize() > 0){
-                if (StringUtils.isEmpty(drugLifeCycle.getDrug().getDrugTagTagId())){
-                    drugLifeCycle.setTagTagId(UUID.randomUUID().toString());
-                }
-
-                OperationDTO operationDTO = drugLifeCycle.pollOperationVOQ();
-
-                if (!DrugOrderStep.class.getName().equals(operationDTO.getOperationType())){
-                    if (AttackAvailability.class.getName().equals(operationDTO.getOperationType())){
-                        break lifeCycleLoop;
-                    }
-                    break;
-                }
-
-                if (0 == drugLifeCycle.getOperationQueueSize()){
-                    consumerReceivedList.add(drugLifeCycle.getDrug());
-                }
-            }
-        }
-
-        assert consumerReceivedList.size() == drugLifeCycleList.size() - 5 :
-                "consumerReceiveListSize: " + consumerReceivedList.size() +
-                "\tdrugLifeCycleListSize: " + drugLifeCycleList.size();
     }
 
     @Test

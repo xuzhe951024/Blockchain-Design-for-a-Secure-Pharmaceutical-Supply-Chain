@@ -32,12 +32,15 @@ import static com.rbpsc.ctp.common.Constant.ServiceConstants.WEB_SCOKET_TOPIC_PR
 @Slf4j
 public class SimulatorDispatcherServiceImpl implements SimulatorDispatcherService {
 
-    private final TaskExecutor taskExecutor;
-    private final SimpMessagingTemplate simpMessagingTemplate;
+    final TaskExecutor taskExecutor;
+    final SimpMessagingTemplate simpMessagingTemplate;
+    final WebClientUtil webClientUtil;
 
-    public SimulatorDispatcherServiceImpl(@Qualifier("SimulatorExecutor") TaskExecutor taskExecutor, SimpMessagingTemplate simpMessagingTemplate) {
+
+    public SimulatorDispatcherServiceImpl(@Qualifier("SimulatorExecutor") TaskExecutor taskExecutor, SimpMessagingTemplate simpMessagingTemplate, WebClientUtil webClientUtil) {
         this.taskExecutor = taskExecutor;
         this.simpMessagingTemplate = simpMessagingTemplate;
+        this.webClientUtil = webClientUtil;
     }
 
     @Override
@@ -64,7 +67,7 @@ public class SimulatorDispatcherServiceImpl implements SimulatorDispatcherServic
                     throw new RuntimeException(e);
                 }
 
-                while (drugLifeCycle.getOperationQueueSize() > 0){
+                while (drugLifeCycle.getOperationQueueSize() > 0) {
                     OperationDTO operationDTO = drugLifeCycle.pollOperationVOQ();
 
                     DrugOperationDTO drugOperationDTO = new DrugOperationDTO();
@@ -83,19 +86,17 @@ public class SimulatorDispatcherServiceImpl implements SimulatorDispatcherServic
         });
     }
 
-    private DrugLifeCycleResponse sendToNextStepBaseLine(DrugOperationDTO drugOperationDTO)  {
+    private DrugLifeCycleResponse sendToNextStepBaseLine(DrugOperationDTO drugOperationDTO) {
         DrugLifeCycleResponse response = new DrugLifeCycleResponse();
 
         OperationDTO operationDTO = drugOperationDTO.getOperationDTO();
 
-        if (StringUtils.isEmpty(operationDTO.getOperation().getAddress())){
+        if (StringUtils.isEmpty(operationDTO.getOperation().getAddress())) {
             response.setResponseWithCode(RESPONSE_CODE_FAIL_FIND_ADDRESS);
             response.setDescribe("Address can not be empty!");
             log.error("Address can not be empty!");
             return response;
         }
-
-        WebClientUtil webClientUtil = new WebClientUtil();
 
         Mono<DrugLifeCycleResponse> responseMono = webClientUtil.postWithParams(operationDTO.getOperation().getAddress(), drugOperationDTO, DrugOperationDTO.class, DrugLifeCycleResponse.class);
 

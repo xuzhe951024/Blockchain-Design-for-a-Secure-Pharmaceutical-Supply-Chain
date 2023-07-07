@@ -24,8 +24,7 @@ import static com.rbpsc.ctp.common.Constant.EntityConstants.ATTACK_CONFIDENTIALI
 @Slf4j
 public class AttackStepsServiceImpl implements AttackStepsService {
 
-    final
-    WebClientUtil webClientUtil;
+    final WebClientUtil webClientUtil;
 
     final DrugLifeCycleReceiptRepository drugLifeCycleReceiptRepository;
 
@@ -43,6 +42,7 @@ public class AttackStepsServiceImpl implements AttackStepsService {
                         Boolean.class,
                         DrugLifeCycleResponse.class)
                 .subscribe(result -> {
+                    log.info("Attack_Availability: \n" + attackAvailability + "\nresult: \n" + result);
                     assert result.isSuccess();
                 }, Throwable::printStackTrace);
 
@@ -53,8 +53,8 @@ public class AttackStepsServiceImpl implements AttackStepsService {
     public boolean attackConfidentiality(DrugInfo drug, OperationBase attackConfidentiality) {
 
         DrugLifeCycle<Receipt> receiptDrugLifeCycle = drugLifeCycleReceiptRepository.selectDrugLifeCycleReceiptById(drug.getId());
-        if (null == receiptDrugLifeCycle){
-            receiptDrugLifeCycle =  DataEntityFactory.createDrugLifeCycleReceipt(drug);
+        if (null == receiptDrugLifeCycle) {
+            receiptDrugLifeCycle = DataEntityFactory.createDrugLifeCycleReceipt(drug);
         }
 
         attackConfidentiality.setOperationMSG(attackConfidentiality.getOperationMSG() + ATTACK_CONFIDENTIALITY_MSG_SUFFIX);
@@ -70,8 +70,8 @@ public class AttackStepsServiceImpl implements AttackStepsService {
     public boolean attackIntegrity(DrugInfo drug, OperationBase attackIntegrity) {
 
         DrugLifeCycle<Receipt> receiptDrugLifeCycle = drugLifeCycleReceiptRepository.selectDrugLifeCycleReceiptById(drug.getId());
-        if (null == receiptDrugLifeCycle){
-            receiptDrugLifeCycle =  DataEntityFactory.createDrugLifeCycleReceipt(drug);
+        if (null == receiptDrugLifeCycle) {
+            receiptDrugLifeCycle = DataEntityFactory.createDrugLifeCycleReceipt(drug);
         }
 
         Receipt receipt = DataEntityFactory.createReceipt(attackIntegrity);
