@@ -40,4 +40,8 @@ public class BaseRoleBaseRepositoryForMongoDBImpl {
     public boolean update(RoleBase entity) {
         return mongoDBUtil.autoUpdateMongoDB(entity);
     }
+
+    public List<RoleBase> findByExample(RoleBase entity){
+        return mongoDBUtil.findAllByExample(entity);
+    }
 }

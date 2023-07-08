@@ -15,7 +15,9 @@ public interface RoleBaseRepository {
 
     RoleBase selectRoleBaseById(String id);
 
-    public List<RoleBase> findAll();
+    List<RoleBase> findAll();
 
-    public boolean updateWithInsert(RoleBase roleBase);
+    boolean updateWithInsert(RoleBase roleBase);
+
+    List<RoleBase> findByExample(RoleBase roleBase);
 }

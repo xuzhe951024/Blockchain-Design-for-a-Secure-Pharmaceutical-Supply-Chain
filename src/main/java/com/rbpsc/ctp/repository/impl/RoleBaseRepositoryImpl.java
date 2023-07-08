@@ -58,4 +58,9 @@ public class RoleBaseRepositoryImpl implements RoleBaseRepository {
 
         return baseRoleBaseRepositoryForMongoDBRepositoryForMongoDB.update(roleBase);
     }
+
+    @Override
+    public List<RoleBase> findByExample(RoleBase roleBase) {
+        return baseRoleBaseRepositoryForMongoDBRepositoryForMongoDB.findByExample(roleBase);
+    }
 }
