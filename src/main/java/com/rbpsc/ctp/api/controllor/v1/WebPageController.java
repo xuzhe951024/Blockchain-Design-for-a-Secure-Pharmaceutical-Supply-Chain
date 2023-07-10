@@ -17,7 +17,6 @@ import org.springframework.web.bind.annotation.*;
 
 import java.util.ArrayList;
 import java.util.List;
-import java.util.UUID;
 
 import static com.rbpsc.ctp.common.Constant.EntityConstants.OPERATION_TYPE_PACKAGE_NAME;
 import static com.rbpsc.ctp.common.Constant.ServiceConstants.WEB_SCOKET_TOPIC_PROGRESS;
@@ -41,20 +40,20 @@ public class WebPageController {
     }
 
 
-    @GetMapping("/cards")
-    public List<DrugLifeCycleVO> getCards() {
+    @PostMapping("/cards")
+    public List<DrugLifeCycleVO> getCards(@RequestBody ExperimentConfig experimentConfig) {
 
 
-        ExperimentConfig experimentConfig = new ExperimentConfig();
-        experimentConfig.setId(UUID.randomUUID().toString());
-        experimentConfig.setExperimentName("testing");
-        experimentConfig.setExperimentDescription("Test experiment");
-        experimentConfig.setDrugName("Covid-Vaccine");
-        experimentConfig.setMaxThreadCount(10);
-        experimentConfig.setManufacturerCount(2);
-        experimentConfig.setDistributorsCount(2);
-        experimentConfig.setConsumerCount(2);
-        experimentConfig.setDoesForEachConsumer(1);
+//        ExperimentConfig experimentConfig = new ExperimentConfig();
+//        experimentConfig.setId(UUID.randomUUID().toString());
+//        experimentConfig.setExperimentName("testing");
+//        experimentConfig.setExperimentDescription("Test experiment");
+//        experimentConfig.setDrugName("Covid-Vaccine");
+//        experimentConfig.setMaxThreadCount(10);
+//        experimentConfig.setManufacturerCount(2);
+//        experimentConfig.setDistributorsCount(2);
+//        experimentConfig.setConsumerCount(2);
+//        experimentConfig.setDoesForEachConsumer(1);
 
 
         return modelEntityFactory.createDrugLifeCycleVOList(experimentConfig);

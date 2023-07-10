@@ -76,8 +76,24 @@ public class SimulatorDispatcherServiceImpl implements SimulatorDispatcherServic
                     drugOperationDTO.setOperationDTO(operationDTO);
                     drugOperationDTO.setExpectedReceiver(drugLifeCycle.getExpectedReceiver().getId());
 
+                    DrugLifeCycleResponse response = sendToNextStepBaseLine(drugOperationDTO);
+
+                    if (!response.isSuccess()){
+                        String wsMessage = "Fail to access: " +
+                                operationDTO.getOperation().getDomain() +
+                                "\nIt may be suffering from DDoS attack!";
+                        simpMessagingTemplate.convertAndSend(WEB_SCOKET_TOPIC_PROGRESS + wsUUID, wsMessage);
+                        log.info(wsMessage);
+                        break;
+                    }
+
+                    String wsMessage = "Access to: " +
+                            operationDTO.getOperation().getDomain() +
+                            ", result: " +
+                            response;
+
                     // Send to database-based system
-                    simpMessagingTemplate.convertAndSend(WEB_SCOKET_TOPIC_PROGRESS + wsUUID, sendToNextStepBaseLine(drugOperationDTO));
+                    simpMessagingTemplate.convertAndSend(WEB_SCOKET_TOPIC_PROGRESS + wsUUID, wsMessage);
 
                     //TODO send to blockchain-based system(s)
                 }

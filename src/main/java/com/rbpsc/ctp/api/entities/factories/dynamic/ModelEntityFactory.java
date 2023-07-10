@@ -40,6 +40,7 @@ public class ModelEntityFactory {
     }
 
     public List<DrugLifeCycleVO> createDrugLifeCycleVOList(ExperimentConfig experimentConfig) {
+        cleanRoleBase();
         List<Consumer> consumerList = createAndSaveConsumers(experimentConfig.getConsumerCount(), experimentConfig.getDoesForEachConsumer(), experimentConfig.getExperimentName());
         List<Institution> manufactureList = createInstituteList(experimentConfig.getManufacturerCount(), V1_SERVICE_NAME_MANUFACTURE_API, ROLE_NAME_MANUFACTURE, experimentConfig.getExperimentName());
         List<Institution> distributorList = createInstituteList(experimentConfig.getDistributorsCount(), V1_SERVICE_NAME_DISTRIBUTOR_API, ROLE_NAME_DISTRIBUTOR, experimentConfig.getExperimentName());
@@ -90,6 +91,13 @@ public class ModelEntityFactory {
                 }
             });
         }});
+    }
+
+    private void cleanRoleBase() {
+        List<RoleBase> roleBaseList = roleBaseRepository.findAll();
+        if (roleBaseList.size() > 0){
+            roleBaseList.forEach(roleBaseRepository::deleteRoleBase);
+        }
     }
 
     private List<Institution> createInstituteList(int institutionCount, String serviceName, String roleName, String batchId) {
@@ -191,7 +199,7 @@ public class ModelEntityFactory {
         domainSet.forEach(domain -> {
             containerIds[i.getAndIncrement()] = dockerUtils.createAndStartContainer(DOCKER_NETWORK_NAME, dockerUtils.buildImage(dockerFilePath, domain + DOCKER_IMAGE_SUFIX),
                     domain,
-                    Arrays.asList("ROLE=" + domain.split(DASH)[0]));
+                    Collections.singletonList("ROLE=" + domain.split(DASH)[0]));
         });
 
         dockerUtils.waitForContainerStarting(containerIds, DOCKER_LAUNCHED_LOG_SIGN, uuid);

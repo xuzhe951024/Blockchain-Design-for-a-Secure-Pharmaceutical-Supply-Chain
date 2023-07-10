@@ -74,11 +74,31 @@ export function CardPage() {
     const [webSocket, setWebSocket] = useState<Client | null>(null);
     const [progress, setProgress] = useState<string[]>([]);
     const [operatorAddList, setOperatorAddList] = useState<string[]>([]);
+    const [experimentConfig, setExperimentConfig] = useState({
+        experimentName: '',
+        experimentDescription: '',
+        drugName: '',
+        maxThreadCount: 0,
+        manufacturerCount: 0,
+        distributorsCount: 0,
+        consumerCount: 0,
+        doesForEachConsumer: 0
+    });
+    const [isSubmitted, setIsSubmitted] = useState(false);
 
-    // Fetch initial data and operationTypeMap
-    useEffect(() => {
+    const handleInputChange = (event: React.ChangeEvent<HTMLInputElement>) => {
+        setExperimentConfig({
+            ...experimentConfig,
+            [event.target.name]: event.target.value
+        });
+    };
+
+    const handleSubmitConfig = (event: React.FormEvent<HTMLFormElement>) => {
+        event.preventDefault();
+        setIsSubmitted(true);
+
         Promise.all([
-            axios.get(`${BASE_URL_V1}/web/cards`),
+            axios.post(`${BASE_URL_V1}/web/cards`, experimentConfig),
             axios.get(`${BASE_URL_V1}/web/operationTypes`)
         ]).then(([cardsResponse, operationTypesResponse]) => {
             const newOperationTypeMap = new Map();
@@ -114,7 +134,8 @@ export function CardPage() {
                 });
             }
         });
-    }, []);
+
+    };
 
 
     // Disconnect from WebSocket when the component unmounts
@@ -195,90 +216,153 @@ export function CardPage() {
     };
 
     return (
-        <Container>
-            {data.map((item, index) => (
-                <StyledCard key={index}>
-                    <CardContent>
-                        <Box component="h2" sx={{ fontSize: '1.5em', color: 'grey.900' }}>{item.drugName}</Box>
-                        <Box component="h3" sx={{ color: 'grey.700' }}>Drug Id: {item.drugId}</Box>
-                        <Box component="h3" sx={{ color: 'grey.700' }}>Drug Physical Marking: {item.physicalMarking}</Box>
-                        <Box component="h3" sx={{ color: 'grey.700'}}>Expected Buyer: {item.targetConsumer}</Box>
-                        <Box component="h3" sx={{ color: 'grey.700', mb: 5}}> Expected Dose: {item.expectedDose}</Box>
-                        <Grid container spacing={2}>
-                            <Grid item xs={3}>
-                                <Box component="h4" sx={{ color: 'grey.800' }}>Operation Type</Box>
+        !isSubmitted ? (
+            <StyledCard>
+                <CardContent>
+                    <form onSubmit={handleSubmitConfig}>
+                        <StyledTextField
+                            label="Experiment Name"
+                            name="experimentName"
+                            onChange={handleInputChange}
+                            fullWidth
+                        />
+                        <StyledTextField
+                            label="Experiment Description"
+                            name="experimentDescription"
+                            onChange={handleInputChange}
+                            fullWidth
+                        />
+                        <StyledTextField
+                            label="Drug Name"
+                            name="drugName"
+                            onChange={handleInputChange}
+                            fullWidth
+                        />
+                        <StyledTextField
+                            label="Max Thread Count"
+                            name="maxThreadCount"
+                            onChange={handleInputChange}
+                            type="number"
+                            fullWidth
+                        />
+                        <StyledTextField
+                            label="Manufacturer Count"
+                            name="manufacturerCount"
+                            onChange={handleInputChange}
+                            type="number"
+                            fullWidth
+                        />
+                        <StyledTextField
+                            label="Distributors Count"
+                            name="distributorsCount"
+                            onChange={handleInputChange}
+                            type="number"
+                            fullWidth
+                        />
+                        <StyledTextField
+                            label="Consumer Count"
+                            name="consumerCount"
+                            onChange={handleInputChange}
+                            type="number"
+                            fullWidth
+                        />
+                        <StyledTextField
+                            label="Does For Each Consumer"
+                            name="doesForEachConsumer"
+                            onChange={handleInputChange}
+                            type="number"
+                            fullWidth
+                        />
+                        <Button type="submit" variant="contained" style={{ backgroundColor: '#0070c9', color: 'white', marginTop: '16px' }}>Submit</Button>
+                    </form>
+                </CardContent>
+            </StyledCard>
+        ) : (
+            <Container>
+                {data.map((item, index) => (
+                    <StyledCard key={index}>
+                        <CardContent>
+                            <Box component="h2" sx={{ fontSize: '1.5em', color: 'grey.900' }}>{item.drugName}</Box>
+                            <Box component="h3" sx={{ color: 'grey.700' }}>Drug Id: {item.drugId}</Box>
+                            <Box component="h3" sx={{ color: 'grey.700' }}>Drug Physical Marking: {item.physicalMarking}</Box>
+                            <Box component="h3" sx={{ color: 'grey.700'}}>Expected Buyer: {item.targetConsumer}</Box>
+                            <Box component="h3" sx={{ color: 'grey.700', mb: 5}}> Expected Dose: {item.expectedDose}</Box>
+                            <Grid container spacing={2}>
+                                <Grid item xs={3}>
+                                    <Box component="h4" sx={{ color: 'grey.800' }}>Operation Type</Box>
+                                </Grid>
+                                <Grid item xs={3}>
+                                    <Box component="h4" sx={{ color: 'grey.800' }}>Operation Message</Box>
+                                </Grid>
+                                <Grid item xs={3}>
+                                    <Box component="h4" sx={{ color: 'grey.800' }}>Operator Address</Box>
+                                </Grid>
+                                <Grid item xs={3}>
+                                    <Box component="h4" sx={{ color: 'grey.800' }}>Actions</Box>
+                                </Grid>
                             </Grid>
-                            <Grid item xs={3}>
-                                <Box component="h4" sx={{ color: 'grey.800' }}>Operation Message</Box>
-                            </Grid>
-                            <Grid item xs={3}>
-                                <Box component="h4" sx={{ color: 'grey.800' }}>Operator Address</Box>
-                            </Grid>
-                            <Grid item xs={3}>
-                                <Box component="h4" sx={{ color: 'grey.800' }}>Actions</Box>
-                            </Grid>
-                        </Grid>
 
-                        {item.operationVOList.map((operation, operationIndex) => (
-                            <Grid container spacing={2} key={operation.id}>
-                                <Grid item xs={3}>
-                                    <StyledSelect
-                                        value={operation.operationType}
-                                        onChange={(e) => {
-                                            const newData = [...data];
-                                            newData[index].operationVOList[operationIndex].operationType = e.target.value as string;
-                                            setData(newData);
-                                        }}
-                                        fullWidth
-                                    >
-                                        {Array.from(operationTypeMap.keys()).map((displayType) => (
-                                            <MenuItem key={displayType} value={displayType}>
-                                                {displayType}
-                                            </MenuItem>
-                                        ))}
-                                    </StyledSelect>
+                            {item.operationVOList.map((operation, operationIndex) => (
+                                <Grid container spacing={2} key={operation.id}>
+                                    <Grid item xs={3}>
+                                        <StyledSelect
+                                            value={operation.operationType}
+                                            onChange={(e) => {
+                                                const newData = [...data];
+                                                newData[index].operationVOList[operationIndex].operationType = e.target.value as string;
+                                                setData(newData);
+                                            }}
+                                            fullWidth
+                                        >
+                                            {Array.from(operationTypeMap.keys()).map((displayType) => (
+                                                <MenuItem key={displayType} value={displayType}>
+                                                    {displayType}
+                                                </MenuItem>
+                                            ))}
+                                        </StyledSelect>
+                                    </Grid>
+                                    <Grid item xs={3}>
+                                        <StyledTextField
+                                            value={operation.operationMsg}
+                                            onChange={(e) => {
+                                                const newData = [...data];
+                                                newData[index].operationVOList[operationIndex].operationMsg = e.target.value;
+                                                setData(newData);
+                                            }}
+                                            fullWidth
+                                        />
+                                    </Grid>
+                                    <Grid item xs={3}>
+                                        <Autocomplete
+                                            options={operatorAddList} // 这是一个字符串数组，表示所有可能的操作者
+                                            getOptionLabel={(option) => option}
+                                            value={operation.operatorAdd}
+                                            onChange={(event: any, newValue: string | null) => {
+                                                const newData = [...data];
+                                                newData[index].operationVOList[operationIndex].operatorAdd = newValue || '';
+                                                setData(newData);
+                                            }}
+                                            renderInput={(params) => <StyledTextField {...params} />}
+                                        />
+                                    </Grid>
+                                    <Grid item xs={3}>
+                                        <IconButton onClick={() => addOperation(index, operation.id)}>
+                                            <AddCircleOutline />
+                                        </IconButton>
+                                        <IconButton onClick={() => deleteOperation(index, operation.id)}>
+                                            <RemoveCircleOutline />
+                                        </IconButton>
+                                    </Grid>
                                 </Grid>
-                                <Grid item xs={3}>
-                                    <StyledTextField
-                                        value={operation.operationMsg}
-                                        onChange={(e) => {
-                                            const newData = [...data];
-                                            newData[index].operationVOList[operationIndex].operationMsg = e.target.value;
-                                            setData(newData);
-                                        }}
-                                        fullWidth
-                                    />
-                                </Grid>
-                                <Grid item xs={3}>
-                                    <Autocomplete
-                                        options={operatorAddList} // 这是一个字符串数组，表示所有可能的操作者
-                                        getOptionLabel={(option) => option}
-                                        value={operation.operatorAdd}
-                                        onChange={(event: any, newValue: string | null) => {
-                                            const newData = [...data];
-                                            newData[index].operationVOList[operationIndex].operatorAdd = newValue || '';
-                                            setData(newData);
-                                        }}
-                                        renderInput={(params) => <StyledTextField {...params} />}
-                                    />
-                                </Grid>
-                                <Grid item xs={3}>
-                                    <IconButton onClick={() => addOperation(index, operation.id)}>
-                                        <AddCircleOutline />
-                                    </IconButton>
-                                    <IconButton onClick={() => deleteOperation(index, operation.id)}>
-                                        <RemoveCircleOutline />
-                                    </IconButton>
-                                </Grid>
-                            </Grid>
-                        ))}
-                    </CardContent>
-                </StyledCard>
-            ))}
-            <Button onClick={handleSubmit} variant="contained" style={{ backgroundColor: '#0070c9', color: 'white', marginTop: '16px' }}>Submit</Button>
-            {progress.map((prog, index) => (
-                <TextField disabled value={prog} fullWidth key={index} />
-            ))}
-        </Container>
+                            ))}
+                        </CardContent>
+                    </StyledCard>
+                ))}
+                <Button onClick={handleSubmit} variant="contained" style={{ backgroundColor: '#0070c9', color: 'white', marginTop: '16px' }}>Submit</Button>
+                {progress.map((prog, index) => (
+                    <TextField disabled value={prog} fullWidth key={index} />
+                ))}
+            </Container>
+        )
     );
 }
