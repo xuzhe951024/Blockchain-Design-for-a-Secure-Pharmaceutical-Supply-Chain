@@ -1,0 +1,9 @@
+FROM openjdk:8-jre
+WORKDIR /app
+RUN apt update
+RUN apt install iputils-ping -y
+RUN apt install netcat -y
+RUN apt install curl -y
+
+COPY testAuto/app/app.jar ./
+COPY testAuto/app/application.properties ./

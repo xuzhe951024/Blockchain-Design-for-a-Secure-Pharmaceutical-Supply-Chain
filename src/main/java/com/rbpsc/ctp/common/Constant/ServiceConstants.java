@@ -14,6 +14,16 @@ public class ServiceConstants {
     public static final String NORMAL_CASE = "N";
     public static final String POISSON_CASE = "P";
     public static final String MANGODB_COLLECTION_NAME_BENCHMARK = "benchmark";
+    public static final String DOCKER_NETWORK_NAME = "psc-testnet";
+
+    public static final Map<String, String> DOCKER_LABEL_MAP = new HashMap<String, String>(){{
+        put("group", "psc");
+    }};
+
+    public static final String DOCKER_TAG_LATEST = "latest";
+    public static final String DOCKER_FILE_PATH = "./DockerFile_SupplyChainNode";
+    public static final String DOCKER_IMAGE_SUFIX = "-image";
+    public static final String DOCKER_LAUNCHED_LOG_SIGN = "Started.";
 
     public static final String V1_BASE_ADD = "v1";
 

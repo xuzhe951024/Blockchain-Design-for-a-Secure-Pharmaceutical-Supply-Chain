@@ -7,8 +7,10 @@ public class EntityConstants {
     public static final int ATTACK_TYPE_AVAILABILITY = 2;
 
     public static final String DOT = ".";
+    public static final String DASH = "-";
     public static final String COLON = ":";
     public static final String SLASH = "/";
+    public static final String HTTP_URL_PRE_FIX = "http://";
 
     public static final String ROLE_NAME_CONSUMER = "consumer";
     public static final String ROLE_NAME_INSTITUTION = "institution";

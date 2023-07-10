@@ -6,6 +6,7 @@ import com.rbpsc.ctp.api.entities.dto.webview.DrugLifeCycleVO;
 import com.rbpsc.ctp.api.entities.dto.webview.SimulationDataView;
 import com.rbpsc.ctp.api.entities.factories.dynamic.ModelEntityFactory;
 import com.rbpsc.ctp.biz.service.SimulatorDispatcherService;
+import com.rbpsc.ctp.common.utiles.DockerUtils;
 import com.rbpsc.ctp.configuration.v1prefix.V1RestController;
 import io.github.classgraph.ClassGraph;
 import io.github.classgraph.ScanResult;
@@ -14,14 +15,17 @@ import org.springframework.messaging.simp.SimpMessagingTemplate;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 import java.util.UUID;
 
 import static com.rbpsc.ctp.common.Constant.EntityConstants.OPERATION_TYPE_PACKAGE_NAME;
+import static com.rbpsc.ctp.common.Constant.ServiceConstants.DOCKER_NETWORK_NAME;
+import static com.rbpsc.ctp.common.Constant.ServiceConstants.WEB_SCOKET_TOPIC_PROGRESS;
 
 @V1RestController
 @RequestMapping("/web")
-@CrossOrigin(origins = "http://localhost:3000")
+@CrossOrigin(origins = "*")
 @Slf4j
 public class WebPageController {
 
@@ -42,7 +46,7 @@ public class WebPageController {
 
         ExperimentConfig experimentConfig = new ExperimentConfig();
         experimentConfig.setId(UUID.randomUUID().toString());
-        experimentConfig.setExperimentName("T");
+        experimentConfig.setExperimentName("testing");
         experimentConfig.setExperimentDescription("Test experiment");
         experimentConfig.setDrugName("Covid-Vaccine");
         experimentConfig.setMaxThreadCount(10);
@@ -67,11 +71,17 @@ public class WebPageController {
     }
 
     @PostMapping("/submit/{uuid}")
-    public void processCards(@PathVariable("uuid") String uuid, @RequestBody List<DrugLifeCycleVO> drugLifeCycleVOList) {
+    public void processCards(@PathVariable("uuid") String uuid, @RequestBody List<DrugLifeCycleVO> drugLifeCycleVOList) throws InterruptedException {
 
+        Thread.sleep(500);
+        log.info("Starting to process data & build docker containers:");
+        simpMessagingTemplate.convertAndSend(WEB_SCOKET_TOPIC_PROGRESS + uuid, "MSG: Starting to process data & build docker containers:");
 
         // Process data...
-        SimulationDataView simulationDataView = modelEntityFactory.buildSimulationDataViewFromVOList(drugLifeCycleVOList);
+        SimulationDataView simulationDataView = modelEntityFactory.buildSimulationDataViewFromVOList(drugLifeCycleVOList, uuid);
+
+        log.info("Finished processing data & building docker containers:");
+        simpMessagingTemplate.convertAndSend(WEB_SCOKET_TOPIC_PROGRESS + uuid, "MSG: Finished processing data & building docker containers:");
 
         simulatorDispatcherService.startRequesting(simulationDataView, uuid);
 
@@ -79,7 +89,7 @@ public class WebPageController {
 //            // Assume this is the processing progress
 //            Thread.sleep(500);
 //            log.info("destination: /topic/process-progress/" + uuid);
-//            simpMessagingTemplate.convertAndSend("/topic/process-progress/" + uuid, "MSG:" + i);
+//            simpMessagingTemplate.convertAndSend(WEB_SCOKET_TOPIC_PROGRESS + uuid, "MSG:" + i);
 //        }
 
     }

@@ -1,0 +1,15 @@
+FROM openjdk:8-jre
+WORKDIR /app
+LABEL group="psc"
+RUN apt update
+RUN apt install iputils-ping -y
+RUN apt install netcat -y
+RUN apt install curl -y
+RUN curl -fsSL https://get.docker.com -o get-docker.sh
+RUN sh get-docker.sh
+RUN curl -L "https://github.com/docker/compose/releases/download/1.29.2/docker-compose-$(uname -s)-$(uname -m)" -o /usr/local/bin/docker-compose
+RUN chmod +x /usr/local/bin/docker-compose
+
+COPY testAuto/app/app.jar ./
+COPY testAuto/app/application.properties ./
+COPY testAuto/app/DockerFile_SupplyChainNode ./

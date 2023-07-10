@@ -6,6 +6,8 @@ import oshi.hardware.CentralProcessor;
 import oshi.hardware.GlobalMemory;
 import oshi.software.os.OperatingSystem;
 
+import java.util.concurrent.atomic.AtomicInteger;
+
 import static com.rbpsc.ctp.common.Constant.EntityConstants.ROLE_NAME;
 
 @Slf4j
@@ -61,6 +63,11 @@ public class PlayGround {
 //
 //        System.out.println("Operating System: " + os.getFamily() + " " + os.getVersionInfo());
 
-        System.out.println("test:1".split(":")[0]);
+        System.out.println("http://manufacture0-T/v1/drugLifeCycle/drugOrderStep/manufacture".split("/")[2]);
+        AtomicInteger index = new AtomicInteger();
+        for (int i = 0; i <5; i++) {
+
+            log.info(index.getAndIncrement() + "");
+        }
     }
 }

@@ -1,0 +1,11 @@
+FROM openjdk:8-jre
+WORKDIR /app
+LABEL group="psc"
+RUN apt update
+RUN apt install iputils-ping -y
+RUN apt install netcat -y
+RUN apt install curl -y
+
+COPY app.jar ./
+COPY application.properties ./
+CMD [ "java", "-jar", "-Dspring.config.location=application.properties", "app.jar" ]

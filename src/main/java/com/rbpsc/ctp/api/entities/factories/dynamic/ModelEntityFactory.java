@@ -12,11 +12,15 @@ import com.rbpsc.ctp.api.entities.supplychain.operations.DrugOrderStep;
 import com.rbpsc.ctp.api.entities.supplychain.operations.OperationBase;
 import com.rbpsc.ctp.api.entities.supplychain.roles.Consumer;
 import com.rbpsc.ctp.api.entities.supplychain.roles.Institution;
+import com.rbpsc.ctp.api.entities.supplychain.roles.RoleBase;
+import com.rbpsc.ctp.common.utiles.DockerUtils;
 import com.rbpsc.ctp.repository.service.ConsumerReceiptRepository;
 import com.rbpsc.ctp.repository.service.RoleBaseRepository;
+import org.springframework.messaging.simp.SimpMessagingTemplate;
 import org.springframework.stereotype.Service;
 
 import java.util.*;
+import java.util.concurrent.atomic.AtomicInteger;
 
 import static com.rbpsc.ctp.common.Constant.EntityConstants.*;
 import static com.rbpsc.ctp.common.Constant.ServiceConstants.*;
@@ -25,10 +29,14 @@ import static com.rbpsc.ctp.common.Constant.ServiceConstants.*;
 public class ModelEntityFactory {
     final ConsumerReceiptRepository consumerReceiptRepository;
     final RoleBaseRepository roleBaseRepository;
+    final DockerUtils dockerUtils;
+    final SimpMessagingTemplate simpMessagingTemplate;
 
-    public ModelEntityFactory(ConsumerReceiptRepository consumerReceiptRepository, RoleBaseRepository roleBaseRepository) {
+    public ModelEntityFactory(ConsumerReceiptRepository consumerReceiptRepository, RoleBaseRepository roleBaseRepository, DockerUtils dockerUtils, SimpMessagingTemplate simpMessagingTemplate) {
         this.consumerReceiptRepository = consumerReceiptRepository;
         this.roleBaseRepository = roleBaseRepository;
+        this.dockerUtils = dockerUtils;
+        this.simpMessagingTemplate = simpMessagingTemplate;
     }
 
     public List<DrugLifeCycleVO> createDrugLifeCycleVOList(ExperimentConfig experimentConfig) {
@@ -90,7 +98,7 @@ public class ModelEntityFactory {
             for (int i = 0; i < institutionCount; i++) {
 
                 //TODO: Modify the method of address generation
-                Institution institution = DataEntityFactory.createInstitution(roleName + i + DOT + batchId + serviceName
+                Institution institution = DataEntityFactory.createInstitution(HTTP_URL_PRE_FIX + roleName + i + DASH + batchId + serviceName
                         , roleName
                         , batchId);
 
@@ -107,8 +115,8 @@ public class ModelEntityFactory {
             for (int i = 0; i < consumerCount; i++) {
 
                 //TODO: Modify the method of address generation
-                Consumer consumer = DataEntityFactory.createConsumer(doesForEachConsumer, ROLE_NAME_CONSUMER
-                                + i + DOT + batchId + V1_SERVICE_NAME_CONSUMER_API
+                Consumer consumer = DataEntityFactory.createConsumer(doesForEachConsumer, HTTP_URL_PRE_FIX + ROLE_NAME_CONSUMER
+                                + i + DASH + batchId + V1_SERVICE_NAME_CONSUMER_API
                         , batchId, Optional.empty());
                 consumerReceiptRepository.insertConsumerReceipt(consumer);
                 add(consumer);
@@ -118,7 +126,7 @@ public class ModelEntityFactory {
         }});
     }
 
-    public SimulationDataView buildSimulationDataViewFromVOList(List<DrugLifeCycleVO> drugLifeCycleVOList) {
+    public SimulationDataView buildSimulationDataViewFromVOList(List<DrugLifeCycleVO> drugLifeCycleVOList, String uuid) {
         String batchId = drugLifeCycleVOList.get(0).getBatchId();
         SimulationDataView simulationDataView = new SimulationDataView();
         simulationDataView.setId(UUID.randomUUID().toString());
@@ -161,6 +169,32 @@ public class ModelEntityFactory {
             drugLifeCycleVOList.forEach(this::build);
         }}));
 
+        buildDockerContainers(DOCKER_FILE_PATH, batchId, uuid);
+
         return simulationDataView;
+    }
+
+    private void buildDockerContainers(String dockerFilePath, String batchId, String uuid){
+
+        RoleBase roleBaseKey = new RoleBase();
+        roleBaseKey.setBatchId(batchId);
+        List<RoleBase> roleBaseList = roleBaseRepository.findByExample(roleBaseKey);
+
+        Set<String> domainSet = new HashSet<String>(){{
+            roleBaseList.forEach(roleBase -> {
+                add(roleBase.getDomain());
+            });
+        }};
+
+        AtomicInteger i = new AtomicInteger();
+        String[] containerIds = new String[domainSet.size()];
+        domainSet.forEach(domain -> {
+            containerIds[i.getAndIncrement()] = dockerUtils.createAndStartContainer(DOCKER_NETWORK_NAME, dockerUtils.buildImage(dockerFilePath, domain + DOCKER_IMAGE_SUFIX),
+                    domain,
+                    Arrays.asList("ROLE=" + domain.split(DASH)[0]));
+        });
+
+        dockerUtils.waitForContainerStarting(containerIds, DOCKER_LAUNCHED_LOG_SIGN, uuid);
+
     }
 }

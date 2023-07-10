@@ -10,6 +10,5 @@ import org.springframework.data.mongodb.core.mapping.Document;
 @EqualsAndHashCode(callSuper = true)
 @ToString(callSuper = true)
 public class Institution extends RoleBase {
-
 }
 

@@ -11,4 +11,8 @@ import lombok.ToString;
 public class RoleBase extends SupplyChainBaseEntity {
     private String roleName;
     private String address;
+
+    public String getDomain(){
+        return this.address.split("/")[2];
+    }
 }
