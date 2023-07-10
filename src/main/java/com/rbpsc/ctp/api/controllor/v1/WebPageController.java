@@ -6,21 +6,20 @@ import com.rbpsc.ctp.api.entities.dto.webview.DrugLifeCycleVO;
 import com.rbpsc.ctp.api.entities.dto.webview.SimulationDataView;
 import com.rbpsc.ctp.api.entities.factories.dynamic.ModelEntityFactory;
 import com.rbpsc.ctp.biz.service.SimulatorDispatcherService;
-import com.rbpsc.ctp.common.utiles.DockerUtils;
+import com.rbpsc.ctp.biz.service.WebPageService;
 import com.rbpsc.ctp.configuration.v1prefix.V1RestController;
 import io.github.classgraph.ClassGraph;
 import io.github.classgraph.ScanResult;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.messaging.simp.SimpMessagingTemplate;
+import org.springframework.util.StringUtils;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.List;
 import java.util.UUID;
 
 import static com.rbpsc.ctp.common.Constant.EntityConstants.OPERATION_TYPE_PACKAGE_NAME;
-import static com.rbpsc.ctp.common.Constant.ServiceConstants.DOCKER_NETWORK_NAME;
 import static com.rbpsc.ctp.common.Constant.ServiceConstants.WEB_SCOKET_TOPIC_PROGRESS;
 
 @V1RestController
@@ -32,11 +31,13 @@ public class WebPageController {
     private final SimpMessagingTemplate simpMessagingTemplate;
     private final SimulatorDispatcherService simulatorDispatcherService;
     private final ModelEntityFactory modelEntityFactory;
+    private final WebPageService webPageService;
 
-    public WebPageController(SimpMessagingTemplate simpMessagingTemplate, SimulatorDispatcherService simulatorDispatcherService, ModelEntityFactory modelEntityFactory) {
+    public WebPageController(SimpMessagingTemplate simpMessagingTemplate, SimulatorDispatcherService simulatorDispatcherService, ModelEntityFactory modelEntityFactory, WebPageService webPageService) {
         this.simpMessagingTemplate = simpMessagingTemplate;
         this.simulatorDispatcherService = simulatorDispatcherService;
         this.modelEntityFactory = modelEntityFactory;
+        this.webPageService = webPageService;
     }
 
 
@@ -92,6 +93,15 @@ public class WebPageController {
 //            simpMessagingTemplate.convertAndSend(WEB_SCOKET_TOPIC_PROGRESS + uuid, "MSG:" + i);
 //        }
 
+    }
+
+    @GetMapping("/operationAdds")
+    public List<String> getOperationAddsByBatchId(@RequestParam(value = "batchId") String batchId){
+        if (!StringUtils.isEmpty(batchId)){
+            return webPageService.getAddressListByBatchId(batchId);
+        }
+
+        return null;
     }
 
 }

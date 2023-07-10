@@ -27,7 +27,6 @@ type DrugLifeCycleVO = {
 
 // Define data type
 const operationTypes = ["Normal_Step", "Attack_Availability", "Attack_Confidentiality", "Attack_Integrity"];
-const operatorAddList = ["http://localhost:8090/v1/drugLifeCycle/drugOrderStep/manufacture", "http://localhost:8090/v1/drugLifeCycle/drugOrderStep/distributor", "http://localhost:8090/v1/drugLifeCycle/drugOrderStep/consumer", "Attack_Integrity"];
 
 const StyledCard = styled(Card)(({ theme }) => ({
     marginTop: theme.spacing(2),
@@ -74,6 +73,7 @@ export function CardPage() {
     const [operationTypeMap, setOperationTypeMap] = useState<Map<string, string>>(new Map());
     const [webSocket, setWebSocket] = useState<Client | null>(null);
     const [progress, setProgress] = useState<string[]>([]);
+    const [operatorAddList, setOperatorAddList] = useState<string[]>([]);
 
     // Fetch initial data and operationTypeMap
     useEffect(() => {
@@ -102,6 +102,17 @@ export function CardPage() {
             });
 
             setData(processedData);
+
+            // Use the batchId of the first item to get the operator address list
+            if (processedData.length > 0) {
+                axios.get(`${BASE_URL_V1}/web/operationAdds`, {
+                    params: {
+                        batchId: processedData[0].batchId
+                    }
+                }).then(operatorAddResponse => {
+                    setOperatorAddList(operatorAddResponse.data);
+                });
+            }
         });
     }, []);
 
