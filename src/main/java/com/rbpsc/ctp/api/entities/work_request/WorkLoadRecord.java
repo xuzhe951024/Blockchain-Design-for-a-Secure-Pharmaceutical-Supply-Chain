@@ -1,6 +1,6 @@
-package com.rbpsc.ctp.api.entities.work_request;
+package main.java.com.rbpsc.ctp.api.entities.work_request;
 
-import com.rbpsc.ctp.api.entities.base.BaseEntity;
+import main.java.com.rbpsc.ctp.api.entities.base.BaseEntity;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
 import lombok.ToString;

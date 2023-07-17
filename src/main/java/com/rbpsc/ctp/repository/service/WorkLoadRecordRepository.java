@@ -1,6 +1,6 @@
-package com.rbpsc.ctp.repository.service;
+package main.java.com.rbpsc.ctp.repository.service;
 
-import com.rbpsc.ctp.api.entities.work_request.WorkLoadRecord;
+import main.java.com.rbpsc.ctp.api.entities.work_request.WorkLoadRecord;
 import org.springframework.stereotype.Repository;
 
 /**

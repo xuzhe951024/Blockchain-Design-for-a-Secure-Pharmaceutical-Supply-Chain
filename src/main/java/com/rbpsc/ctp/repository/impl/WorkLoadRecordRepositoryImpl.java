@@ -1,8 +1,8 @@
-package com.rbpsc.ctp.repository.impl;
+package main.java.com.rbpsc.ctp.repository.impl;
 
-import com.rbpsc.ctp.api.entities.work_request.WorkLoadRecord;
-import com.rbpsc.ctp.repository.impl.base.BaseWorkLoadRecordRepositoryForMongoDBImpl;
-import com.rbpsc.ctp.repository.service.WorkLoadRecordRepository;
+import main.java.com.rbpsc.ctp.api.entities.work_request.WorkLoadRecord;
+import main.java.com.rbpsc.ctp.repository.impl.base.BaseWorkLoadRecordRepositoryForMongoDBImpl;
+import main.java.com.rbpsc.ctp.repository.service.WorkLoadRecordRepository;
 import org.springframework.stereotype.Repository;
 
 /**

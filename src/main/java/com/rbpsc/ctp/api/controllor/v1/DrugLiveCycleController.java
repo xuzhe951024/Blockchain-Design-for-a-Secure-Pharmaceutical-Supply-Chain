@@ -1,11 +1,12 @@
-package com.rbpsc.ctp.api.controllor.v1;
+package main.java.com.rbpsc.ctp.api.controllor.v1;
 
-import com.rbpsc.ctp.api.entities.dto.DrugOperationDTO;
-import com.rbpsc.ctp.api.entities.dto.response.DrugLifeCycleResponse;
-import com.rbpsc.ctp.biz.service.AttackStepsService;
-import com.rbpsc.ctp.biz.service.SupplyChainStepsService;
-import com.rbpsc.ctp.configuration.v1prefix.V1RestController;
+
 import lombok.extern.slf4j.Slf4j;
+import main.java.com.rbpsc.ctp.api.entities.dto.DrugOperationDTO;
+import main.java.com.rbpsc.ctp.api.entities.dto.response.DrugLifeCycleResponse;
+import main.java.com.rbpsc.ctp.biz.service.AttackStepsService;
+import main.java.com.rbpsc.ctp.biz.service.SupplyChainStepsService;
+import main.java.com.rbpsc.ctp.configuration.v1prefix.V1RestController;
 import org.springframework.http.MediaType;
 import org.springframework.util.StringUtils;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -13,8 +14,8 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 
-import static com.rbpsc.ctp.common.Constant.EntityConstants.ROLE_NAME;
-import static com.rbpsc.ctp.common.Constant.ServiceConstants.*;
+import static main.java.com.rbpsc.ctp.common.Constant.ServiceConstants.*;
+
 
 @V1RestController
 @RequestMapping(value = "/drugLifeCycle/drugOrderStep", produces = MediaType.APPLICATION_JSON_UTF8_VALUE)

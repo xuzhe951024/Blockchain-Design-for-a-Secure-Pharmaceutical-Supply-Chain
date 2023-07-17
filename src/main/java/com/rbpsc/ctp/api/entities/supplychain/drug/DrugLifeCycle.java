@@ -1,7 +1,7 @@
-package com.rbpsc.ctp.api.entities.supplychain.drug;
+package main.java.com.rbpsc.ctp.api.entities.supplychain.drug;
 
-import com.rbpsc.ctp.api.entities.supplychain.SupplyChainBaseEntity;
-import com.rbpsc.ctp.api.entities.supplychain.roles.Consumer;
+import main.java.com.rbpsc.ctp.api.entities.supplychain.SupplyChainBaseEntity;
+import main.java.com.rbpsc.ctp.api.entities.supplychain.roles.Consumer;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
 import lombok.ToString;

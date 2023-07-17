@@ -1,8 +1,8 @@
-package com.rbpsc.ctp.common.utiles;
+package main.java.com.rbpsc.ctp.common.utiles;
 
 import com.mongodb.bulk.BulkWriteResult;
 import com.mongodb.client.result.UpdateResult;
-import com.rbpsc.ctp.api.entities.base.BaseEntity;
+import main.java.com.rbpsc.ctp.api.entities.base.BaseEntity;
 import org.springframework.data.mongodb.core.BulkOperations;
 import org.springframework.data.mongodb.core.MongoTemplate;
 import org.springframework.data.mongodb.core.query.Criteria;

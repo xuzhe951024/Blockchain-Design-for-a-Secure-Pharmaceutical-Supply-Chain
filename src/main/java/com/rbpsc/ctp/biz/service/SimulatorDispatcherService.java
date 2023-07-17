@@ -1,6 +1,6 @@
-package com.rbpsc.ctp.biz.service;
+package main.java.com.rbpsc.ctp.biz.service;
 
-import com.rbpsc.ctp.api.entities.dto.webview.SimulationDataView;
+import main.java.com.rbpsc.ctp.api.entities.dto.webview.SimulationDataView;
 
 /**
  * @project: WorkLoad

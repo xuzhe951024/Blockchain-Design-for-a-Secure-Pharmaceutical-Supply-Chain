@@ -1,9 +1,10 @@
-package com.rbpsc.ctp.api.entities.supplychain;
+package main.java.com.rbpsc.ctp.api.entities.supplychain;
 
-import com.rbpsc.ctp.api.entities.base.BaseEntity;
+
 import lombok.Data;
 import lombok.EqualsAndHashCode;
 import lombok.ToString;
+import main.java.com.rbpsc.ctp.api.entities.base.BaseEntity;
 
 @EqualsAndHashCode(callSuper = true)
 @Data

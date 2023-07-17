@@ -1,16 +1,16 @@
-package com.rbpsc.ctp.api.controllor.v1;
+package main.java.com.rbpsc.ctp.api.controllor.v1;
 
 
-import com.rbpsc.ctp.api.entities.configs.ExperimentConfig;
-import com.rbpsc.ctp.api.entities.dto.webview.DrugLifeCycleVO;
-import com.rbpsc.ctp.api.entities.dto.webview.SimulationDataView;
-import com.rbpsc.ctp.api.entities.factories.dynamic.ModelEntityFactory;
-import com.rbpsc.ctp.biz.service.SimulatorDispatcherService;
-import com.rbpsc.ctp.biz.service.WebPageService;
-import com.rbpsc.ctp.configuration.v1prefix.V1RestController;
 import io.github.classgraph.ClassGraph;
 import io.github.classgraph.ScanResult;
 import lombok.extern.slf4j.Slf4j;
+import main.java.com.rbpsc.ctp.api.entities.configs.ExperimentConfig;
+import main.java.com.rbpsc.ctp.api.entities.dto.webview.DrugLifeCycleVO;
+import main.java.com.rbpsc.ctp.api.entities.dto.webview.SimulationDataView;
+import main.java.com.rbpsc.ctp.api.entities.factories.dynamic.ModelEntityFactory;
+import main.java.com.rbpsc.ctp.biz.service.SimulatorDispatcherService;
+import main.java.com.rbpsc.ctp.biz.service.WebPageService;
+import main.java.com.rbpsc.ctp.configuration.v1prefix.V1RestController;
 import org.springframework.messaging.simp.SimpMessagingTemplate;
 import org.springframework.util.StringUtils;
 import org.springframework.web.bind.annotation.*;
@@ -18,8 +18,9 @@ import org.springframework.web.bind.annotation.*;
 import java.util.ArrayList;
 import java.util.List;
 
-import static com.rbpsc.ctp.common.Constant.EntityConstants.OPERATION_TYPE_PACKAGE_NAME;
-import static com.rbpsc.ctp.common.Constant.ServiceConstants.WEB_SCOKET_TOPIC_PROGRESS;
+import static main.java.com.rbpsc.ctp.common.Constant.EntityConstants.OPERATION_TYPE_PACKAGE_NAME;
+import static main.java.com.rbpsc.ctp.common.Constant.ServiceConstants.WEB_SCOKET_TOPIC_PROGRESS;
+
 
 @V1RestController
 @RequestMapping("/web")

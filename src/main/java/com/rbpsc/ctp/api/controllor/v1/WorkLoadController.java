@@ -1,9 +1,9 @@
-package com.rbpsc.ctp.api.controllor.v1;
+package main.java.com.rbpsc.ctp.api.controllor.v1;
 
 
-import com.rbpsc.ctp.api.entities.work_request.WorkLoadReq;
-import com.rbpsc.ctp.biz.service.WorkLoadService;
-import com.rbpsc.ctp.configuration.v1prefix.V1RestController;
+import main.java.com.rbpsc.ctp.api.entities.work_request.WorkLoadReq;
+import main.java.com.rbpsc.ctp.biz.service.WorkLoadService;
+import main.java.com.rbpsc.ctp.configuration.v1prefix.V1RestController;
 import org.springframework.http.MediaType;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;

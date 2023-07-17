@@ -1,4 +1,4 @@
-package com.rbpsc.ctp.common.Constant;
+package main.java.com.rbpsc.ctp.common.Constant;
 
 public class EntityConstants {
     public static final String BASE_ENTITY_ID_FIELD_NAME = "id";

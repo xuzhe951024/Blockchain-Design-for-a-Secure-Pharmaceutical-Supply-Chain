@@ -1,14 +1,10 @@
-package com.rbpsc.ctp;
+package test.java.com.rbpsc.ctp;
 
 import lombok.extern.slf4j.Slf4j;
-import oshi.SystemInfo;
-import oshi.hardware.CentralProcessor;
-import oshi.hardware.GlobalMemory;
-import oshi.software.os.OperatingSystem;
 
 import java.util.concurrent.atomic.AtomicInteger;
 
-import static com.rbpsc.ctp.common.Constant.EntityConstants.ROLE_NAME;
+import static main.java.com.rbpsc.ctp.common.Constant.EntityConstants.ROLE_NAME;
 
 @Slf4j
 public class PlayGround {

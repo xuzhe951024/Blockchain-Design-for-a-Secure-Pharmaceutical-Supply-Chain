@@ -1,4 +1,4 @@
-package com.rbpsc.ctp.api.entities.configs;
+package main.java.com.rbpsc.ctp.api.entities.configs;
 
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;

@@ -1,4 +1,4 @@
-package com.rbpsc.ctp.configuration;
+package main.java.com.rbpsc.ctp.configuration;
 
 import org.springframework.context.annotation.Configuration;
 import org.springframework.messaging.simp.config.MessageBrokerRegistry;

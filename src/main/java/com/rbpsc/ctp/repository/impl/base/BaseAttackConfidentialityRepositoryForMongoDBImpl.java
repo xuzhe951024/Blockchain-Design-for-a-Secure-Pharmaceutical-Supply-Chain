@@ -1,7 +1,7 @@
-package com.rbpsc.ctp.repository.impl.base;
+package main.java.com.rbpsc.ctp.repository.impl.base;
 
-import com.rbpsc.ctp.api.entities.supplychain.operations.attack.AttackConfidentiality;
-import com.rbpsc.ctp.repository.service.base.BaseAttackConfidentialityRepository;
+import main.java.com.rbpsc.ctp.api.entities.supplychain.operations.attack.AttackConfidentiality;
+import main.java.com.rbpsc.ctp.repository.service.base.BaseAttackConfidentialityRepository;
 import org.springframework.stereotype.Repository;
 
 import java.util.List;

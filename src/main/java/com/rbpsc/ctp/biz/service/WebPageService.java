@@ -1,4 +1,4 @@
-package com.rbpsc.ctp.biz.service;
+package main.java.com.rbpsc.ctp.biz.service;
 
 import java.util.List;
 

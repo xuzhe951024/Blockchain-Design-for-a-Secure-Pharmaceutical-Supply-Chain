@@ -1,4 +1,4 @@
-package com.rbpsc.ctp.common.Constant;
+package main.java.com.rbpsc.ctp.common.Constant;
 
 import java.util.HashMap;
 import java.util.Map;

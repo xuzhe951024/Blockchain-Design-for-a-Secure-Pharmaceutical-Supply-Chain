@@ -1,12 +1,14 @@
-package com.rbpsc.ctp.api.controllor.v1;
+package main.java.com.rbpsc.ctp.api.controllor.v1;
 
-import com.rbpsc.ctp.biz.service.Hello;
-import com.rbpsc.ctp.configuration.v1prefix.V1RestController;
+
+import main.java.com.rbpsc.ctp.biz.service.Hello;
+import main.java.com.rbpsc.ctp.configuration.v1prefix.V1RestController;
 import org.springframework.http.MediaType;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 
-import static com.rbpsc.ctp.common.Constant.ServiceConstants.API_ENABLED;
+import static main.java.com.rbpsc.ctp.common.Constant.ServiceConstants.API_ENABLED;
+
 
 /**
  * @project: WorkLoader

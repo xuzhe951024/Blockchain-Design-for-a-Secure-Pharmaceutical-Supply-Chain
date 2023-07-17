@@ -5,7 +5,7 @@
  * @create: 7/9/23
  **/
 
-package com.rbpsc.ctp.common.utiles;
+package main.java.com.rbpsc.ctp.common.utiles;
 
 import com.github.dockerjava.api.DockerClient;
 import com.github.dockerjava.api.async.ResultCallback;
@@ -29,7 +29,7 @@ import java.util.concurrent.CountDownLatch;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
 
-import static com.rbpsc.ctp.common.Constant.ServiceConstants.*;
+import static main.java.com.rbpsc.ctp.common.Constant.ServiceConstants.*;
 
 
 @Service

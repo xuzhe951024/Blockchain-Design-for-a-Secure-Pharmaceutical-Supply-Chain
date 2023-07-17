@@ -1,7 +1,7 @@
-package com.rbpsc.ctp.repository.service;
+package main.java.com.rbpsc.ctp.repository.service;
 
-import com.rbpsc.ctp.api.entities.supplychain.drug.DrugLifeCycle;
-import com.rbpsc.ctp.api.entities.supplychain.operations.Receipt;
+import main.java.com.rbpsc.ctp.api.entities.supplychain.drug.DrugLifeCycle;
+import main.java.com.rbpsc.ctp.api.entities.supplychain.operations.Receipt;
 import org.springframework.stereotype.Repository;
 
 import java.util.List;

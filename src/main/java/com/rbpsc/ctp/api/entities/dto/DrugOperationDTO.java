@@ -1,7 +1,7 @@
-package com.rbpsc.ctp.api.entities.dto;
+package main.java.com.rbpsc.ctp.api.entities.dto;
 
-import com.rbpsc.ctp.api.entities.base.BaseEntity;
-import com.rbpsc.ctp.api.entities.supplychain.drug.DrugInfo;
+import main.java.com.rbpsc.ctp.api.entities.base.BaseEntity;
+import main.java.com.rbpsc.ctp.api.entities.supplychain.drug.DrugInfo;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
 import lombok.ToString;

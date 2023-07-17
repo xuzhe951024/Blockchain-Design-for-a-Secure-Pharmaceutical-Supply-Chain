@@ -1,8 +1,8 @@
-package com.rbpsc.ctp.biz.service;
+package main.java.com.rbpsc.ctp.biz.service;
 
-import com.rbpsc.ctp.api.entities.supplychain.drug.DrugInfo;
-import com.rbpsc.ctp.api.entities.supplychain.operations.DrugOrderStep;
-import com.rbpsc.ctp.api.entities.supplychain.operations.OperationBase;
+
+import main.java.com.rbpsc.ctp.api.entities.supplychain.drug.DrugInfo;
+import main.java.com.rbpsc.ctp.api.entities.supplychain.operations.OperationBase;
 
 public interface SupplyChainStepsService {
     public boolean manufacture(DrugInfo drug, OperationBase operationBase);

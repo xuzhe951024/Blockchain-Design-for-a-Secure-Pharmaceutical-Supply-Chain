@@ -1,6 +1,6 @@
-package com.rbpsc.ctp.repository.service;
+package main.java.com.rbpsc.ctp.repository.service;
 
-import com.rbpsc.ctp.api.entities.supplychain.roles.RoleBase;
+import main.java.com.rbpsc.ctp.api.entities.supplychain.roles.RoleBase;
 import org.springframework.stereotype.Repository;
 
 import java.util.List;

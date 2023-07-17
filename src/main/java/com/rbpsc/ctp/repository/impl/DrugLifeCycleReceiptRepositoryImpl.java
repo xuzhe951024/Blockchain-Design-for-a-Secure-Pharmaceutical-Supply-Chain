@@ -1,10 +1,9 @@
-package com.rbpsc.ctp.repository.impl;
+package main.java.com.rbpsc.ctp.repository.impl;
 
-import com.rbpsc.ctp.api.entities.supplychain.drug.DrugLifeCycle;
-import com.rbpsc.ctp.api.entities.supplychain.operations.Receipt;
-import com.rbpsc.ctp.repository.impl.base.BaseDrugLifeCycleReceiptForMongoDBImpl;
-import com.rbpsc.ctp.repository.service.DrugLifeCycleReceiptRepository;
-import com.rbpsc.ctp.repository.service.base.BaseDrugLifeCycleReceiptRepository;
+import main.java.com.rbpsc.ctp.api.entities.supplychain.drug.DrugLifeCycle;
+import main.java.com.rbpsc.ctp.api.entities.supplychain.operations.Receipt;
+import main.java.com.rbpsc.ctp.repository.impl.base.BaseDrugLifeCycleReceiptForMongoDBImpl;
+import main.java.com.rbpsc.ctp.repository.service.DrugLifeCycleReceiptRepository;
 import org.springframework.stereotype.Repository;
 import org.springframework.util.StringUtils;
 

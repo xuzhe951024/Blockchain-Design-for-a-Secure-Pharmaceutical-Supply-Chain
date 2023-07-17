@@ -1,8 +1,8 @@
-package com.rbpsc.ctp.repository.impl;
+package main.java.com.rbpsc.ctp.repository.impl;
 
-import com.rbpsc.ctp.api.entities.supplychain.operations.attack.AttackConfidentiality;
-import com.rbpsc.ctp.repository.impl.base.BaseAttackConfidentialityRepositoryForMongoDBImpl;
-import com.rbpsc.ctp.repository.service.AttackConfidentialityRepository;
+import main.java.com.rbpsc.ctp.api.entities.supplychain.operations.attack.AttackConfidentiality;
+import main.java.com.rbpsc.ctp.repository.impl.base.BaseAttackConfidentialityRepositoryForMongoDBImpl;
+import main.java.com.rbpsc.ctp.repository.service.AttackConfidentialityRepository;
 import org.springframework.stereotype.Repository;
 
 import java.util.List;

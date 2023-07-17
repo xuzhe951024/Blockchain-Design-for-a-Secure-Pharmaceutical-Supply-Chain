@@ -1,14 +1,14 @@
-package com.rbpsc.ctp.biz.impl;
+package main.java.com.rbpsc.ctp.biz.impl;
 
-import com.rbpsc.ctp.api.entities.factories.DataEntityFactory;
-import com.rbpsc.ctp.api.entities.supplychain.drug.DrugInfo;
-import com.rbpsc.ctp.api.entities.supplychain.drug.DrugLifeCycle;
-import com.rbpsc.ctp.api.entities.supplychain.operations.OperationBase;
-import com.rbpsc.ctp.api.entities.supplychain.operations.Receipt;
-import com.rbpsc.ctp.api.entities.supplychain.roles.Consumer;
-import com.rbpsc.ctp.biz.service.SupplyChainStepsService;
-import com.rbpsc.ctp.repository.service.ConsumerReceiptRepository;
-import com.rbpsc.ctp.repository.service.DrugLifeCycleReceiptRepository;
+import main.java.com.rbpsc.ctp.api.entities.factories.DataEntityFactory;
+import main.java.com.rbpsc.ctp.api.entities.supplychain.drug.DrugInfo;
+import main.java.com.rbpsc.ctp.api.entities.supplychain.drug.DrugLifeCycle;
+import main.java.com.rbpsc.ctp.api.entities.supplychain.operations.OperationBase;
+import main.java.com.rbpsc.ctp.api.entities.supplychain.operations.Receipt;
+import main.java.com.rbpsc.ctp.api.entities.supplychain.roles.Consumer;
+import main.java.com.rbpsc.ctp.biz.service.SupplyChainStepsService;
+import main.java.com.rbpsc.ctp.repository.service.ConsumerReceiptRepository;
+import main.java.com.rbpsc.ctp.repository.service.DrugLifeCycleReceiptRepository;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 

@@ -1,8 +1,8 @@
-package com.rbpsc.ctp.repository.impl;
+package main.java.com.rbpsc.ctp.repository.impl;
 
-import com.rbpsc.ctp.api.entities.supplychain.roles.Consumer;
-import com.rbpsc.ctp.repository.impl.base.BaseConsumerReceiptRepositoryForMongoDBImpl;
-import com.rbpsc.ctp.repository.service.ConsumerReceiptRepository;
+import main.java.com.rbpsc.ctp.api.entities.supplychain.roles.Consumer;
+import main.java.com.rbpsc.ctp.repository.impl.base.BaseConsumerReceiptRepositoryForMongoDBImpl;
+import main.java.com.rbpsc.ctp.repository.service.ConsumerReceiptRepository;
 import org.springframework.stereotype.Repository;
 import org.springframework.util.StringUtils;
 

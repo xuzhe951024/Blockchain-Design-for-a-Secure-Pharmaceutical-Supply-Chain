@@ -1,9 +1,10 @@
-package com.rbpsc.ctp.api.entities.base;
+package main.java.com.rbpsc.ctp.api.entities.base;
 
 import lombok.Data;
 
-import static com.rbpsc.ctp.common.Constant.ServiceConstants.RESPONSE_CODE_MESSAGE_MAP;
-import static com.rbpsc.ctp.common.Constant.ServiceConstants.RESPONSE_CODE_SUCCESS;
+import static main.java.com.rbpsc.ctp.common.Constant.ServiceConstants.RESPONSE_CODE_MESSAGE_MAP;
+import static main.java.com.rbpsc.ctp.common.Constant.ServiceConstants.RESPONSE_CODE_SUCCESS;
+
 
 @Data
 public class BaseResponse<T> {

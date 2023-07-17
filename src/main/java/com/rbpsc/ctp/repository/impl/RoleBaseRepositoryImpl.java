@@ -1,8 +1,8 @@
-package com.rbpsc.ctp.repository.impl;
+package main.java.com.rbpsc.ctp.repository.impl;
 
-import com.rbpsc.ctp.api.entities.supplychain.roles.RoleBase;
-import com.rbpsc.ctp.repository.impl.base.BaseRoleBaseRepositoryForMongoDBImpl;
-import com.rbpsc.ctp.repository.service.RoleBaseRepository;
+import main.java.com.rbpsc.ctp.api.entities.supplychain.roles.RoleBase;
+import main.java.com.rbpsc.ctp.repository.impl.base.BaseRoleBaseRepositoryForMongoDBImpl;
+import main.java.com.rbpsc.ctp.repository.service.RoleBaseRepository;
 import org.springframework.stereotype.Repository;
 import org.springframework.util.StringUtils;
 

@@ -1,14 +1,12 @@
-package com.rbpsc.ctp.api.entities.dto.response;
+package main.java.com.rbpsc.ctp.api.entities.dto.response;
 
-import com.rbpsc.ctp.api.entities.base.BaseResponse;
-import com.rbpsc.ctp.api.entities.supplychain.drug.DrugLifeCycle;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
 import lombok.ToString;
-import org.springframework.data.mongodb.core.mapping.Document;
+import main.java.com.rbpsc.ctp.api.entities.base.BaseResponse;
 
-import static com.rbpsc.ctp.common.Constant.ServiceConstants.RESPONSE_CODE_MESSAGE_MAP;
-import static com.rbpsc.ctp.common.Constant.ServiceConstants.RESPONSE_CODE_SUCCESS;
+import static main.java.com.rbpsc.ctp.common.Constant.ServiceConstants.RESPONSE_CODE_SUCCESS;
+
 
 @Data
 @EqualsAndHashCode(callSuper = true)

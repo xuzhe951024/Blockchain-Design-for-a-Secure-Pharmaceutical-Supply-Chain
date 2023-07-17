@@ -1,11 +1,11 @@
-package com.rbpsc.ctp.biz.impl;
+package main.java.com.rbpsc.ctp.biz.impl;
 
 import com.github.kevinsawicki.http.HttpRequest;
-import com.rbpsc.ctp.api.entities.factories.DataEntityFactory;
-import com.rbpsc.ctp.api.entities.work_request.WorkLoadRecord;
-import com.rbpsc.ctp.api.entities.work_request.WorkLoadReq;
-import com.rbpsc.ctp.biz.service.WorkLoadService;
-import com.rbpsc.ctp.repository.impl.WorkLoadRecordRepositoryImpl;
+import main.java.com.rbpsc.ctp.api.entities.factories.DataEntityFactory;
+import main.java.com.rbpsc.ctp.api.entities.work_request.WorkLoadRecord;
+import main.java.com.rbpsc.ctp.api.entities.work_request.WorkLoadReq;
+import main.java.com.rbpsc.ctp.biz.service.WorkLoadService;
+import main.java.com.rbpsc.ctp.repository.impl.WorkLoadRecordRepositoryImpl;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 

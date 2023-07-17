@@ -1,4 +1,4 @@
-package com.rbpsc.ctp.configuration.v1prefix;
+package main.java.com.rbpsc.ctp.configuration.v1prefix;
 
 import org.springframework.core.annotation.AliasFor;
 import org.springframework.web.bind.annotation.RequestMapping;

@@ -1,7 +1,7 @@
-package com.rbpsc.ctp.repository.impl.base;
+package main.java.com.rbpsc.ctp.repository.impl.base;
 
-import com.rbpsc.ctp.api.entities.supplychain.drug.DrugInfo;
-import com.rbpsc.ctp.repository.service.base.BaseDrugInfoRepository;
+import main.java.com.rbpsc.ctp.api.entities.supplychain.drug.DrugInfo;
+import main.java.com.rbpsc.ctp.repository.service.base.BaseDrugInfoRepository;
 import org.springframework.stereotype.Repository;
 
 import java.util.List;

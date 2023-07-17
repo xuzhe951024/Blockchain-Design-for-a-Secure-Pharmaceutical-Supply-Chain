@@ -1,6 +1,6 @@
-package com.rbpsc.ctp.biz.service;
+package main.java.com.rbpsc.ctp.biz.service;
 
-import com.rbpsc.ctp.api.entities.work_request.WorkLoadReq;
+import main.java.com.rbpsc.ctp.api.entities.work_request.WorkLoadReq;
 
 /**
  * @project: WorkLoader

@@ -1,4 +1,4 @@
-package com.rbpsc.ctp.configuration;
+package main.java.com.rbpsc.ctp.configuration;
 
 import com.github.dockerjava.api.DockerClient;
 import com.github.dockerjava.core.DockerClientBuilder;

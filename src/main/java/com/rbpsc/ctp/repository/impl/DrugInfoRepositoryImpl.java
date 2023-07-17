@@ -1,8 +1,8 @@
-package com.rbpsc.ctp.repository.impl;
+package main.java.com.rbpsc.ctp.repository.impl;
 
-import com.rbpsc.ctp.api.entities.supplychain.drug.DrugInfo;
-import com.rbpsc.ctp.repository.impl.base.BaseDrugInfoRepositoryForMongoDBImpl;
-import com.rbpsc.ctp.repository.service.DrugInfoRepository;
+import main.java.com.rbpsc.ctp.api.entities.supplychain.drug.DrugInfo;
+import main.java.com.rbpsc.ctp.repository.impl.base.BaseDrugInfoRepositoryForMongoDBImpl;
+import main.java.com.rbpsc.ctp.repository.service.DrugInfoRepository;
 import org.springframework.stereotype.Repository;
 
 import java.util.List;
