@@ -11,6 +11,7 @@
     <groupId>com.example</groupId>
     <artifactId>demo</artifactId>
     <version>0.0.1-SNAPSHOT</version>
+    <packaging>pom</packaging>
     <name>demo</name>
     <description>PSC Test Platform</description>
     <properties>
@@ -19,9 +20,9 @@
         <project.reporting.outputEncoding>UTF-8</project.reporting.outputEncoding>
 
         <!-- fabric-chaincode-java -->
-        <fabric-chaincode-java.version>2.1.0</fabric-chaincode-java.version>
+        <fabric-chaincode-java.version>2.2.0</fabric-chaincode-java.version>
         <!-- fabric-gateway-java -->
-        <fabric-gateway-java.version>2.1.0</fabric-gateway-java.version>
+        <fabric-gateway-java.version>2.2.0</fabric-gateway-java.version>
     </properties>
 
     <dependencies>
@@ -197,5 +198,10 @@
             <url>https://jitpack.io</url>
         </repository>
     </repositories>
+
+    <modules>
+        <module>rbpsc-entities</module>
+    </modules>
+
 
 </project>
