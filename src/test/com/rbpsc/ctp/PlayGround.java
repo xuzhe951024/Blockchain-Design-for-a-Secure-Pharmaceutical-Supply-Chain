@@ -30,7 +30,7 @@ public class PlayGround {
 //        attackAvailability.setRoleName("1");
 //        attackAvailability.setTargetDrugId("2");
 
-//        try (ScanResult scanResult = new ClassGraph().whitelistPackages("com.rbpsc.ctp.api.entities.supplychain.operations").scan()) {
+//        try (ScanResult scanResult = new ClassGraph().whitelistPackages("main.java.com.rbpsc.ctp.api.entities.supplychain.operations").scan()) {
 //            scanResult.getAllClasses().forEach(classInfo -> System.out.println(classInfo.getName()));
 //        }
 

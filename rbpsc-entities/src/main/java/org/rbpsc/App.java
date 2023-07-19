@@ -1,4 +1,4 @@
-package org.rbpsc;
+package main.java.org.rbpsc;
 
 /**
  * Hello world!

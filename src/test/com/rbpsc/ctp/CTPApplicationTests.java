@@ -1,18 +1,19 @@
 package com.rbpsc.ctp;
 
 import com.github.dockerjava.api.DockerClient;
-import com.rbpsc.ctp.api.entities.dto.response.DrugLifeCycleResponse;
-import com.rbpsc.ctp.api.entities.supplychain.roles.Institution;
-import com.rbpsc.ctp.api.entities.supplychain.roles.RoleBase;
-import com.rbpsc.ctp.api.entities.work_request.WorkLoadRecord;
-import com.rbpsc.ctp.api.entities.work_request.WorkLoadReq;
-import com.rbpsc.ctp.api.entities.factories.DataEntityFactory;
-import com.rbpsc.ctp.biz.service.WorkLoadService;
-import com.rbpsc.ctp.common.Constant.ServiceConstants;
-import com.rbpsc.ctp.common.utiles.DockerUtils;
-import com.rbpsc.ctp.common.utiles.WebClientUtil;
-import com.rbpsc.ctp.repository.service.RoleBaseRepository;
-import com.rbpsc.ctp.repository.service.WorkLoadRecordRepository;
+import main.java.com.rbpsc.CTPApplication;
+import main.java.org.rbpsc.api.entities.dto.response.DrugLifeCycleResponse;
+import main.java.org.rbpsc.api.entities.supplychain.roles.Institution;
+import main.java.org.rbpsc.api.entities.supplychain.roles.RoleBase;
+import main.java.org.rbpsc.api.entities.work_request.WorkLoadRecord;
+import main.java.org.rbpsc.api.entities.work_request.WorkLoadReq;
+import main.java.com.rbpsc.common.factories.DataEntityFactory;
+import main.java.com.rbpsc.biz.service.WorkLoadService;
+import main.java.org.rbpsc.common.constant.ServiceConstants;
+import main.java.com.rbpsc.common.utiles.DockerUtils;
+import main.java.com.rbpsc.common.utiles.WebClientUtil;
+import main.java.com.rbpsc.repository.service.RoleBaseRepository;
+import main.java.com.rbpsc.repository.service.WorkLoadRecordRepository;
 import lombok.extern.slf4j.Slf4j;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -23,29 +24,30 @@ import java.util.Arrays;
 import java.util.List;
 import java.util.UUID;
 
-import static com.rbpsc.ctp.common.Constant.EntityConstants.DASH;
-import static com.rbpsc.ctp.common.Constant.EntityConstants.HTTP_URL_PRE_FIX;
-import static com.rbpsc.ctp.common.Constant.ServiceConstants.DOCKER_LAUNCHED_LOG_SIGN;
-import static com.rbpsc.ctp.common.Constant.ServiceConstants.RESPONSE_CODE_FAIL_SERVICE_DISABLED;
+import static main.java.org.rbpsc.common.constant.EntityConstants.DASH;
+import static main.java.org.rbpsc.common.constant.EntityConstants.HTTP_URL_PRE_FIX;
+import static main.java.org.rbpsc.common.constant.ServiceConstants.DOCKER_LAUNCHED_LOG_SIGN;
+import static main.java.org.rbpsc.common.constant.ServiceConstants.RESPONSE_CODE_FAIL_SERVICE_DISABLED;
 
-@SpringBootTest
+@SpringBootTest(classes = CTPApplication.class)
 @Slf4j
 class CTPApplicationTests {
 
-    @Autowired
-    private WorkLoadService workLoadService;
 
     @Autowired
-    private WorkLoadRecordRepository workLoadRecordRepository;
+    WorkLoadService workLoadService;
 
     @Autowired
-    private DockerUtils dockerUtils;
+    WorkLoadRecordRepository workLoadRecordRepository;
 
     @Autowired
-    private RoleBaseRepository roleBaseRepository;
+    DockerUtils dockerUtils;
 
     @Autowired
-    private DockerClient dockerClient;
+    RoleBaseRepository roleBaseRepository;
+
+    @Autowired
+    DockerClient dockerClient;
 
     @Test
     void contextLoads() {
