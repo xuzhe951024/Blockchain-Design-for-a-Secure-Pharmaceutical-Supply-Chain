@@ -1,6 +1,6 @@
-package main.java.org.rbpsc.api.entities.work_request;
+package org.rbpsc.api.entities.work_request;
 
-import main.java.org.rbpsc.common.constant.ServiceConstants;
+import org.rbpsc.common.constant.ServiceConstants;
 import lombok.Data;
 
 import javax.validation.constraints.NotBlank;

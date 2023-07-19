@@ -1,14 +1,14 @@
-package main.java.com.rbpsc.biz.impl;
+package com.rbpsc.biz.impl;
 
-import main.java.com.rbpsc.common.factories.DataEntityFactory;
-import main.java.org.rbpsc.api.entities.supplychain.drug.DrugLifeCycle;
-import main.java.org.rbpsc.api.entities.dto.DrugOperationDTO;
-import main.java.org.rbpsc.api.entities.dto.OperationDTO;
-import main.java.org.rbpsc.api.entities.dto.response.DrugLifeCycleResponse;
-import main.java.com.rbpsc.biz.service.SimulatorDispatcherService;
-import main.java.org.rbpsc.common.constant.ServiceConstants;
-import main.java.com.rbpsc.common.utiles.WebClientUtil;
-import main.java.org.rbpsc.api.entities.dto.webview.SimulationDataView;
+import com.rbpsc.common.factories.DataEntityFactory;
+import org.rbpsc.api.entities.supplychain.drug.DrugLifeCycle;
+import org.rbpsc.api.entities.dto.DrugOperationDTO;
+import org.rbpsc.api.entities.dto.OperationDTO;
+import org.rbpsc.api.entities.dto.response.DrugLifeCycleResponse;
+import com.rbpsc.biz.service.SimulatorDispatcherService;
+import org.rbpsc.common.constant.ServiceConstants;
+import com.rbpsc.common.utiles.WebClientUtil;
+import org.rbpsc.api.entities.dto.webview.SimulationDataView;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.core.task.TaskExecutor;

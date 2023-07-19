@@ -1,8 +1,8 @@
-package main.java.com.rbpsc.repository.impl;
+package com.rbpsc.repository.impl;
 
-import main.java.org.rbpsc.api.entities.supplychain.drug.DrugInfo;
-import main.java.com.rbpsc.repository.impl.base.BaseDrugInfoRepositoryForMongoDBImpl;
-import main.java.com.rbpsc.repository.service.DrugInfoRepository;
+import org.rbpsc.api.entities.supplychain.drug.DrugInfo;
+import com.rbpsc.repository.impl.base.BaseDrugInfoRepositoryForMongoDBImpl;
+import com.rbpsc.repository.service.DrugInfoRepository;
 import org.springframework.stereotype.Repository;
 
 import java.util.List;

@@ -1,9 +1,9 @@
-package main.java.com.rbpsc.biz.impl;
+package com.rbpsc.biz.impl;
 
 
-import main.java.org.rbpsc.api.entities.supplychain.roles.RoleBase;
-import main.java.com.rbpsc.biz.service.WebPageService;
-import main.java.com.rbpsc.repository.service.RoleBaseRepository;
+import org.rbpsc.api.entities.supplychain.roles.RoleBase;
+import com.rbpsc.biz.service.WebPageService;
+import com.rbpsc.repository.service.RoleBaseRepository;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 

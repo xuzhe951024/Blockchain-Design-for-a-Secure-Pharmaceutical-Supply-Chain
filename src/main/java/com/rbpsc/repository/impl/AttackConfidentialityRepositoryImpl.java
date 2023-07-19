@@ -1,8 +1,8 @@
-package main.java.com.rbpsc.repository.impl;
+package com.rbpsc.repository.impl;
 
-import main.java.org.rbpsc.api.entities.supplychain.operations.attack.AttackConfidentiality;
-import main.java.com.rbpsc.repository.impl.base.BaseAttackConfidentialityRepositoryForMongoDBImpl;
-import main.java.com.rbpsc.repository.service.AttackConfidentialityRepository;
+import org.rbpsc.api.entities.supplychain.operations.attack.AttackConfidentiality;
+import com.rbpsc.repository.impl.base.BaseAttackConfidentialityRepositoryForMongoDBImpl;
+import com.rbpsc.repository.service.AttackConfidentialityRepository;
 import org.springframework.stereotype.Repository;
 
 import java.util.List;

@@ -1,19 +1,19 @@
 package com.rbpsc.ctp;
 
 import com.github.dockerjava.api.DockerClient;
-import main.java.com.rbpsc.CTPApplication;
-import main.java.org.rbpsc.api.entities.dto.response.DrugLifeCycleResponse;
-import main.java.org.rbpsc.api.entities.supplychain.roles.Institution;
-import main.java.org.rbpsc.api.entities.supplychain.roles.RoleBase;
-import main.java.org.rbpsc.api.entities.work_request.WorkLoadRecord;
-import main.java.org.rbpsc.api.entities.work_request.WorkLoadReq;
-import main.java.com.rbpsc.common.factories.DataEntityFactory;
-import main.java.com.rbpsc.biz.service.WorkLoadService;
-import main.java.org.rbpsc.common.constant.ServiceConstants;
-import main.java.com.rbpsc.common.utiles.DockerUtils;
-import main.java.com.rbpsc.common.utiles.WebClientUtil;
-import main.java.com.rbpsc.repository.service.RoleBaseRepository;
-import main.java.com.rbpsc.repository.service.WorkLoadRecordRepository;
+import com.rbpsc.CTPApplication;
+import org.rbpsc.api.entities.dto.response.DrugLifeCycleResponse;
+import org.rbpsc.api.entities.supplychain.roles.Institution;
+import org.rbpsc.api.entities.supplychain.roles.RoleBase;
+import org.rbpsc.api.entities.work_request.WorkLoadRecord;
+import org.rbpsc.api.entities.work_request.WorkLoadReq;
+import com.rbpsc.common.factories.DataEntityFactory;
+import com.rbpsc.biz.service.WorkLoadService;
+import org.rbpsc.common.constant.ServiceConstants;
+import com.rbpsc.common.utiles.DockerUtils;
+import com.rbpsc.common.utiles.WebClientUtil;
+import com.rbpsc.repository.service.RoleBaseRepository;
+import com.rbpsc.repository.service.WorkLoadRecordRepository;
 import lombok.extern.slf4j.Slf4j;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -21,13 +21,14 @@ import org.springframework.boot.test.context.SpringBootTest;
 import reactor.core.publisher.Mono;
 
 import java.util.Arrays;
+import java.util.Collections;
 import java.util.List;
 import java.util.UUID;
 
-import static main.java.org.rbpsc.common.constant.EntityConstants.DASH;
-import static main.java.org.rbpsc.common.constant.EntityConstants.HTTP_URL_PRE_FIX;
-import static main.java.org.rbpsc.common.constant.ServiceConstants.DOCKER_LAUNCHED_LOG_SIGN;
-import static main.java.org.rbpsc.common.constant.ServiceConstants.RESPONSE_CODE_FAIL_SERVICE_DISABLED;
+import static org.rbpsc.common.constant.EntityConstants.DASH;
+import static org.rbpsc.common.constant.EntityConstants.HTTP_URL_PRE_FIX;
+import static org.rbpsc.common.constant.ServiceConstants.DOCKER_LAUNCHED_LOG_SIGN;
+import static org.rbpsc.common.constant.ServiceConstants.RESPONSE_CODE_FAIL_SERVICE_DISABLED;
 
 @SpringBootTest(classes = CTPApplication.class)
 @Slf4j
@@ -142,7 +143,7 @@ class CTPApplicationTests {
             String imageId = dockerUtils.buildImage("testAuto/app/DockerFile_SupplyChainNode", "auto-img-t-" + i);
             String containerId = dockerUtils.createAndStartContainer("test-network", imageId,
                     "autocontainer-t-" + i,
-                    Arrays.asList("KEY=VALUE" + i));
+                    Collections.singletonList("KEY=VALUE" + i));
 
             containers[i] = containerId;
             images[i] = imageId;

@@ -1,6 +1,6 @@
-package main.java.com.rbpsc.biz.service;
+package com.rbpsc.biz.service;
 
-import main.java.org.rbpsc.api.entities.dto.webview.SimulationDataView;
+import org.rbpsc.api.entities.dto.webview.SimulationDataView;
 
 /**
  * @project: WorkLoad
@@ -9,5 +9,5 @@ import main.java.org.rbpsc.api.entities.dto.webview.SimulationDataView;
  * @create: 6/16/23
  **/
 public interface SimulatorDispatcherService {
-    public void startRequesting(SimulationDataView simulationDataView, String wsUUID);
+    void startRequesting(SimulationDataView simulationDataView, String wsUUID);
 }

@@ -1,7 +1,7 @@
-package main.java.com.rbpsc.repository.service.base;
+package com.rbpsc.repository.service.base;
 
-import main.java.org.rbpsc.api.entities.supplychain.drug.DrugLifeCycle;
-import main.java.org.rbpsc.api.entities.supplychain.operations.Receipt;
+import org.rbpsc.api.entities.supplychain.drug.DrugLifeCycle;
+import org.rbpsc.api.entities.supplychain.operations.Receipt;
 import org.springframework.stereotype.Repository;
 
 @Repository

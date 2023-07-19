@@ -1,8 +1,8 @@
-package main.java.com.rbpsc.repository.impl.base;
+package com.rbpsc.repository.impl.base;
 
-import main.java.org.rbpsc.api.entities.supplychain.roles.RoleBase;
-import main.java.com.rbpsc.common.utiles.MongoDBUtil;
-import main.java.com.rbpsc.repository.service.base.BaseRoleBaseRepository;
+import org.rbpsc.api.entities.supplychain.roles.RoleBase;
+import com.rbpsc.common.utiles.MongoDBUtil;
+import com.rbpsc.repository.service.base.BaseRoleBaseRepository;
 import org.springframework.stereotype.Repository;
 
 import java.util.List;

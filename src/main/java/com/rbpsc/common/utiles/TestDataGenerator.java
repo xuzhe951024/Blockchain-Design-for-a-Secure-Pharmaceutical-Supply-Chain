@@ -1,17 +1,17 @@
-package main.java.com.rbpsc.common.utiles;
+package com.rbpsc.common.utiles;
 
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
-import main.java.org.rbpsc.api.entities.configs.ExperimentConfig;
-import main.java.com.rbpsc.common.factories.DataEntityFactory;
-import main.java.org.rbpsc.api.entities.supplychain.drug.DrugLifeCycle;
-import main.java.org.rbpsc.api.entities.supplychain.operations.OperationBase;
-import main.java.org.rbpsc.api.entities.supplychain.operations.attack.AttackAvailability;
-import main.java.org.rbpsc.api.entities.supplychain.operations.attack.AttackConfidentiality;
-import main.java.org.rbpsc.api.entities.supplychain.operations.attack.AttackIntegrity;
-import main.java.org.rbpsc.api.entities.dto.OperationDTO;
-import main.java.org.rbpsc.api.entities.dto.webview.DrugLifeCycleVO;
-import main.java.org.rbpsc.api.entities.dto.webview.OperationVO;
+import org.rbpsc.api.entities.configs.ExperimentConfig;
+import com.rbpsc.common.factories.DataEntityFactory;
+import org.rbpsc.api.entities.supplychain.drug.DrugLifeCycle;
+import org.rbpsc.api.entities.supplychain.operations.OperationBase;
+import org.rbpsc.api.entities.supplychain.operations.attack.AttackAvailability;
+import org.rbpsc.api.entities.supplychain.operations.attack.AttackConfidentiality;
+import org.rbpsc.api.entities.supplychain.operations.attack.AttackIntegrity;
+import org.rbpsc.api.entities.dto.OperationDTO;
+import org.rbpsc.api.entities.dto.webview.DrugLifeCycleVO;
+import org.rbpsc.api.entities.dto.webview.OperationVO;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -93,7 +93,7 @@ public class TestDataGenerator {
     }
 
     public static List<DrugLifeCycleVO> generateDrugLifeCycleVO(List<DrugLifeCycle<OperationDTO>> drugLifeCycleList) {
-        List<DrugLifeCycleVO> drugLifeCycleVOList = new ArrayList<DrugLifeCycleVO>(){{
+        return new ArrayList<DrugLifeCycleVO>(){{
             drugLifeCycleList.forEach(drugLifeCycle -> {
                 DrugLifeCycleVO drugLifeCycleVO = new DrugLifeCycleVO();
                 List<OperationVO> operationVOList = new ArrayList<OperationVO>(){{
@@ -111,6 +111,5 @@ public class TestDataGenerator {
                 add(drugLifeCycleVO);
             });
         }};
-        return drugLifeCycleVOList;
     }
 }

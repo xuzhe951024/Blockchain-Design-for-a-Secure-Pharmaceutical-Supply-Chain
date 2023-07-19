@@ -1,4 +1,4 @@
-package main.java.org.rbpsc.api.entities.supplychain.roles;
+package org.rbpsc.api.entities.supplychain.roles;
 
 import lombok.Data;
 import lombok.EqualsAndHashCode;

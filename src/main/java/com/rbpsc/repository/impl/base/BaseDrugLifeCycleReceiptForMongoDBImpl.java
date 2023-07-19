@@ -1,9 +1,9 @@
-package main.java.com.rbpsc.repository.impl.base;
+package com.rbpsc.repository.impl.base;
 
-import main.java.org.rbpsc.api.entities.supplychain.drug.DrugLifeCycle;
-import main.java.org.rbpsc.api.entities.supplychain.operations.Receipt;
-import main.java.com.rbpsc.common.utiles.MongoDBUtil;
-import main.java.com.rbpsc.repository.service.base.BaseDrugLifeCycleReceiptRepository;
+import org.rbpsc.api.entities.supplychain.drug.DrugLifeCycle;
+import org.rbpsc.api.entities.supplychain.operations.Receipt;
+import com.rbpsc.common.utiles.MongoDBUtil;
+import com.rbpsc.repository.service.base.BaseDrugLifeCycleReceiptRepository;
 import org.springframework.stereotype.Repository;
 
 import java.util.List;

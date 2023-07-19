@@ -1,12 +1,14 @@
-package main.java.org.rbpsc.api.entities.supplychain.drug;
+package org.rbpsc.api.entities.supplychain.drug;
 
-import main.java.org.rbpsc.api.entities.supplychain.SupplyChainBaseEntity;
-import main.java.org.rbpsc.api.entities.supplychain.roles.Consumer;
+import org.rbpsc.api.entities.supplychain.SupplyChainBaseEntity;
+import org.rbpsc.api.entities.supplychain.roles.Consumer;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
 import lombok.ToString;
 import org.springframework.data.mongodb.core.mapping.Document;
 import org.springframework.util.StringUtils;
+//import org.hyperledger.fabric.contract.annotation.DataType;
+//import org.hyperledger.fabric.contract.annotation.Property;
 
 import java.util.List;
 

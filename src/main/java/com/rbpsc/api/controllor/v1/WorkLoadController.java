@@ -1,9 +1,9 @@
-package main.java.com.rbpsc.api.controllor.v1;
+package com.rbpsc.api.controllor.v1;
 
 
-import main.java.org.rbpsc.api.entities.work_request.WorkLoadReq;
-import main.java.com.rbpsc.biz.service.WorkLoadService;
-import main.java.com.rbpsc.configuration.v1prefix.V1RestController;
+import org.rbpsc.api.entities.work_request.WorkLoadReq;
+import com.rbpsc.biz.service.WorkLoadService;
+import com.rbpsc.configuration.v1prefix.V1RestController;
 import org.springframework.http.MediaType;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;

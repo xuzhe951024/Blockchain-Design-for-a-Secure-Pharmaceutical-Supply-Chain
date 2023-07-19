@@ -1,4 +1,4 @@
-package main.java.com.rbpsc.biz.service;
+package com.rbpsc.biz.service;
 
 import java.util.List;
 

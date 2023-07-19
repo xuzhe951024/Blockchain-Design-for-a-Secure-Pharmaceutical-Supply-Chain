@@ -1,30 +1,30 @@
-package main.java.com.rbpsc.common.factories;
+package com.rbpsc.common.factories;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
-import main.java.org.rbpsc.api.entities.supplychain.SupplyChainBaseEntity;
-import main.java.org.rbpsc.api.entities.supplychain.operations.DrugOrderStep;
-import main.java.org.rbpsc.api.entities.base.BaseEntity;
-import main.java.org.rbpsc.api.entities.dto.OperationDTO;
-import main.java.org.rbpsc.api.entities.dto.webview.DrugLifeCycleVO;
-import main.java.org.rbpsc.api.entities.dto.webview.OperationVO;
-import main.java.org.rbpsc.api.entities.supplychain.drug.DrugInfo;
-import main.java.org.rbpsc.api.entities.supplychain.drug.DrugLifeCycle;
-import main.java.org.rbpsc.api.entities.supplychain.operations.OperationBase;
-import main.java.org.rbpsc.api.entities.supplychain.operations.Receipt;
-import main.java.org.rbpsc.api.entities.supplychain.operations.attack.AttackAvailability;
-import main.java.org.rbpsc.api.entities.supplychain.operations.attack.AttackConfidentiality;
-import main.java.org.rbpsc.api.entities.supplychain.operations.attack.AttackIntegrity;
-import main.java.org.rbpsc.api.entities.supplychain.roles.Consumer;
-import main.java.org.rbpsc.api.entities.supplychain.roles.Institution;
-import main.java.org.rbpsc.api.entities.supplychain.roles.RoleBase;
-import main.java.org.rbpsc.api.entities.work_request.WorkLoadRecord;
+import org.rbpsc.api.entities.supplychain.SupplyChainBaseEntity;
+import org.rbpsc.api.entities.supplychain.operations.DrugOrderStep;
+import org.rbpsc.api.entities.base.BaseEntity;
+import org.rbpsc.api.entities.dto.OperationDTO;
+import org.rbpsc.api.entities.dto.webview.DrugLifeCycleVO;
+import org.rbpsc.api.entities.dto.webview.OperationVO;
+import org.rbpsc.api.entities.supplychain.drug.DrugInfo;
+import org.rbpsc.api.entities.supplychain.drug.DrugLifeCycle;
+import org.rbpsc.api.entities.supplychain.operations.OperationBase;
+import org.rbpsc.api.entities.supplychain.operations.Receipt;
+import org.rbpsc.api.entities.supplychain.operations.attack.AttackAvailability;
+import org.rbpsc.api.entities.supplychain.operations.attack.AttackConfidentiality;
+import org.rbpsc.api.entities.supplychain.operations.attack.AttackIntegrity;
+import org.rbpsc.api.entities.supplychain.roles.Consumer;
+import org.rbpsc.api.entities.supplychain.roles.Institution;
+import org.rbpsc.api.entities.supplychain.roles.RoleBase;
+import org.rbpsc.api.entities.work_request.WorkLoadRecord;
 
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 import java.util.UUID;
 
-import static main.java.org.rbpsc.common.constant.EntityConstants.*;
+import static org.rbpsc.common.constant.EntityConstants.*;
 
 /**
  * @project: WorkLoad

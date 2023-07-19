@@ -1,9 +1,9 @@
-package main.java.com.rbpsc.api.controllor.v1;
+package com.rbpsc.api.controllor.v1;
 
 
-import main.java.org.rbpsc.common.constant.ServiceConstants;
-import main.java.com.rbpsc.biz.service.Hello;
-import main.java.com.rbpsc.configuration.v1prefix.V1RestController;
+import org.rbpsc.common.constant.ServiceConstants;
+import com.rbpsc.biz.service.Hello;
+import com.rbpsc.configuration.v1prefix.V1RestController;
 import org.springframework.http.MediaType;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;

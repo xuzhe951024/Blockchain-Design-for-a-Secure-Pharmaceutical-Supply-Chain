@@ -1,9 +1,9 @@
-package main.java.com.rbpsc.repository.impl.base;
+package com.rbpsc.repository.impl.base;
 
 import com.mongodb.bulk.BulkWriteResult;
-import main.java.org.rbpsc.api.entities.work_request.WorkLoadRecord;
-import main.java.com.rbpsc.common.utiles.MongoDBUtil;
-import main.java.com.rbpsc.repository.service.base.BaseWorkLoadRecordRepository;
+import org.rbpsc.api.entities.work_request.WorkLoadRecord;
+import com.rbpsc.common.utiles.MongoDBUtil;
+import com.rbpsc.repository.service.base.BaseWorkLoadRecordRepository;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageImpl;
 import org.springframework.data.domain.Pageable;

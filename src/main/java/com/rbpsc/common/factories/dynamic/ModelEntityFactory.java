@@ -1,29 +1,29 @@
-package main.java.com.rbpsc.common.factories.dynamic;
+package com.rbpsc.common.factories.dynamic;
 
-import main.java.com.rbpsc.common.factories.DataEntityFactory;
-import main.java.org.rbpsc.api.entities.dto.webview.OperationVO;
-import main.java.org.rbpsc.api.entities.supplychain.operations.DrugOrderStep;
-import main.java.org.rbpsc.api.entities.supplychain.roles.RoleBase;
-import main.java.com.rbpsc.common.utiles.DockerUtils;
-import main.java.com.rbpsc.repository.service.ConsumerReceiptRepository;
-import main.java.com.rbpsc.repository.service.RoleBaseRepository;
-import main.java.org.rbpsc.api.entities.configs.ExperimentConfig;
-import main.java.org.rbpsc.api.entities.dto.OperationDTO;
-import main.java.org.rbpsc.api.entities.dto.webview.DrugLifeCycleVO;
-import main.java.org.rbpsc.api.entities.dto.webview.SimulationDataView;
-import main.java.org.rbpsc.api.entities.supplychain.drug.DrugInfo;
-import main.java.org.rbpsc.api.entities.supplychain.drug.DrugLifeCycle;
-import main.java.org.rbpsc.api.entities.supplychain.operations.OperationBase;
-import main.java.org.rbpsc.api.entities.supplychain.roles.Consumer;
-import main.java.org.rbpsc.api.entities.supplychain.roles.Institution;
+import com.rbpsc.common.factories.DataEntityFactory;
+import org.rbpsc.api.entities.dto.webview.OperationVO;
+import org.rbpsc.api.entities.supplychain.operations.DrugOrderStep;
+import org.rbpsc.api.entities.supplychain.roles.RoleBase;
+import com.rbpsc.common.utiles.DockerUtils;
+import com.rbpsc.repository.service.ConsumerReceiptRepository;
+import com.rbpsc.repository.service.RoleBaseRepository;
+import org.rbpsc.api.entities.configs.ExperimentConfig;
+import org.rbpsc.api.entities.dto.OperationDTO;
+import org.rbpsc.api.entities.dto.webview.DrugLifeCycleVO;
+import org.rbpsc.api.entities.dto.webview.SimulationDataView;
+import org.rbpsc.api.entities.supplychain.drug.DrugInfo;
+import org.rbpsc.api.entities.supplychain.drug.DrugLifeCycle;
+import org.rbpsc.api.entities.supplychain.operations.OperationBase;
+import org.rbpsc.api.entities.supplychain.roles.Consumer;
+import org.rbpsc.api.entities.supplychain.roles.Institution;
 import org.springframework.messaging.simp.SimpMessagingTemplate;
 import org.springframework.stereotype.Service;
 
 import java.util.*;
 import java.util.concurrent.atomic.AtomicInteger;
 
-import static main.java.org.rbpsc.common.constant.EntityConstants.*;
-import static main.java.org.rbpsc.common.constant.ServiceConstants.*;
+import static org.rbpsc.common.constant.EntityConstants.*;
+import static org.rbpsc.common.constant.ServiceConstants.*;
 
 @Service
 public class ModelEntityFactory {

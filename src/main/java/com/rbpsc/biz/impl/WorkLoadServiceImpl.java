@@ -1,11 +1,11 @@
-package main.java.com.rbpsc.biz.impl;
+package com.rbpsc.biz.impl;
 
 import com.github.kevinsawicki.http.HttpRequest;
-import main.java.com.rbpsc.common.factories.DataEntityFactory;
-import main.java.org.rbpsc.api.entities.work_request.WorkLoadRecord;
-import main.java.org.rbpsc.api.entities.work_request.WorkLoadReq;
-import main.java.com.rbpsc.biz.service.WorkLoadService;
-import main.java.com.rbpsc.repository.impl.WorkLoadRecordRepositoryImpl;
+import com.rbpsc.common.factories.DataEntityFactory;
+import org.rbpsc.api.entities.work_request.WorkLoadRecord;
+import org.rbpsc.api.entities.work_request.WorkLoadReq;
+import com.rbpsc.biz.service.WorkLoadService;
+import com.rbpsc.repository.impl.WorkLoadRecordRepositoryImpl;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 

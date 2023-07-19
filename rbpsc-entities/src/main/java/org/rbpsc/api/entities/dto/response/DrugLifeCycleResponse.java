@@ -1,7 +1,7 @@
-package main.java.org.rbpsc.api.entities.dto.response;
+package org.rbpsc.api.entities.dto.response;
 
-import main.java.org.rbpsc.api.entities.base.BaseResponse;
-import main.java.org.rbpsc.common.constant.ServiceConstants;
+import org.rbpsc.api.entities.base.BaseResponse;
+import org.rbpsc.common.constant.ServiceConstants;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
 import lombok.ToString;

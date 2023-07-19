@@ -1,6 +1,6 @@
-package main.java.org.rbpsc.api.entities.supplychain.operations.attack;
+package org.rbpsc.api.entities.supplychain.operations.attack;
 
-import main.java.org.rbpsc.api.entities.supplychain.operations.OperationBase;
+import org.rbpsc.api.entities.supplychain.operations.OperationBase;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
 import lombok.ToString;

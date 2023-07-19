@@ -1,19 +1,19 @@
-package main.java.com.rbpsc.api.controllor.v1;
+package com.rbpsc.api.controllor.v1;
 
 
 import lombok.extern.slf4j.Slf4j;
-import main.java.org.rbpsc.api.entities.dto.DrugOperationDTO;
-import main.java.org.rbpsc.api.entities.dto.response.DrugLifeCycleResponse;
-import main.java.com.rbpsc.biz.service.AttackStepsService;
-import main.java.com.rbpsc.biz.service.SupplyChainStepsService;
-import main.java.com.rbpsc.configuration.v1prefix.V1RestController;
+import org.rbpsc.api.entities.dto.DrugOperationDTO;
+import org.rbpsc.api.entities.dto.response.DrugLifeCycleResponse;
+import com.rbpsc.biz.service.AttackStepsService;
+import com.rbpsc.biz.service.SupplyChainStepsService;
+import com.rbpsc.configuration.v1prefix.V1RestController;
 import org.springframework.http.MediaType;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 
-import static main.java.org.rbpsc.common.constant.ServiceConstants.*;
+import static org.rbpsc.common.constant.ServiceConstants.*;
 
 
 @V1RestController

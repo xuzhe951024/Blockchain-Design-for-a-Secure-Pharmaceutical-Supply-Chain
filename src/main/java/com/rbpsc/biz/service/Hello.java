@@ -1,4 +1,4 @@
-package main.java.com.rbpsc.biz.service;
+package com.rbpsc.biz.service;
 
 /**
  * @project: WorkLoader
@@ -7,8 +7,8 @@ package main.java.com.rbpsc.biz.service;
  * @create: 2021/1/22
  **/
 public interface Hello {
-    public String say();
+    String say();
 
-    public String refuse();
+    String refuse();
 }
 

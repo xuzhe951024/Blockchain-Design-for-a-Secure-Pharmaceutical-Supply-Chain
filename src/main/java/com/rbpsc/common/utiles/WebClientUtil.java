@@ -1,4 +1,4 @@
-package main.java.com.rbpsc.common.utiles;
+package com.rbpsc.common.utiles;
 
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpMethod;

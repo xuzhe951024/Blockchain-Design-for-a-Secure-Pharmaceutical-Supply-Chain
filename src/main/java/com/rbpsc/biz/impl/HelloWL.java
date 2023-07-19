@@ -1,6 +1,6 @@
-package main.java.com.rbpsc.biz.impl;
+package com.rbpsc.biz.impl;
 
-import main.java.com.rbpsc.biz.service.Hello;
+import com.rbpsc.biz.service.Hello;
 import org.springframework.stereotype.Service;
 
 /**

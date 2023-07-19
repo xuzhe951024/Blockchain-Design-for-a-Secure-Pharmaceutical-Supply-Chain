@@ -1,4 +1,4 @@
-package main.java.com.rbpsc.configuration.v1prefix;
+package com.rbpsc.configuration.v1prefix;
 
 import org.springframework.core.annotation.AliasFor;
 import org.springframework.web.bind.annotation.RequestMapping;

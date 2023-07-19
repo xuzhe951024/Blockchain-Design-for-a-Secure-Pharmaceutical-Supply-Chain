@@ -1,6 +1,6 @@
-package main.java.com.rbpsc.repository.service;
+package com.rbpsc.repository.service;
 
-import main.java.org.rbpsc.api.entities.supplychain.drug.DrugInfo;
+import org.rbpsc.api.entities.supplychain.drug.DrugInfo;
 import org.springframework.stereotype.Repository;
 
 import java.util.List;

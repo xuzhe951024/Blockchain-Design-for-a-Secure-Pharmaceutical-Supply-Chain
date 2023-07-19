@@ -1,7 +1,7 @@
-package main.java.com.rbpsc.repository.service;
+package com.rbpsc.repository.service;
 
-import main.java.org.rbpsc.api.entities.supplychain.drug.DrugLifeCycle;
-import main.java.org.rbpsc.api.entities.supplychain.operations.Receipt;
+import org.rbpsc.api.entities.supplychain.drug.DrugLifeCycle;
+import org.rbpsc.api.entities.supplychain.operations.Receipt;
 import org.springframework.stereotype.Repository;
 
 import java.util.List;
@@ -15,7 +15,7 @@ public interface DrugLifeCycleReceiptRepository {
 
     DrugLifeCycle<Receipt> selectDrugLifeCycleReceiptById(String id);
 
-    public List<DrugLifeCycle<Receipt>> findAll();
+    List<DrugLifeCycle<Receipt>> findAll();
 
-    public boolean updateWithInsert(DrugLifeCycle<Receipt> receiptDrugLifeCycle, Optional<String> id);
+    boolean updateWithInsert(DrugLifeCycle<Receipt> receiptDrugLifeCycle, Optional<String> id);
 }

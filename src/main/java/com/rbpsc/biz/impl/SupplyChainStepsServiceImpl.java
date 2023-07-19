@@ -1,14 +1,14 @@
-package main.java.com.rbpsc.biz.impl;
+package com.rbpsc.biz.impl;
 
-import main.java.com.rbpsc.common.factories.DataEntityFactory;
-import main.java.org.rbpsc.api.entities.supplychain.drug.DrugInfo;
-import main.java.org.rbpsc.api.entities.supplychain.drug.DrugLifeCycle;
-import main.java.org.rbpsc.api.entities.supplychain.operations.OperationBase;
-import main.java.org.rbpsc.api.entities.supplychain.operations.Receipt;
-import main.java.org.rbpsc.api.entities.supplychain.roles.Consumer;
-import main.java.com.rbpsc.biz.service.SupplyChainStepsService;
-import main.java.com.rbpsc.repository.service.ConsumerReceiptRepository;
-import main.java.com.rbpsc.repository.service.DrugLifeCycleReceiptRepository;
+import com.rbpsc.common.factories.DataEntityFactory;
+import org.rbpsc.api.entities.supplychain.drug.DrugInfo;
+import org.rbpsc.api.entities.supplychain.drug.DrugLifeCycle;
+import org.rbpsc.api.entities.supplychain.operations.OperationBase;
+import org.rbpsc.api.entities.supplychain.operations.Receipt;
+import org.rbpsc.api.entities.supplychain.roles.Consumer;
+import com.rbpsc.biz.service.SupplyChainStepsService;
+import com.rbpsc.repository.service.ConsumerReceiptRepository;
+import com.rbpsc.repository.service.DrugLifeCycleReceiptRepository;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 

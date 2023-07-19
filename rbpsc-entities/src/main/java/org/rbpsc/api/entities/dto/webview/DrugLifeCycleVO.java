@@ -1,8 +1,8 @@
-package main.java.org.rbpsc.api.entities.dto.webview;
+package org.rbpsc.api.entities.dto.webview;
 
-import main.java.org.rbpsc.api.entities.supplychain.SupplyChainBaseEntity;
-import main.java.org.rbpsc.api.entities.supplychain.drug.DrugInfo;
-import main.java.org.rbpsc.api.entities.supplychain.drug.DrugLifeCycle;
+import org.rbpsc.api.entities.supplychain.SupplyChainBaseEntity;
+import org.rbpsc.api.entities.supplychain.drug.DrugInfo;
+import org.rbpsc.api.entities.supplychain.drug.DrugLifeCycle;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
 import lombok.ToString;

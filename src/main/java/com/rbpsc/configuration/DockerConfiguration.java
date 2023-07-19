@@ -1,4 +1,4 @@
-package main.java.com.rbpsc.configuration;
+package com.rbpsc.configuration;
 
 import com.github.dockerjava.api.DockerClient;
 import com.github.dockerjava.core.DockerClientBuilder;

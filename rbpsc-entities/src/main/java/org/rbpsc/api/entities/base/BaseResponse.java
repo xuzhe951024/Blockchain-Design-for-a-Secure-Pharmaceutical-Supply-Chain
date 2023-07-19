@@ -1,6 +1,6 @@
-package main.java.org.rbpsc.api.entities.base;
+package org.rbpsc.api.entities.base;
 
-import main.java.org.rbpsc.common.constant.ServiceConstants;
+import org.rbpsc.common.constant.ServiceConstants;
 import lombok.Data;
 
 

@@ -1,10 +1,10 @@
-package main.java.org.rbpsc.api.entities.supplychain;
+package org.rbpsc.api.entities.supplychain;
 
 
 import lombok.Data;
 import lombok.EqualsAndHashCode;
 import lombok.ToString;
-import main.java.org.rbpsc.api.entities.base.BaseEntity;
+import org.rbpsc.api.entities.base.BaseEntity;
 
 @EqualsAndHashCode(callSuper = true)
 @Data

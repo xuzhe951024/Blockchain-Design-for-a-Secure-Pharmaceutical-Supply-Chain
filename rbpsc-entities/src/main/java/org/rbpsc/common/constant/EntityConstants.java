@@ -1,4 +1,4 @@
-package main.java.org.rbpsc.common.constant;
+package org.rbpsc.common.constant;
 
 public class EntityConstants {
     public static final String BASE_ENTITY_ID_FIELD_NAME = "id";

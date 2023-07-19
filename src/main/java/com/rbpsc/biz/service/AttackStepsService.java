@@ -1,8 +1,8 @@
-package main.java.com.rbpsc.biz.service;
+package com.rbpsc.biz.service;
 
 
-import main.java.org.rbpsc.api.entities.supplychain.drug.DrugInfo;
-import main.java.org.rbpsc.api.entities.supplychain.operations.OperationBase;
+import org.rbpsc.api.entities.supplychain.drug.DrugInfo;
+import org.rbpsc.api.entities.supplychain.operations.OperationBase;
 
 public interface AttackStepsService {
     boolean attackAvailability(OperationBase attackAvailability);

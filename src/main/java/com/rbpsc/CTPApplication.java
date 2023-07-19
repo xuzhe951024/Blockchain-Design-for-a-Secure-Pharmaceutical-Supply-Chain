@@ -1,4 +1,4 @@
-package main.java.com.rbpsc;
+package com.rbpsc;
 
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;

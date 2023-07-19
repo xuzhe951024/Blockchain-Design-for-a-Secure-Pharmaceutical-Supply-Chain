@@ -1,7 +1,7 @@
-package main.java.org.rbpsc.api.entities.configs;
+package org.rbpsc.api.entities.configs;
 
 
-import main.java.org.rbpsc.api.entities.base.BaseEntity;
+import org.rbpsc.api.entities.base.BaseEntity;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
 import lombok.ToString;
