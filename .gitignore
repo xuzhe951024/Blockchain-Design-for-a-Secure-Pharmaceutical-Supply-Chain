@@ -33,5 +33,8 @@ build/
 ### VS Code ###
 .vscode/
 
-###  gradle  ###
+###  Gradle  ###
 .gradle
+
+###  Fabric Contracts Output  ###
+fabric-contracts/build
