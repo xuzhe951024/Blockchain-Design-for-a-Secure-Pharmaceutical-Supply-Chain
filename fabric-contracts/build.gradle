@@ -1,15 +1,38 @@
 /*
  * SPDX-License-Identifier: Apache-2.0
  */
+
 plugins {
     id 'com.github.johnrengelman.shadow' version '5.1.0'
+    id 'application'
+    id 'checkstyle'
+    id 'jacoco'
     id 'java'
 }
 
+group 'org.hyperledger.fabric.samples'
+version '1.0-SNAPSHOT'
 
-version '0.0.1'
+dependencies {
+    
+    implementation 'org.hyperledger.fabric-chaincode-java:fabric-chaincode-shim:2.4.1'
+    implementation 'org.json:json:+'
+    implementation 'com.owlike:genson:1.5'
+    implementation group: 'org.rbpsc', name: 'rbpsc-entities', version:'1.0-SNAPSHOT'
+    testImplementation 'org.hyperledger.fabric-chaincode-java:fabric-chaincode-shim:2.4.1'
+    testImplementation 'org.junit.jupiter:junit-jupiter:5.4.2'
+    testImplementation 'org.assertj:assertj-core:3.11.1'
+    testImplementation 'org.mockito:mockito-core:2.+'
+    // SLF4J API
+    implementation 'org.slf4j:slf4j-api:1.7.30'
 
-sourceCompatibility = 1.8
+    // SLF4J Logback implement
+    implementation 'ch.qos.logback:logback-classic:1.2.3'
+
+    // Lombok
+    compileOnly 'org.projectlombok:lombok:1.18.20'
+    annotationProcessor 'org.projectlombok:lombok:1.18.20'
+}
 
 repositories {
     mavenLocal()
@@ -19,21 +42,47 @@ repositories {
     }
 }
 
-dependencies {
-    implementation group: 'org.hyperledger.fabric-chaincode-java', name: 'fabric-chaincode-shim', version: '2.+'
-    implementation group: 'org.json', name: 'json', version: '20180813'
-    implementation group: 'org.rbpsc', name: 'rbpsc-entities', version:'1.0-SNAPSHOT'
-    testImplementation 'org.junit.jupiter:junit-jupiter:5.4.2'
-    testImplementation 'org.assertj:assertj-core:3.11.1'
-    testImplementation 'org.mockito:mockito-core:2.+'
+application {
+    mainClass = 'org.hyperledger.fabric.contract.ContractRouter'
 }
 
-test {
-    useJUnitPlatform()
-    testLogging {
-        events "passed", "skipped", "failed"
-    }
+checkstyle {
+    toolVersion '8.21'
+    configFile file("config/checkstyle/checkstyle.xml")
 }
+
+checkstyleMain {
+    source ='src/main/java'
+}
+
+checkstyleTest {
+    source ='src/test/java'
+}
+
+jacocoTestReport {
+    dependsOn test
+}
+
+jacocoTestCoverageVerification {
+    violationRules {
+        rule {
+            limit {
+                minimum = 0.9
+            }
+        }
+    }
+
+    finalizedBy jacocoTestReport
+}
+
+//test {
+//    useJUnitPlatform()
+//    testLogging {
+//        events "passed", "skipped", "failed"
+//    }
+//}
+
+mainClassName = 'org.hyperledger.fabric.contract.ContractRouter'
 
 shadowJar {
     baseName = 'chaincode'
@@ -45,7 +94,5 @@ shadowJar {
     }
 }
 
-
-tasks.withType(JavaCompile) {
-  options.compilerArgs << "-Xlint:unchecked" << "-Xlint:deprecation" << "-parameters"
-}
+check.dependsOn jacocoTestCoverageVerification
+installDist.dependsOn check

@@ -18,11 +18,8 @@
         <java.version>1.8</java.version>
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
         <project.reporting.outputEncoding>UTF-8</project.reporting.outputEncoding>
-
-        <!-- fabric-chaincode-java -->
-        <fabric-chaincode-java.version>2.2.0</fabric-chaincode-java.version>
         <!-- fabric-gateway-java -->
-        <fabric-gateway-java.version>2.2.0</fabric-gateway-java.version>
+        <fabric-gateway-java.version>2.1.1</fabric-gateway-java.version>
     </properties>
 
     <dependencies>
@@ -101,13 +98,11 @@
             <version>${fabric-gateway-java.version}</version>
         </dependency>
 
-
-        <!-- Used for datatype annotations only -->
         <dependency>
-            <groupId>org.hyperledger.fabric-chaincode-java</groupId>
-            <artifactId>fabric-chaincode-shim</artifactId>
-            <version>${fabric-chaincode-java.version}</version>
-            <scope>compile</scope>
+            <groupId>io.grpc</groupId>
+            <artifactId>grpc-netty-shaded</artifactId>
+            <version>1.56.0</version>
+            <scope>runtime</scope>
         </dependency>
 
         <!-- https://mvnrepository.com/artifact/org.json/json -->
@@ -122,6 +117,13 @@
             <artifactId>rbpsc-entities</artifactId>
             <version>1.0-SNAPSHOT</version>
         </dependency>
+
+        <dependency>
+            <groupId>com.google.guava</groupId>
+            <artifactId>guava</artifactId>
+            <version>29.0-jre</version>
+        </dependency>
+
     </dependencies>
 
     <build>

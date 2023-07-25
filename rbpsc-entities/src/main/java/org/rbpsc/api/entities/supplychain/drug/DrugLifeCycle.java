@@ -7,8 +7,8 @@ import lombok.EqualsAndHashCode;
 import lombok.ToString;
 import org.springframework.data.mongodb.core.mapping.Document;
 import org.springframework.util.StringUtils;
-//import org.hyperledger.fabric.contract.annotation.DataType;
-//import org.hyperledger.fabric.contract.annotation.Property;
+import org.hyperledger.fabric.contract.annotation.DataType;
+import org.hyperledger.fabric.contract.annotation.Property;
 
 import java.util.List;
 
@@ -16,10 +16,18 @@ import java.util.List;
 @Data
 @EqualsAndHashCode(callSuper = true)
 @ToString(callSuper = true)
+@DataType()
 public class DrugLifeCycle <T> extends SupplyChainBaseEntity {
+    @Property()
     DrugInfo drug;
+
+    @Property()
     List<T> lifeCycleQueue;
+
+    @Property()
     Consumer expectedReceiver;
+
+    @Property()
     Boolean isAttacked = false;
 
     public T pollOperationVOQ(){
