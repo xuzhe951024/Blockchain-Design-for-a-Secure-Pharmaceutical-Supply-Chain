@@ -67,24 +67,24 @@ public final class DrugLifeCycleContract implements ContractInterface {
      * Creates a new asset on the ledger.
      *
      * @param ctx the transaction context
-     * @param drugLifeCycle the desired drugLifeCycle entity
+     * @param drugLifeCycleJSON the desired drugLifeCycle entity
      * @return the created asset
      */
     @Transaction(intent = Transaction.TYPE.SUBMIT)
-    public DrugLifeCycleReceipt CreateDruglifeCycle(final Context ctx, final DrugLifeCycleReceipt drugLifeCycle) {
+    public String CreateDruglifeCycle(final Context ctx, final String drugLifeCycleJSON) {
         ChaincodeStub stub = ctx.getStub();
 
-        if (AssetExists(ctx, drugLifeCycle.getId())) {
-            String errorMessage = String.format("drugLifeCycle %s already exists", drugLifeCycle.getId());
+        DrugLifeCycleReceipt drugLifeCycleReceipt = genson.deserialize(drugLifeCycleJSON, DrugLifeCycleReceipt.class);
+
+        if (drugLifeCycleExists(ctx, drugLifeCycleReceipt.getId())) {
+            String errorMessage = String.format("drugLifeCycle %s already exists", drugLifeCycleReceipt.getId());
             log.error(errorMessage);
             throw new ChaincodeException(errorMessage, AssetTransferErrors.ASSET_ALREADY_EXISTS.toString());
         }
 
-        // Use Genson to convert the Asset into string, sort it alphabetically and serialize it into a json string
-        String sortedJson = genson.serialize(drugLifeCycle);
-        stub.putStringState(drugLifeCycle.getId(), sortedJson);
+        stub.putStringState(drugLifeCycleReceipt.getId(), drugLifeCycleJSON);
 
-        return drugLifeCycle;
+        return drugLifeCycleJSON;
     }
 
     /**
@@ -95,40 +95,41 @@ public final class DrugLifeCycleContract implements ContractInterface {
      * @return the asset found on the ledger if there was one
      */
     @Transaction(intent = Transaction.TYPE.EVALUATE)
-    public DrugLifeCycleReceipt ReadDrugLifeCycle(final Context ctx, final String drugLifeCycleId) {
+    public String ReadDrugLifeCycle(final Context ctx, final String drugLifeCycleId) {
         ChaincodeStub stub = ctx.getStub();
-        String assetJSON = stub.getStringState(drugLifeCycleId);
+        String drugLifeCycleJSON = stub.getStringState(drugLifeCycleId);
 
-        if (assetJSON == null || assetJSON.isEmpty()) {
+        if (drugLifeCycleJSON == null || drugLifeCycleJSON.isEmpty()) {
             String errorMessage = String.format("drugLifeCycle %s does not exist", drugLifeCycleId);
             log.error(errorMessage);
             throw new ChaincodeException(errorMessage, AssetTransferErrors.ASSET_NOT_FOUND.toString());
         }
 
-        return genson.deserialize(assetJSON, DrugLifeCycleReceipt.class);
+        return drugLifeCycleJSON;
     }
 
     /**
      * Updates the properties of an asset on the ledger.
      *
      * @param ctx the transaction context
-     * @param drugLifeCycle the desired drugLifeCycle
+     * @param drugLifeCycleJSON the desired drugLifeCycle
      * @return the transferred asset
      */
     @Transaction(intent = Transaction.TYPE.SUBMIT)
-    public DrugLifeCycleReceipt UpdateDrugLifeCycle(final Context ctx, final DrugLifeCycleReceipt drugLifeCycle) {
+    public String UpdateDrugLifeCycle(final Context ctx, final String drugLifeCycleJSON) {
         ChaincodeStub stub = ctx.getStub();
 
-        if (!AssetExists(ctx, drugLifeCycle.getId())) {
-            String errorMessage = String.format("drugLifeCycle %s does not exist", drugLifeCycle.getId());
+        DrugLifeCycleReceipt drugLifeCycleReceipt = genson.deserialize(drugLifeCycleJSON, DrugLifeCycleReceipt.class);
+
+        if (!drugLifeCycleExists(ctx, drugLifeCycleReceipt.getId())) {
+            String errorMessage = String.format("drugLifeCycle %s does not exist", drugLifeCycleReceipt.getId());
             log.error(errorMessage);
             throw new ChaincodeException(errorMessage, AssetTransferErrors.ASSET_NOT_FOUND.toString());
         }
 
         // Use Genson to convert the Asset into string, sort it alphabetically and serialize it into a json string
-        String sortedJson = genson.serialize(drugLifeCycle);
-        stub.putStringState(drugLifeCycle.getId(), sortedJson);
-        return drugLifeCycle;
+        stub.putStringState(drugLifeCycleReceipt.getId(), drugLifeCycleJSON);
+        return drugLifeCycleJSON;
     }
 
     /**
@@ -141,7 +142,7 @@ public final class DrugLifeCycleContract implements ContractInterface {
     public void DeleteDrugLifeCycle(final Context ctx, final String drugLifeCycleID) {
         ChaincodeStub stub = ctx.getStub();
 
-        if (!AssetExists(ctx, drugLifeCycleID)) {
+        if (!drugLifeCycleExists(ctx, drugLifeCycleID)) {
             String errorMessage = String.format("drugLifeCycleID %s does not exist", drugLifeCycleID);
             log.error(errorMessage);
             throw new ChaincodeException(errorMessage, AssetTransferErrors.ASSET_NOT_FOUND.toString());
@@ -158,7 +159,7 @@ public final class DrugLifeCycleContract implements ContractInterface {
      * @return boolean indicating the existence of the asset
      */
     @Transaction(intent = Transaction.TYPE.EVALUATE)
-    public boolean AssetExists(final Context ctx, final String drugLifeCycleID) {
+    public boolean drugLifeCycleExists(final Context ctx, final String drugLifeCycleID) {
         ChaincodeStub stub = ctx.getStub();
         String assetJSON = stub.getStringState(drugLifeCycleID);
 
@@ -170,11 +171,11 @@ public final class DrugLifeCycleContract implements ContractInterface {
      *
      * @param ctx the transaction context
      * @param drugLifeCycleID the ID of the asset being transferred
-     * @param receipt the new valid receipt
+     * @param receiptJSON the new valid receipt
      * @return the old owner
      */
     @Transaction(intent = Transaction.TYPE.SUBMIT)
-    public Boolean addReceiptToDrugLifeCycle(final Context ctx, final String drugLifeCycleID, final Receipt receipt) {
+    public Boolean addReceiptToDrugLifeCycle(final Context ctx, final String drugLifeCycleID, final String receiptJSON) {
         ChaincodeStub stub = ctx.getStub();
         String drugLifeCycleJSON = stub.getStringState(drugLifeCycleID);
 
@@ -185,6 +186,7 @@ public final class DrugLifeCycleContract implements ContractInterface {
         }
 
         DrugLifeCycleReceipt drugLifeCycle = genson.deserialize(drugLifeCycleJSON, DrugLifeCycleReceipt.class);
+        Receipt receipt = genson.deserialize(receiptJSON, Receipt.class);
         drugLifeCycle.addOperation(receipt);
 
         // Use a Genson to conver the Asset into string, sort it alphabetically and serialize it into a json string

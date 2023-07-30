@@ -59,4 +59,12 @@ public class ServiceConstants {
         put(RESPONSE_CODE_FAIL_BAD_GATEWAY, "DrugLifeCycle operation service error or database error!");
         put(RESPONSE_CODE_FAIL_SERVICE_DISABLED, "Service now disabled!");
     }};
+
+    public static final String CHANNEL_NAME = System.getenv().getOrDefault("CHANNEL_NAME", "mychannel");
+    public static final String CHAINCODE_NAME = System.getenv().getOrDefault("CHAINCODE_NAME", "basic");
+
+    public static final String FABRIC_SERVICE_LOCAL_DISCOVERY_CONFIG = "org.hyperledger.fabric.sdk.service_discovery.as_localhost";
+    public static final String TRUE = "true";
+
+    public static final String FABRIC_JAVA_CLIENT_ID = "javaAppUser";
 }

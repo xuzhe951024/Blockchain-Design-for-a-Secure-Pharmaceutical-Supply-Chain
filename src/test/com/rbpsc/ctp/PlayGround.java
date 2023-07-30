@@ -1,12 +1,47 @@
 package com.rbpsc.ctp;
 
+import com.fasterxml.jackson.core.JsonProcessingException;
+import com.fasterxml.jackson.databind.ObjectMapper;
+import com.rbpsc.common.factories.DataEntityFactory;
 import lombok.extern.slf4j.Slf4j;
+import org.junit.jupiter.api.Test;
+import org.rbpsc.api.entities.supplychain.drug.DrugInfo;
+import org.rbpsc.api.entities.supplychain.drug.DrugLifeCycle;
+import org.rbpsc.api.entities.supplychain.operations.OperationBase;
+import org.rbpsc.api.entities.supplychain.operations.Receipt;
+import org.rbpsc.api.entities.supplychain.roles.Consumer;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Service;
 
+import java.util.Optional;
 import java.util.UUID;
 
 @Slf4j
 public class PlayGround {
-    public static void main(String[] args) throws InterruptedException {
+
+    public static DrugLifeCycle<Receipt> buildDrugCycle(String drugName){
+
+        OperationBase operationBase = new OperationBase();
+        operationBase.setId(UUID.randomUUID().toString());
+        operationBase.setOperationMSG("Test MSG 1");
+        operationBase.setBatchId("test");
+
+        Receipt receipt = DataEntityFactory.createReceipt(operationBase);
+        receipt.setRoleName("testRole");
+        receipt.setAddress("http://manufacture0-T/v1/drugLifeCycle/drugOrderStep/manufacture");
+        receipt.setBatchId("test");
+        DrugInfo drugInfo = DataEntityFactory.createDrugInfo(operationBase, drugName);
+        drugInfo.setDrugTagTagId(UUID.randomUUID().toString());
+
+        DrugLifeCycle<Receipt> drugLifeCycle = DataEntityFactory.createDrugLifeCycleReceipt(drugInfo);
+        drugLifeCycle.addOperation(receipt);
+
+        Consumer consumer = DataEntityFactory.createConsumer(1, "http://manufacture0-T/v1/consumer", "test", Optional.of(UUID.randomUUID().toString()));
+        drugLifeCycle.setExpectedReceiver(consumer);
+
+        return drugLifeCycle;
+    }
+    public static void main(String[] args) throws InterruptedException, JsonProcessingException {
 //        Queue<String> queue = new ArrayDeque<>(Arrays.asList("a", "b", "c"));
 //        System.out.printf("queue poll = %s%n", queue.poll());
 //        queue.remove();
@@ -63,6 +98,8 @@ public class PlayGround {
 //
 //            log.info(index.getAndIncrement() + "");
 //        }
-        log.info(UUID.randomUUID().toString());
+        DrugLifeCycle<Receipt> covidVaccine = buildDrugCycle("covid-vaccine");
+        ObjectMapper objectMapper = new ObjectMapper();
+        log.info(objectMapper.writeValueAsString(covidVaccine));
     }
 }

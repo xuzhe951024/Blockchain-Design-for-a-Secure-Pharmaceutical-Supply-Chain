@@ -1,51 +1,100 @@
 package com.rbpsc.ctp;
 
+import com.fasterxml.jackson.databind.ObjectMapper;
 import com.rbpsc.CTPApplication;
-import com.rbpsc.common.utiles.fabric.EnrollAdmin;
-import com.rbpsc.common.utiles.fabric.RegisterUser;
+import com.rbpsc.common.factories.DataEntityFactory;
 import lombok.extern.slf4j.Slf4j;
+import org.hyperledger.fabric.gateway.*;
 import org.junit.jupiter.api.Test;
+import org.rbpsc.api.entities.dto.wrappers.DrugLifeCycleReceipt;
+import org.rbpsc.api.entities.supplychain.drug.DrugInfo;
+import org.rbpsc.api.entities.supplychain.drug.DrugLifeCycle;
+import org.rbpsc.api.entities.supplychain.operations.OperationBase;
+import org.rbpsc.api.entities.supplychain.operations.Receipt;
+import org.rbpsc.api.entities.supplychain.roles.Consumer;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.boot.test.context.SpringBootTest;
+
 import java.nio.file.Path;
 import java.nio.file.Paths;
-import org.hyperledger.fabric.gateway.Contract;
-import org.hyperledger.fabric.gateway.Gateway;
-import org.hyperledger.fabric.gateway.Network;
-import org.hyperledger.fabric.gateway.Wallet;
-import org.hyperledger.fabric.gateway.Wallets;
+import java.util.Optional;
+import java.util.UUID;
+
+import static org.rbpsc.common.constant.ServiceConstants.*;
 
 @SpringBootTest(classes = CTPApplication.class)
 @Slf4j
 public class FabricClientTests {
 
-    private static final String CHANNEL_NAME = System.getenv().getOrDefault("CHANNEL_NAME", "mychannel");
-    private static final String CHAINCODE_NAME = System.getenv().getOrDefault("CHAINCODE_NAME", "basic");
+    @Value("${fabric.config.networkconfig_path}")
+    static String pathToNetWorkConfig;
+
+    @Value("${fabric.config.wallet_path}")
+    static String pathToWallet;
 
     static {
-        System.setProperty("org.hyperledger.fabric.sdk.service_discovery.as_localhost", "true");
+        System.setProperty(FABRIC_SERVICE_LOCAL_DISCOVERY_CONFIG, TRUE);
     }
 
     // helper function for getting connected to the gateway
     public static Gateway connect() throws Exception{
         // Load a file system based wallet for managing identities.
-        Path walletPath = Paths.get("wallet");
+        Path walletPath = Paths.get(pathToWallet);
         Wallet wallet = Wallets.newFileSystemWallet(walletPath);
         // load a CCP
-        Path networkConfigPath = Paths.get("testAuto", "fabric", "test-network", "organizations", "peerOrganizations", "org1.example.com", "connection-org1.yaml");
+        Path networkConfigPath = Paths.get(pathToNetWorkConfig);
 
         Gateway.Builder builder = Gateway.createBuilder();
-        builder.identity(wallet, "javaAppUser").networkConfig(networkConfigPath).discovery(true);
+        builder.identity(wallet, FABRIC_JAVA_CLIENT_ID).networkConfig(networkConfigPath).discovery(true);
         return builder.connect();
     }
+
+    public static DrugLifeCycle<Receipt> buildDrugCycle(String drugName){
+
+        OperationBase operationBase = new OperationBase();
+        operationBase.setId(UUID.randomUUID().toString());
+        operationBase.setOperationMSG("Test MSG 1");
+        operationBase.setBatchId("test");
+
+        Receipt receipt = DataEntityFactory.createReceipt(operationBase);
+        receipt.setRoleName("testRole");
+        receipt.setAddress("http://manufacture0-T/v1/drugLifeCycle/drugOrderStep/manufacture");
+        receipt.setBatchId("test");
+        DrugInfo drugInfo = DataEntityFactory.createDrugInfo(operationBase, drugName);
+        drugInfo.setDrugTagTagId(UUID.randomUUID().toString());
+
+        DrugLifeCycle<Receipt> drugLifeCycle = DataEntityFactory.createDrugLifeCycleReceipt(drugInfo);
+        drugLifeCycle.addOperation(receipt);
+
+        Consumer consumer = DataEntityFactory.createConsumer(1, "http://manufacture0-T/v1/consumer", "test", Optional.of(UUID.randomUUID().toString()));
+        drugLifeCycle.setExpectedReceiver(consumer);
+
+        return drugLifeCycle;
+    }
+
+    public static DrugLifeCycle<Receipt> addReceiptToDrugLifeCycle(String msg, DrugLifeCycle<Receipt> receiptDrugLifeCycle){
+
+        Receipt receipt = receiptDrugLifeCycle.peakOperationVOQ();
+        receipt.setId(UUID.randomUUID().toString());
+        receipt.setOperationMSG(msg);
+
+        receiptDrugLifeCycle.addOperation(receipt);
+
+        return receiptDrugLifeCycle;
+    }
+
+    @Autowired
+    ObjectMapper objectMapper;
     
     @Test
     public void testInteractToSmartContract(){
         // enrolls the admin and registers the user
         try {
-            EnrollAdmin.enroll();
-            RegisterUser.register();
+//            EnrollAdmin.enroll();
+//            RegisterUser.register();
         } catch (Exception e) {
-            log.error(e.getMessage());
+            log.error("89:" + e.getMessage());
         }
 
         // connect to the network and invoke the smart contract
@@ -57,61 +106,68 @@ public class FabricClientTests {
 
             byte[] result;
 
-            log.info("Submit Transaction: InitLedger creates the initial set of assets on the ledger.");
-            contract.submitTransaction("InitLedger");
+//            log.info("Submit Transaction: InitLedger creates the initial set of assets on the ledger.");
+//            contract.submitTransaction("InitLedger");
 
             log.info("\n");
-            result = contract.evaluateTransaction("GetAllAssets");
+            log.info("Submit Transaction: DrugLifeCycle covid-vaccine");
+            DrugLifeCycle<Receipt> covidVaccine = buildDrugCycle("covid-vaccine");
+            log.info("121:" + objectMapper.writeValueAsString(covidVaccine));
+            contract.submitTransaction("CreateDruglifeCycle", objectMapper.writeValueAsString(covidVaccine));
+
+
+            log.info("\n");
+            result = contract.evaluateTransaction("GetAllDrugLifeCycle");
             log.info("Evaluate Transaction: GetAllAssets, result: " + new String(result));
 
-            log.info("\n");
-            log.info("Submit Transaction: CreateAsset asset213");
-            // CreateAsset creates an asset with ID asset213, color yellow, owner Tom, size 5 and appraisedValue of 1300
-            contract.submitTransaction("CreateAsset", "asset213", "yellow", "5", "Tom", "1300");
 
             log.info("\n");
-            log.info("Evaluate Transaction: ReadAsset asset213");
-            // ReadAsset returns an asset with given assetID
-            result = contract.evaluateTransaction("ReadAsset", "asset213");
+            log.info("Evaluate Transaction: ReadDrugLifeCycle" + covidVaccine.getId());
+            result = contract.evaluateTransaction("ReadDrugLifeCycle", covidVaccine.getId());
             log.info("result: " + new String(result));
+            assert objectMapper.readValue(new String(result), DrugLifeCycleReceipt.class).getId().equals(covidVaccine.getId());
 
             log.info("\n");
-            log.info("Evaluate Transaction: AssetExists asset1");
-            // AssetExists returns "true" if an asset with given assetID exist
-            result = contract.evaluateTransaction("AssetExists", "asset1");
-            log.info("result: " + new String(result));
+            log.info("Submit Transaction: addReceiptToDrugLifeCycle");
+            Receipt receipt = objectMapper.readValue(objectMapper.writeValueAsString(covidVaccine.peakOperationVOQ()), Receipt.class);
+            receipt.setId(UUID.randomUUID().toString());
+            receipt.setOperationMSG("new test receipt");
+            contract.submitTransaction("addReceiptToDrugLifeCycle", covidVaccine.getId(), objectMapper.writeValueAsString(receipt));
+//
+//            log.info("\n");
+//            log.info("Evaluate Transaction: AssetExists asset1");
+//            // AssetExists returns "true" if an asset with given assetID exist
+//            result = contract.evaluateTransaction("AssetExists", "asset1");
+//            log.info("result: " + new String(result));
+//
+//            log.info("\n");
+//            log.info("Submit Transaction: UpdateAsset asset1, new AppraisedValue : 350");
+//            // UpdateAsset updates an existing asset with new properties. Same args as CreateAsset
+//            contract.submitTransaction("UpdateAsset", "asset1", "blue", "5", "Tomoko", "350");
+//
+//            log.info("\n");
+//            log.info("Evaluate Transaction: ReadAsset asset1");
+//            result = contract.evaluateTransaction("ReadAsset", "asset1");
+//            log.info("result: " + new String(result));
+//
+//            try {
+//                log.info("\n");
+//                log.info("Submit Transaction: UpdateAsset asset70");
+//                // None existing asset asset70 should throw Error
+//                contract.submitTransaction("UpdateAsset", "asset70", "blue", "5", "Tomoko", "300");
+//            } catch (Exception e) {
+//                log.error("Expected an error on UpdateAsset of non-existing Asset: " + e);
+//            }
+//
 
-            log.info("\n");
-            log.info("Submit Transaction: UpdateAsset asset1, new AppraisedValue : 350");
-            // UpdateAsset updates an existing asset with new properties. Same args as CreateAsset
-            contract.submitTransaction("UpdateAsset", "asset1", "blue", "5", "Tomoko", "350");
-
-            log.info("\n");
-            log.info("Evaluate Transaction: ReadAsset asset1");
-            result = contract.evaluateTransaction("ReadAsset", "asset1");
-            log.info("result: " + new String(result));
-
-            try {
-                log.info("\n");
-                log.info("Submit Transaction: UpdateAsset asset70");
-                // None existing asset asset70 should throw Error
-                contract.submitTransaction("UpdateAsset", "asset70", "blue", "5", "Tomoko", "300");
-            } catch (Exception e) {
-                log.error("Expected an error on UpdateAsset of non-existing Asset: " + e);
-            }
-
-            log.info("\n");
-            log.info("Submit Transaction: TransferAsset asset1 from owner Tomoko > owner Tom");
-            // TransferAsset transfers an asset with given ID to new owner Tom
-            contract.submitTransaction("TransferAsset", "asset1", "Tom");
-
-            log.info("\n");
-            log.info("Evaluate Transaction: ReadAsset asset1");
-            result = contract.evaluateTransaction("ReadAsset", "asset1");
-            log.info("result: " + new String(result));
+//
+//            log.info("\n");
+//            log.info("Evaluate Transaction: ReadAsset asset1");
+//            result = contract.evaluateTransaction("ReadAsset", "asset1");
+//            log.info("result: " + new String(result));
         }
         catch(Exception e){
-            log.error(e.getMessage());
+            log.error("157:" + e.getMessage());
             System.exit(1);
         }
 
