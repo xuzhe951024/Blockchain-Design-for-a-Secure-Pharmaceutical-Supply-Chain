@@ -67,4 +67,9 @@ public class ServiceConstants {
     public static final String TRUE = "true";
 
     public static final String FABRIC_JAVA_CLIENT_ID = "javaAppUser";
+    public static final String FABRIC_PEM_FILE_PATH = "pemFile";
+    public static final String FABRIC_ALLOW_ALL_HOST_NAMES="allowAllHostNames";
+    public static final String FABRIC_ROLE_NAME_ADMIN="admin";
+    public static final String LOCAL_HOST = "localhost";
+    public static final String TLS_PROTOCOL = "tls";
 }

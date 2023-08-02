@@ -1,8 +1,9 @@
 package com.rbpsc.ctp;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
-import com.rbpsc.CTPApplication;
 import com.rbpsc.common.factories.DataEntityFactory;
+import com.rbpsc.common.utiles.fabric.EnrollAdmin;
+import com.rbpsc.common.utiles.fabric.RegisterUser;
 import lombok.extern.slf4j.Slf4j;
 import org.hyperledger.fabric.gateway.*;
 import org.junit.jupiter.api.Test;
@@ -23,22 +24,28 @@ import java.util.UUID;
 
 import static org.rbpsc.common.constant.ServiceConstants.*;
 
-@SpringBootTest(classes = CTPApplication.class)
+@SpringBootTest
 @Slf4j
 public class FabricClientTests {
 
+    @Autowired
+    EnrollAdmin enrollAdmin;
+
+    @Autowired
+    RegisterUser registerUser;
+
     @Value("${fabric.config.networkconfig_path}")
-    static String pathToNetWorkConfig;
+    String pathToNetWorkConfig;
 
     @Value("${fabric.config.wallet_path}")
-    static String pathToWallet;
+    String pathToWallet;
 
     static {
         System.setProperty(FABRIC_SERVICE_LOCAL_DISCOVERY_CONFIG, TRUE);
     }
 
     // helper function for getting connected to the gateway
-    public static Gateway connect() throws Exception{
+    public Gateway connect() throws Exception{
         // Load a file system based wallet for managing identities.
         Path walletPath = Paths.get(pathToWallet);
         Wallet wallet = Wallets.newFileSystemWallet(walletPath);
@@ -91,8 +98,8 @@ public class FabricClientTests {
     public void testInteractToSmartContract(){
         // enrolls the admin and registers the user
         try {
-//            EnrollAdmin.enroll();
-//            RegisterUser.register();
+            enrollAdmin.enroll();
+            registerUser.register();
         } catch (Exception e) {
             log.error("89:" + e.getMessage());
         }
@@ -112,6 +119,7 @@ public class FabricClientTests {
             log.info("\n");
             log.info("Submit Transaction: DrugLifeCycle covid-vaccine");
             DrugLifeCycle<Receipt> covidVaccine = buildDrugCycle("covid-vaccine");
+//            covidVaccine.setId("57fab5fa-2ffd-4890-964f-cb1ea07a5d99");
             log.info("121:" + objectMapper.writeValueAsString(covidVaccine));
             contract.submitTransaction("CreateDruglifeCycle", objectMapper.writeValueAsString(covidVaccine));
 
