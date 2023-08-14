@@ -38,3 +38,5 @@ build/
 
 ###  Fabric Contracts Output  ###
 fabric-contracts/build
+
+testAuto/fabric/wallet/org*
