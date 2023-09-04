@@ -41,7 +41,16 @@ createChannel() {
 	while [ $rc -ne 0 -a $COUNTER -lt $MAX_RETRY ] ; do
 		sleep $DELAY
 		set -x
-		osnadmin channel join --channelID $CHANNEL_NAME --config-block ./channel-artifacts/${CHANNEL_NAME}.block -o localhost:7053 --ca-file "$ORDERER_CA" --client-cert "$ORDERER_ADMIN_TLS_SIGN_CERT" --client-key "$ORDERER_ADMIN_TLS_PRIVATE_KEY" >&log.txt
+#		osnadmin channel join --channelID $CHANNEL_NAME --config-block ./channel-artifacts/${CHANNEL_NAME}.block -o localhost:7053 --ca-file "$ORDERER_CA" --client-cert "$ORDERER_ADMIN_TLS_SIGN_CERT" --client-key "$ORDERER_ADMIN_TLS_PRIVATE_KEY" >&log.txt
+#		osnadmin channel join --channelID $CHANNEL_NAME --config-block ./channel-artifacts/${CHANNEL_NAME}.block -o localhost:7153 --ca-file "$ORDERER_CA" --client-cert "$ORDERER_ADMIN_TLS_SIGN_CERT" --client-key "$ORDERER_ADMIN_TLS_PRIVATE_KEY" >&log.txt
+#		osnadmin channel join --channelID $CHANNEL_NAME --config-block ./channel-artifacts/${CHANNEL_NAME}.block -o localhost:7253 --ca-file "$ORDERER_CA" --client-cert "$ORDERER_ADMIN_TLS_SIGN_CERT" --client-key "$ORDERER_ADMIN_TLS_PRIVATE_KEY" >&log.txt
+
+    osnadmin channel join --channelID mychannel --config-block ./channel-artifacts/mychannel.block -o localhost:7053 --ca-file /mnt/d/IDEA_Projects/Blockchain-Design-for-a-Secure-Pharmaceutical-Supply-Chain/testAuto/fabric/test-network/organizations/ordererOrganizations/example.com/tlsca/tlsca.example.com-cert.pem --client-cert /mnt/d/IDEA_Projects/Blockchain-Design-for-a-Secure-Pharmaceutical-Supply-Chain/testAuto/fabric/test-network/organizations/ordererOrganizations/example.com/orderers/orderer0.example.com/tls/server.crt --client-key /mnt/d/IDEA_Projects/Blockchain-Design-for-a-Secure-Pharmaceutical-Supply-Chain/testAuto/fabric/test-network/organizations/ordererOrganizations/example.com/orderers/orderer0.example.com/tls/server.key >&log.txt
+
+    osnadmin channel join --channelID mychannel --config-block ./channel-artifacts/mychannel.block -o localhost:7153 --ca-file /mnt/d/IDEA_Projects/Blockchain-Design-for-a-Secure-Pharmaceutical-Supply-Chain/testAuto/fabric/test-network/organizations/ordererOrganizations/example.com/tlsca/tlsca.example.com-cert.pem --client-cert /mnt/d/IDEA_Projects/Blockchain-Design-for-a-Secure-Pharmaceutical-Supply-Chain/testAuto/fabric/test-network/organizations/ordererOrganizations/example.com/orderers/orderer1.example.com/tls/server.crt --client-key /mnt/d/IDEA_Projects/Blockchain-Design-for-a-Secure-Pharmaceutical-Supply-Chain/testAuto/fabric/test-network/organizations/ordererOrganizations/example.com/orderers/orderer1.example.com/tls/server.key >&log.txt
+
+    osnadmin channel join --channelID mychannel --config-block ./channel-artifacts/mychannel.block -o localhost:7253 --ca-file /mnt/d/IDEA_Projects/Blockchain-Design-for-a-Secure-Pharmaceutical-Supply-Chain/testAuto/fabric/test-network/organizations/ordererOrganizations/example.com/tlsca/tlsca.example.com-cert.pem --client-cert /mnt/d/IDEA_Projects/Blockchain-Design-for-a-Secure-Pharmaceutical-Supply-Chain/testAuto/fabric/test-network/organizations/ordererOrganizations/example.com/orderers/orderer2.example.com/tls/server.crt --client-key /mnt/d/IDEA_Projects/Blockchain-Design-for-a-Secure-Pharmaceutical-Supply-Chain/testAuto/fabric/test-network/organizations/ordererOrganizations/example.com/orderers/orderer2.example.com/tls/server.key >&log.txt
+
 		res=$?
 		{ set +x; } 2>/dev/null
 		let rc=$res
@@ -77,7 +86,7 @@ setAnchorPeer() {
   ${CONTAINER_CLI} exec cli ./scripts/setAnchorPeer.sh $ORG $CHANNEL_NAME 
 }
 
-FABRIC_CFG_PATH=${PWD}/configtx
+FABRIC_CFG_PATH=$PWD/../config/
 
 ## Create channel genesis block
 infoln "Generating channel genesis block '${CHANNEL_NAME}.block'"

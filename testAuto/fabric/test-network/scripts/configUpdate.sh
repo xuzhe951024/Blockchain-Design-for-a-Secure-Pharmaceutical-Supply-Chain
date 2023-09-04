@@ -20,7 +20,7 @@ fetchChannelConfig() {
 
   infoln "Fetching the most recent configuration block for the channel"
   set -x
-  peer channel fetch config config_block.pb -o orderer.example.com:7050 --ordererTLSHostnameOverride orderer.example.com -c $CHANNEL --tls --cafile "$ORDERER_CA"
+  peer channel fetch config config_block.pb -o orderer0.example.com:7050 --ordererTLSHostnameOverride orderer0.example.com -c $CHANNEL --tls --cafile "$ORDERER_CA"
   { set +x; } 2>/dev/null
 
   infoln "Decoding config block to JSON and isolating config to ${OUTPUT}"
@@ -47,16 +47,16 @@ createConfigUpdate() {
   configtxlator proto_decode --input config_update.pb --type common.ConfigUpdate --output config_update.json
   echo '{"payload":{"header":{"channel_header":{"channel_id":"'$CHANNEL'", "type":2}},"data":{"config_update":'$(cat config_update.json)'}}}' | jq . >config_update_in_envelope.json
   configtxlator proto_encode --input config_update_in_envelope.json --type common.Envelope --output "${OUTPUT}"
-  { set +x; } 2>/dev/null
+#  { set +x; } 2>/dev/null
 }
 
 # signConfigtxAsPeerOrg <org> <configtx.pb>
 # Set the peerOrg admin of an org and sign the config update
 signConfigtxAsPeerOrg() {
+  set -x
   ORG=$1
   CONFIGTXFILE=$2
   setGlobals $ORG
-  set -x
   peer channel signconfigtx -f "${CONFIGTXFILE}"
   { set +x; } 2>/dev/null
 }

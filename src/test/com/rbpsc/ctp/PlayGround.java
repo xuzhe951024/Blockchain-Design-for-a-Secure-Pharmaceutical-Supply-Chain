@@ -1,20 +1,21 @@
 package com.rbpsc.ctp;
 
 import com.fasterxml.jackson.core.JsonProcessingException;
-import com.fasterxml.jackson.databind.ObjectMapper;
 import com.rbpsc.common.factories.DataEntityFactory;
 import lombok.extern.slf4j.Slf4j;
-import org.junit.jupiter.api.Test;
 import org.rbpsc.api.entities.supplychain.drug.DrugInfo;
 import org.rbpsc.api.entities.supplychain.drug.DrugLifeCycle;
 import org.rbpsc.api.entities.supplychain.operations.OperationBase;
 import org.rbpsc.api.entities.supplychain.operations.Receipt;
 import org.rbpsc.api.entities.supplychain.roles.Consumer;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.stereotype.Service;
+import oshi.SystemInfo;
+import oshi.hardware.CentralProcessor;
+import oshi.hardware.GlobalMemory;
+import oshi.software.os.OperatingSystem;
 
 import java.util.Optional;
 import java.util.UUID;
+import java.util.concurrent.atomic.AtomicInteger;
 
 @Slf4j
 public class PlayGround {
@@ -69,37 +70,37 @@ public class PlayGround {
 //            scanResult.getAllClasses().forEach(classInfo -> System.out.println(classInfo.getName()));
 //        }
 
-//        SystemInfo si = new SystemInfo();
-//        CentralProcessor processor = si.getHardware().getProcessor();
-//        System.out.println(processor);
-//        int cores = Runtime.getRuntime().availableProcessors();
-//        System.out.println("Available cores: " + cores);
-//        GlobalMemory memory = si.getHardware().getMemory();
-//
-//        long totalMemory = memory.getTotal();
-//        long availableMemory = memory.getAvailable();
-//
-//        System.out.println("Total Memory: " + totalMemory/(1024*1024));
-//        System.out.println("Available Memory: " + availableMemory/(1024*1024));
-//
-//        long swapUsed = memory.getVirtualMemory().getSwapUsed();
-//        long swapTotal = memory.getVirtualMemory().getSwapTotal();
-//
-//        System.out.println("Swap used: " + swapUsed/(1024*1024));
-//        System.out.println("Swap total: " + swapTotal/(1024*1024));
-//
-//        OperatingSystem os = si.getOperatingSystem();
-//
-//        System.out.println("Operating System: " + os.getFamily() + " " + os.getVersionInfo());
+        SystemInfo si = new SystemInfo();
+        CentralProcessor processor = si.getHardware().getProcessor();
+        System.out.println(processor);
+        int cores = Runtime.getRuntime().availableProcessors();
+        System.out.println("Available cores: " + cores);
+        GlobalMemory memory = si.getHardware().getMemory();
 
-//        System.out.println("http://manufacture0-T/v1/drugLifeCycle/drugOrderStep/manufacture".split("/")[2]);
-//        AtomicInteger index = new AtomicInteger();
-//        for (int i = 0; i <5; i++) {
-//
-//            log.info(index.getAndIncrement() + "");
-//        }
-        DrugLifeCycle<Receipt> covidVaccine = buildDrugCycle("covid-vaccine");
-        ObjectMapper objectMapper = new ObjectMapper();
-        log.info(objectMapper.writeValueAsString(covidVaccine));
+        long totalMemory = memory.getTotal();
+        long availableMemory = memory.getAvailable();
+
+        System.out.println("Total Memory: " + totalMemory/(1024*1024));
+        System.out.println("Available Memory: " + availableMemory/(1024*1024));
+
+        long swapUsed = memory.getVirtualMemory().getSwapUsed();
+        long swapTotal = memory.getVirtualMemory().getSwapTotal();
+
+        System.out.println("Swap used: " + swapUsed/(1024*1024));
+        System.out.println("Swap total: " + swapTotal/(1024*1024));
+
+        OperatingSystem os = si.getOperatingSystem();
+
+        System.out.println("Operating System: " + os.getFamily() + " " + os.getVersionInfo());
+
+        System.out.println("http://manufacture0-T/v1/drugLifeCycle/drugOrderStep/manufacture".split("/")[2]);
+        AtomicInteger index = new AtomicInteger();
+        for (int i = 0; i <5; i++) {
+
+            log.info(index.getAndIncrement() + "");
+        }
+//        DrugLifeCycle<Receipt> covidVaccine = buildDrugCycle("covid-vaccine");
+//        ObjectMapper objectMapper = new ObjectMapper();
+//        log.info(objectMapper.writeValueAsString(covidVaccine));
     }
 }

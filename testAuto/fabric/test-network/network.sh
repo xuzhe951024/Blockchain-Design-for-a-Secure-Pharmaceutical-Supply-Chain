@@ -19,7 +19,7 @@
 
 ROOTDIR=$(cd "$(dirname "$0")" && pwd)
 export PATH=${ROOTDIR}/../bin:${PWD}/../bin:$PATH
-export FABRIC_CFG_PATH=${PWD}/configtx
+export FABRIC_CFG_PATH=$PWD/../config/
 export VERBOSE=false
 
 # push to the required directory & set a trap to go back if needed
@@ -200,19 +200,19 @@ function createOrgs() {
 
     infoln "Creating Org1 Identities"
 
-    createOrg1
+    createOrg 1 1
 
     infoln "Creating Org2 Identities"
 
-    createOrg2
+    createOrg 2 1
 
     infoln "Creating Org3 Identities"
 
-    createOrg3
+    createOrg 3 1
 
     infoln "Creating Orderer Org Identities"
 
-    createOrderer
+    createOrderer 3
 
   fi
 
@@ -300,7 +300,122 @@ function createChannel() {
 
   # now run the script that creates a channel. This script uses configtxgen once
   # to create the channel creation transaction and the anchor peer updates.
-  scripts/createChannel.sh $CHANNEL_NAME $CLI_DELAY $MAX_RETRY $VERBOSE
+#  scripts/createChannel.sh $CHANNEL_NAME $CLI_DELAY $MAX_RETRY $VERBOSE
+
+##################################################tmp#################################
+	# imports
+	. scripts/envVar.sh
+	. scripts/utils.sh
+
+	: ${CHANNEL_NAME:="mychannel"}
+	: ${DELAY:="3"}
+	: ${MAX_RETRY:="5"}
+	: ${VERBOSE:="false"}
+
+	: ${CONTAINER_CLI:="docker"}
+	: ${CONTAINER_CLI_COMPOSE:="${CONTAINER_CLI}-compose"}
+	infoln "Using ${CONTAINER_CLI} and ${CONTAINER_CLI_COMPOSE}"
+
+	if [ ! -d "channel-artifacts" ]; then
+		mkdir channel-artifacts
+	fi
+
+	createChannelGenesisBlock() {
+		which configtxgen
+		if [ "$?" -ne 0 ]; then
+			fatalln "configtxgen tool not found."
+		fi
+		set -x
+		configtxgen -profile TwoOrgsApplicationGenesis -outputBlock ./channel-artifacts/${CHANNEL_NAME}.block -channelID $CHANNEL_NAME
+		res=$?
+		{ set +x; } 2>/dev/null
+	  verifyResult $res "Failed to generate channel configuration transaction..."
+	}
+
+	createChannel() {
+		setGlobals 1
+		# Poll in case the raft leader is not set yet
+		local rc=1
+		local COUNTER=1
+		while [ $rc -ne 0 -a $COUNTER -lt $MAX_RETRY ] ; do
+			sleep $DELAY
+			set -x
+#			osnadmin channel join --channelID $CHANNEL_NAME --config-block ./channel-artifacts/${CHANNEL_NAME}.block -o localhost:7053 --ca-file "$ORDERER_CA" --client-cert "$ORDERER_ADMIN_TLS_SIGN_CERT" --client-key "$ORDERER_ADMIN_TLS_PRIVATE_KEY" >&log.txt
+
+      osnadmin channel join --channelID mychannel --config-block ./channel-artifacts/mychannel.block -o localhost:7053 --ca-file /mnt/d/IDEA_Projects/Blockchain-Design-for-a-Secure-Pharmaceutical-Supply-Chain/testAuto/fabric/test-network/organizations/ordererOrganizations/example.com/tlsca/tlsca.example.com-cert.pem --client-cert /mnt/d/IDEA_Projects/Blockchain-Design-for-a-Secure-Pharmaceutical-Supply-Chain/testAuto/fabric/test-network/organizations/ordererOrganizations/example.com/orderers/orderer0.example.com/tls/server.crt --client-key /mnt/d/IDEA_Projects/Blockchain-Design-for-a-Secure-Pharmaceutical-Supply-Chain/testAuto/fabric/test-network/organizations/ordererOrganizations/example.com/orderers/orderer0.example.com/tls/server.key >&log.txt
+
+      osnadmin channel join --channelID mychannel --config-block ./channel-artifacts/mychannel.block -o localhost:7153 --ca-file /mnt/d/IDEA_Projects/Blockchain-Design-for-a-Secure-Pharmaceutical-Supply-Chain/testAuto/fabric/test-network/organizations/ordererOrganizations/example.com/tlsca/tlsca.example.com-cert.pem --client-cert /mnt/d/IDEA_Projects/Blockchain-Design-for-a-Secure-Pharmaceutical-Supply-Chain/testAuto/fabric/test-network/organizations/ordererOrganizations/example.com/orderers/orderer1.example.com/tls/server.crt --client-key /mnt/d/IDEA_Projects/Blockchain-Design-for-a-Secure-Pharmaceutical-Supply-Chain/testAuto/fabric/test-network/organizations/ordererOrganizations/example.com/orderers/orderer1.example.com/tls/server.key >&log.txt
+
+      osnadmin channel join --channelID mychannel --config-block ./channel-artifacts/mychannel.block -o localhost:7253 --ca-file /mnt/d/IDEA_Projects/Blockchain-Design-for-a-Secure-Pharmaceutical-Supply-Chain/testAuto/fabric/test-network/organizations/ordererOrganizations/example.com/tlsca/tlsca.example.com-cert.pem --client-cert /mnt/d/IDEA_Projects/Blockchain-Design-for-a-Secure-Pharmaceutical-Supply-Chain/testAuto/fabric/test-network/organizations/ordererOrganizations/example.com/orderers/orderer2.example.com/tls/server.crt --client-key /mnt/d/IDEA_Projects/Blockchain-Design-for-a-Secure-Pharmaceutical-Supply-Chain/testAuto/fabric/test-network/organizations/ordererOrganizations/example.com/orderers/orderer2.example.com/tls/server.key >&log.txt
+
+			res=$?
+			{ set +x; } 2>/dev/null
+			let rc=$res
+			COUNTER=$(expr $COUNTER + 1)
+		done
+		cat log.txt
+		verifyResult $res "Channel creation failed"
+	}
+
+	# joinChannel ORG
+	joinChannel() {
+	  FABRIC_CFG_PATH=$PWD/../config/
+	  ORG=$1
+	  setGlobals $ORG
+		local rc=1
+		local COUNTER=1
+		## Sometimes Join takes time, hence retry
+		while [ $rc -ne 0 -a $COUNTER -lt $MAX_RETRY ] ; do
+	    sleep $DELAY
+	    set -x
+	    peer channel join -b $BLOCKFILE >&log.txt
+	    res=$?
+	    { set +x; } 2>/dev/null
+			let rc=$res
+			COUNTER=$(expr $COUNTER + 1)
+		done
+		cat log.txt
+		verifyResult $res "After $MAX_RETRY attempts, peer0.org${ORG} has failed to join channel '$CHANNEL_NAME' "
+	}
+
+	setAnchorPeer() {
+	  ORG=$1
+	  ${CONTAINER_CLI} exec cli ./scripts/setAnchorPeer.sh $ORG $CHANNEL_NAME
+	}
+
+	FABRIC_CFG_PATH=$PWD/../config/
+
+	## Create channel genesis block
+	infoln "Generating channel genesis block '${CHANNEL_NAME}.block'"
+	createChannelGenesisBlock
+
+	FABRIC_CFG_PATH=$PWD/../config/
+	BLOCKFILE="./channel-artifacts/${CHANNEL_NAME}.block"
+
+	## Create channel
+	infoln "Creating channel ${CHANNEL_NAME}"
+	createChannel
+	successln "Channel '$CHANNEL_NAME' created"
+
+	## Join all the peers to the channel
+	infoln "Joining org1 peer to the channel..."
+	joinChannel 1
+	infoln "Joining org2 peer to the channel..."
+	joinChannel 2
+	infoln "Joining org3 peer to the channel..."
+	joinChannel 3
+
+	## Set the anchor peers for each org in the channel
+	infoln "Setting anchor peer for org1..."
+	setAnchorPeer 1
+	infoln "Setting anchor peer for org2..."
+	setAnchorPeer 2
+	infoln "Setting anchor peer for org3..."
+	setAnchorPeer 3
+
+	successln "Channel '$CHANNEL_NAME' joined"
+##################################################tmp#################################
+
 }
 
 
@@ -349,6 +464,7 @@ function networkDown() {
   if [ "$MODE" != "restart" ]; then
     # Bring down the network, deleting the volumes
     ${CONTAINER_CLI} volume rm docker_orderer.example.com docker_peer0.org1.example.com docker_peer0.org2.example.com docker_peer0.org3.example.com
+    ${CONTAINER_CLI} volume rm compose_orderer.example.com compose_peer0.org1.example.com compose_peer0.org2.example.com
     #Cleanup the chaincode containers
     clearContainers
     #Cleanup images
