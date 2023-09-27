@@ -113,8 +113,8 @@ public class FabricClientTests {
 
             byte[] result;
 
-//            log.info("Submit Transaction: InitLedger creates the initial set of assets on the ledger.");
-//            contract.submitTransaction("InitLedger");
+            log.info("Submit Transaction: InitLedger creates the initial set of assets on the ledger.");
+            contract.submitTransaction("InitLedger");
 
             log.info("\n");
             log.info("Submit Transaction: DrugLifeCycle covid-vaccine");

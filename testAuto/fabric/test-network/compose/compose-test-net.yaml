@@ -49,7 +49,7 @@ services:
       - ORDERER_ADMIN_LISTENADDRESS=0.0.0.0:7053
       - ORDERER_OPERATIONS_LISTENADDRESS=orderer0.example.com:9043
       - ORDERER_METRICS_PROVIDER=prometheus
-      - FABRIC_LOGGING_SPEC=DEBUG
+#      - FABRIC_LOGGING_SPEC=DEBUG
     working_dir: /root
     command: orderer
     volumes:
@@ -92,7 +92,7 @@ services:
       - ORDERER_ADMIN_LISTENADDRESS=0.0.0.0:7053
       - ORDERER_OPERATIONS_LISTENADDRESS=orderer1.example.com:9043
       - ORDERER_METRICS_PROVIDER=prometheus
-      - FABRIC_LOGGING_SPEC=DEBUG
+#      - FABRIC_LOGGING_SPEC=DEBUG
     working_dir: /root
     command: orderer
     volumes:
@@ -135,7 +135,7 @@ services:
       - ORDERER_ADMIN_LISTENADDRESS=0.0.0.0:7053
       - ORDERER_OPERATIONS_LISTENADDRESS=orderer2.example.com:9043
       - ORDERER_METRICS_PROVIDER=prometheus
-      - FABRIC_LOGGING_SPEC=DEBUG
+#      - FABRIC_LOGGING_SPEC=DEBUG
     working_dir: /root
     command: orderer
     volumes:
