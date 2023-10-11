@@ -38,79 +38,35 @@ Organizations:
                 Rule: "OR('OrdererMSP.admin')"
 
         OrdererEndpoints:
-            - orderer0.example.com:7050
-            - orderer1.example.com:7050
-            - orderer2.example.com:7050
+<#list ordererInfos as ordererInfo>
+            - ${ordererInfo.nodeName}.example.com:7050
+</#list>
 
-    - &Org1
-        Name: Org1MSP
+<#list orgInfos as orgInfo>
+    - &${orgInfo.mspOrgName}
+        Name: ${orgInfo.mspOrgName}MSP
 
         # ID to load the MSP definition as
-        ID: Org1MSP
+        ID: ${orgInfo.mspOrgName}MSP
 
-        MSPDir: ../test-network/organizations/peerOrganizations/org1.example.com/msp
+        MSPDir: ../test-network/organizations/peerOrganizations/${orgInfo.orgName}.example.com/msp
 
         # Policies defines the set of policies at this level of the config tree
         # For organization policies, their canonical path is usually
         Policies:
             Readers:
                 Type: Signature
-                Rule: "OR('Org1MSP.admin', 'Org1MSP.peer', 'Org1MSP.client')"
+                Rule: "OR('${orgInfo.mspOrgName}MSP.admin', '${orgInfo.mspOrgName}MSP.peer', '${orgInfo.mspOrgName}MSP.client')"
             Writers:
                 Type: Signature
-                Rule: "OR('Org1MSP.admin', 'Org1MSP.client')"
+                Rule: "OR('${orgInfo.mspOrgName}MSP.admin', '${orgInfo.mspOrgName}MSP.client')"
             Admins:
                 Type: Signature
-                Rule: "OR('Org1MSP.admin')"
+                Rule: "OR('${orgInfo.mspOrgName}MSP.admin')"
             Endorsement:
                 Type: Signature
-                Rule: "OR('Org1MSP.peer')"
-    - &Org2
-        Name: Org2MSP
-
-        # ID to load the MSP definition as
-        ID: Org2MSP
-
-        MSPDir: ../test-network/organizations/peerOrganizations/org2.example.com/msp
-
-        # Policies defines the set of policies at this level of the config tree
-        # For organization policies, their canonical path is usually
-        Policies:
-            Readers:
-                Type: Signature
-                Rule: "OR('Org2MSP.admin', 'Org2MSP.peer', 'Org2MSP.client')"
-            Writers:
-                Type: Signature
-                Rule: "OR('Org2MSP.admin', 'Org2MSP.client')"
-            Admins:
-                Type: Signature
-                Rule: "OR('Org2MSP.admin')"
-            Endorsement:
-                Type: Signature
-                Rule: "OR('Org2MSP.peer')"
-    - &Org3
-        Name: Org3MSP
-
-        # ID to load the MSP definition as
-        ID: Org3MSP
-
-        MSPDir: ../test-network/organizations/peerOrganizations/org3.example.com/msp
-
-        # Policies defines the set of policies at this level of the config tree
-        # For organization policies, their canonical path is usually
-        Policies:
-            Readers:
-                Type: Signature
-                Rule: "OR('Org3MSP.admin', 'Org3MSP.peer', 'Org3MSP.client')"
-            Writers:
-                Type: Signature
-                Rule: "OR('Org3MSP.admin', 'Org3MSP.client')"
-            Admins:
-                Type: Signature
-                Rule: "OR('Org3MSP.admin')"
-            Endorsement:
-                Type: Signature
-                Rule: "OR('Org3MSP.peer')"
+                Rule: "OR('${orgInfo.mspOrgName}MSP.peer')"
+</#list>
 
 ################################################################################
 #
@@ -222,18 +178,12 @@ Orderer: &OrdererDefaults
 
     EtcdRaft:
         Consenters:
-            - Host: orderer0.example.com
+    <#list ordererInfos as ordererInfo>
+            - Host: ${ordererInfo.nodeName}.example.com
               Port: 7050
-              ClientTLSCert: ../test-network/organizations/ordererOrganizations/example.com/orderers/orderer0.example.com/tls/server.crt
-              ServerTLSCert: ../test-network/organizations/ordererOrganizations/example.com/orderers/orderer0.example.com/tls/server.crt
-            - Host: orderer1.example.com
-              Port: 7050
-              ClientTLSCert: ../test-network/organizations/ordererOrganizations/example.com/orderers/orderer1.example.com/tls/server.crt
-              ServerTLSCert: ../test-network/organizations/ordererOrganizations/example.com/orderers/orderer1.example.com/tls/server.crt
-            - Host: orderer2.example.com
-              Port: 7050
-              ClientTLSCert: ../test-network/organizations/ordererOrganizations/example.com/orderers/orderer2.example.com/tls/server.crt
-              ServerTLSCert: ../test-network/organizations/ordererOrganizations/example.com/orderers/orderer2.example.com/tls/server.crt
+              ClientTLSCert: ../test-network/organizations/ordererOrganizations/example.com/orderers/${ordererInfo.nodeName}.example.com/tls/server.crt
+              ServerTLSCert: ../test-network/organizations/ordererOrganizations/example.com/orderers/${ordererInfo.nodeName}.example.com/tls/server.crt
+    </#list>
     # Batch Timeout: The amount of time to wait before creating a batch
     BatchTimeout: 2s
 
@@ -326,7 +276,7 @@ Profiles:
         Application:
             <<: *ApplicationDefaults
             Organizations:
-                - *Org1
-                - *Org2
-                - *Org3
+            <#list orgInfos as orgInfo>
+                - *${orgInfo.mspOrgName}
+            </#list>
             Capabilities: *ApplicationCapabilities

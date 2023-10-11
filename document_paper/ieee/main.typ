@@ -20,7 +20,7 @@
       email: "burleson@umass.edu"
     ),
   ),
-  index-terms: ("Blockchain", "Pharmaceutical", "Security", "Supply Chain", "Hyperledger Fabric", "Corda", "FISCO-BCOS"),
+  index-terms: ("Blockchain", "Consortium Blockchain", "Pharmaceutical", "Security", "Supply Chain", "Hyperledger Fabric", "Corda", "FISCO-BCOS"),
   bibliography-file: "refs.bib",
 )
 

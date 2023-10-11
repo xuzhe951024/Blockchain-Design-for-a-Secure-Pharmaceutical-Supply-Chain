@@ -8,6 +8,7 @@ CHANNEL_NAME="$1"
 DELAY="$2"
 MAX_RETRY="$3"
 VERBOSE="$4"
+ORG_NUM="$5"
 : ${CHANNEL_NAME:="mychannel"}
 : ${DELAY:="3"}
 : ${MAX_RETRY:="5"}
@@ -100,20 +101,34 @@ infoln "Creating channel ${CHANNEL_NAME}"
 createChannel
 successln "Channel '$CHANNEL_NAME' created"
 
-## Join all the peers to the channel
-infoln "Joining org1 peer to the channel..."
-joinChannel 1
-infoln "Joining org2 peer to the channel..."
-joinChannel 2
-infoln "Joining org3 peer to the channel..."
-joinChannel 3
+### Join all the peers to the channel
+#infoln "Joining org1 peer to the channel..."
+#joinChannel 1
+#infoln "Joining org2 peer to the channel..."
+#joinChannel 2
+#infoln "Joining org3 peer to the channel..."
+#joinChannel 3
+#
+### Set the anchor peers for each org in the channel
+#infoln "Setting anchor peer for org1..."
+#setAnchorPeer 1
+#infoln "Setting anchor peer for org2..."
+#setAnchorPeer 2
+#infoln "Setting anchor peer for org3..."
+#setAnchorPeer 3
 
-## Set the anchor peers for each org in the channel
-infoln "Setting anchor peer for org1..."
-setAnchorPeer 1
-infoln "Setting anchor peer for org2..."
-setAnchorPeer 2
-infoln "Setting anchor peer for org3..."
-setAnchorPeer 3
+for (( o=1; o<=$ORG_NUM; o++ ))
+do
+    ## Join all the peers to the channel
+    infoln "Joining org{$o} peer to the channel..."
+    joinChannel $o
+done
+
+for (( p=1; p<=$ORG_NUM; p++ ))
+do
+    ## Set the anchor peers for each org in the channel
+    infoln "Setting anchor peer for org{$p}..."
+    setAnchorPeer {$p}
+done
 
 successln "Channel '$CHANNEL_NAME' joined"
