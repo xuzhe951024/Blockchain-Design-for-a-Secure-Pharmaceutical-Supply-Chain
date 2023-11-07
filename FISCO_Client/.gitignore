@@ -67,6 +67,7 @@ bnd/
 
 # Ignore Gradle build output directory
 build
+dist
 /.idea/codeStyles/codeStyleConfig.xml
 /.idea/codeStyles/Project.xml
 
