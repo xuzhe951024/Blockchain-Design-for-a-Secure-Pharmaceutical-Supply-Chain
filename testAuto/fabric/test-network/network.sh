@@ -198,26 +198,45 @@ function createOrgs() {
       fi
     done
 
-    infoln "Creating Org1 Identities"
+    local orgNum=$1
+    local peerNum=$2
+    local ordererNume=$3
 
+#    for (( i=1; i<=$orgNum; i++ ))
+#    do
+#        for (( j=0; j<$peerNum; j++ ))
+#        do
+#            infoln "Creating Org{$i} peer{$j} Identities"
+#            createOrg $i $j
+#        done
+#    done
+    createOrg 1 0
     createOrg 1 1
+    createOrg 2 0
+    createOrg 3 0
+    createOrderer $ordererNume
 
-    infoln "Creating Org2 Identities"
+#    infoln "Creating Org1 Identities"
+#
+#    createOrg 1 1
+#
+#    infoln "Creating Org2 Identities"
+#
+#    createOrg 2 1
+#
+#    infoln "Creating Org3 Identities"
+#
+#    createOrg 3 1
+#
+#    infoln "Creating Orderer Org Identities"
+#    createOrderer 3
 
-    createOrg 2 1
-
-    infoln "Creating Org3 Identities"
-
-    createOrg 3 1
-
-    infoln "Creating Orderer Org Identities"
-
-    createOrderer 3
 
   fi
 
   infoln "Generating CCP files for Orgs"
-  ./organizations/ccp-generate.sh
+  ./organizations/ccp-generate.sh 3
+#  ./organizations/ccp-generate.sh
 }
 
 # Once you create the organization crypto material, you need to create the
@@ -252,7 +271,7 @@ function networkUp() {
 
   # generate artifacts if they don't exist
   if [ ! -d "organizations/peerOrganizations" ]; then
-    createOrgs
+    createOrgs 3 2 3
   fi
 
   COMPOSE_FILES="-f compose/${COMPOSE_FILE_BASE} -f compose/${CONTAINER_CLI}/${CONTAINER_CLI}-${COMPOSE_FILE_BASE}"
@@ -300,8 +319,7 @@ function createChannel() {
 
   # now run the script that creates a channel. This script uses configtxgen once
   # to create the channel creation transaction and the anchor peer updates.
-#  scripts/createChannel.sh $CHANNEL_NAME $CLI_DELAY $MAX_RETRY $VERBOSE
-
+#  scripts/createChannel.sh mychannel 3 5 false 3
 ##################################################tmp#################################
 	# imports
 	. scripts/envVar.sh
@@ -311,6 +329,7 @@ function createChannel() {
 	: ${DELAY:="3"}
 	: ${MAX_RETRY:="5"}
 	: ${VERBOSE:="false"}
+	: ${ORG_NUM:="3"}
 
 	: ${CONTAINER_CLI:="docker"}
 	: ${CONTAINER_CLI_COMPOSE:="${CONTAINER_CLI}-compose"}
@@ -334,7 +353,7 @@ function createChannel() {
 
 	createChannel() {
 		setGlobals 1
-		# Poll in case the raft leader is not set yet
+		# Poll in case the raft letader is not set yet
 		local rc=1
 		local COUNTER=1
 		while [ $rc -ne 0 -a $COUNTER -lt $MAX_RETRY ] ; do
@@ -397,21 +416,35 @@ function createChannel() {
 	createChannel
 	successln "Channel '$CHANNEL_NAME' created"
 
-	## Join all the peers to the channel
-	infoln "Joining org1 peer to the channel..."
-	joinChannel 1
-	infoln "Joining org2 peer to the channel..."
-	joinChannel 2
-	infoln "Joining org3 peer to the channel..."
-	joinChannel 3
+#	## Join all the peers to the channel
+#	infoln "Joining org1 peer to the channel..."
+#	joinChannel 1
+#	infoln "Joining org2 peer to the channel..."
+#	joinChannel 2
+#	infoln "Joining org3 peer to the channel..."
+#	joinChannel 3
+#
+#	## Set the anchor peers for each org in the channel
+#	infoln "Setting anchor peer for org1..."
+#	setAnchorPeer 1
+#	infoln "Setting anchor peer for org2..."
+#	setAnchorPeer 2
+#	infoln "Setting anchor peer for org3..."
+#	setAnchorPeer 3
 
-	## Set the anchor peers for each org in the channel
-	infoln "Setting anchor peer for org1..."
-	setAnchorPeer 1
-	infoln "Setting anchor peer for org2..."
-	setAnchorPeer 2
-	infoln "Setting anchor peer for org3..."
-	setAnchorPeer 3
+  for (( p=1; p<=$ORG_NUM; p++ ))
+  do
+      ## Set the anchor peers for each org in the channel
+      infoln "Setting anchor peer for org${p}..."
+      setAnchorPeer ${p}
+  done
+
+  for (( o=1; o<=$ORG_NUM; o++ ))
+  do
+      ## Join all the peers to the channel
+      infoln "Joining org${o} peer to the channel..."
+      joinChannel ${o}
+  done
 
 	successln "Channel '$CHANNEL_NAME' joined"
 ##################################################tmp#################################
@@ -463,8 +496,8 @@ function networkDown() {
   # Don't remove the generated artifacts -- note, the ledgers are always removed
   if [ "$MODE" != "restart" ]; then
     # Bring down the network, deleting the volumes
-    ${CONTAINER_CLI} volume rm docker_orderer.example.com docker_peer0.org1.example.com docker_peer0.org2.example.com docker_peer0.org3.example.com
-    ${CONTAINER_CLI} volume rm compose_orderer.example.com compose_peer0.org1.example.com compose_peer0.org2.example.com
+    ${CONTAINER_CLI} volume rm docker_orderer0.example.com docker_orderer1.example.com docker_orderer2.example.com docker_peer0.org1.example.com docker_peer0.org2.example.com docker_peer0.org3.example.com
+    ${CONTAINER_CLI} volume rm compose_orderer0.example.com compose_orderer1.example.com compose_orderer2.example.com compose_peer0.org1.example.com compose_peer0.org2.example.com compose_peer0.org3.example.com
     #Cleanup the chaincode containers
     clearContainers
     #Cleanup images

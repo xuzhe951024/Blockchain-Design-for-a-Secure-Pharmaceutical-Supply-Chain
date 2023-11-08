@@ -2,20 +2,21 @@
 #show: ieee.with(
   title: "Blockchain Design for a Secure Pharmaceutical Supply Chain",
   abstract: [
-    Amid the COVID-19 pandemic, the pharmaceutical supply chain faces significant challenges. While serialization regulations, such as the U.S. Drug Supply Chain Security Act (DSCSA), aim to enhance traceability, there remain challenges in fully managing and protecting the pharmaceutical supply chain. This study investigates the potential of blockchain technology as a solution, emphasizing its attributes of superior traceability, robust security, and heightened transparency. We utilize a physical-level product marking scheme to complement the traceability features of blockchain. To validate feasibility, we developed a testing platform comparing three major consortium chain solutions: Hyperledger Fabric, FISCO-BCOS, and Corda. Our research aims to offer an optimized blockchain-based pharmaceutical supply chain solution and a valuable selection guide for industry stakeholders.
+    Amid the COVID-19 pandemic, the pharmaceutical supply chain faces significant challenges. While serialization regulations, such as the U.S. Drug Supply Chain Security Act (DSCSA), aim to enhance traceability, there remain challenges in fully managing and protecting the pharmaceutical supply chain. This study investigates the potential of blockchain technology as a solution, emphasizing its attributes of superior traceability, robust security, and heightened transparency. We rely on a physical-level product marking scheme to complement the traceability features of blockchain. To validate feasibility, we developed a testing platform comparing three major consortium chain solutions: Hyperledger Fabric, FISCO-BCOS, and Corda. Our research aims to offer an optimized blockchain-based pharmaceutical supply chain solution and a methodology for platform developers and industry stakeholders.
+    #TODO[Results description]
   ],
   authors: (
     (
       name: "Zhe Xu",
       department: [Electrical and Computer Engineering],
-      organization: [UMASS Amherst],
+      organization: [University of Massachusetts],
       location: [Amherst, Massachusetts],
       email: "zhexu@umass.edu"
     ),
     (
       name: "Wayne Burleson",
       department: [Electrical and Computer Engineering],
-      organization: [UMASS Amherst],
+      organization: [University of Massachusetts],
       location: [Amherst, Massachusetts],
       email: "burleson@umass.edu"
     ),
@@ -25,7 +26,7 @@
 )
 
 = Introduction
-This section presents an overview of the common challenges in the pharmaceutical supply chain, viewed through the lens of the three core tenets of information security: Confidentiality, Integrity, and Availability (CIA).
+This section presents an overview of the common challenges in the pharmaceutical supply chain, viewed through the lens of the three core tenets of information security: Confidentiality, Integrity, and Availability (CIA).#TODO[More overview about background(Covid)]
 
 == *Data Confidentiality*
 <subsec:Confidentiality>

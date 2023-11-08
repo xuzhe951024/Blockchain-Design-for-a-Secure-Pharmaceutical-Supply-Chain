@@ -4,11 +4,6 @@
 . scripts/envVar.sh
 . scripts/utils.sh
 
-CHANNEL_NAME="$1"
-DELAY="$2"
-MAX_RETRY="$3"
-VERBOSE="$4"
-ORG_NUM="$5"
 : ${CHANNEL_NAME:="mychannel"}
 : ${DELAY:="3"}
 : ${MAX_RETRY:="5"}
@@ -16,6 +11,13 @@ ORG_NUM="$5"
 
 : ${CONTAINER_CLI:="docker"}
 : ${CONTAINER_CLI_COMPOSE:="${CONTAINER_CLI}-compose"}
+
+CHANNEL_NAME="${1}"
+DELAY="${2}"
+MAX_RETRY="${3}"
+VERBOSE="${4}"
+ORG_NUM="${5}"
+
 infoln "Using ${CONTAINER_CLI} and ${CONTAINER_CLI_COMPOSE}"
 
 if [ ! -d "channel-artifacts" ]; then
