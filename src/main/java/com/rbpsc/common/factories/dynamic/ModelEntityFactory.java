@@ -178,6 +178,7 @@ public class ModelEntityFactory {
         }}));
 
         buildDockerContainers(DOCKER_FILE_PATH, batchId, uuid);
+//        buildDockerContainers("D:\\IDEA_Projects\\Blockchain-Design-for-a-Secure-Pharmaceutical-Supply-Chain\\testAuto\\app\\DockerFile_SupplyChainNode", batchId, uuid);
 
         return simulationDataView;
     }

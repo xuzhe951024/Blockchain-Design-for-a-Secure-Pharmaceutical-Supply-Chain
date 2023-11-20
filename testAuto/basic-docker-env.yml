@@ -26,6 +26,7 @@ services:
     container_name: app.service
     volumes:
       - /var/run/docker.sock:/var/run/docker.sock
+      - /home/zhexu/.m2/repository:/home/zhexu/.m2/repository
     tty: true
     depends_on:
       - db

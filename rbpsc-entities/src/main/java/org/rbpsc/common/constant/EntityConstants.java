@@ -18,11 +18,13 @@ public class EntityConstants {
     public static final String ROLE_NAME_DISTRIBUTOR = "distributor";
     public static final String ROLE_NAME_ATTACKER = "attacker";
 
-    public static final String OPERATION_TYPE_PACKAGE_NAME = "main.java.com.rbpsc.ctp.api.entities.supplychain.operations";
+    public static final String OPERATION_TYPE_PACKAGE_NAME = "org.rbpsc.api.entities.supplychain.operations";
 
     public static final String DEFAULT_OPERATION_MSG = "Default MSG";
 
     public static final String ROLE_NAME = "ROLE_NAME";
 
     public static final String ATTACK_CONFIDENTIALITY_MSG_SUFFIX = ": Intercepted!";
+
+    public static final String FABRIC_WALLET_ID_FILE_SUFFIX = ".id";
 }

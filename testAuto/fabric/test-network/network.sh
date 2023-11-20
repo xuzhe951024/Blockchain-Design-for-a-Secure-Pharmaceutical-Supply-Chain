@@ -211,7 +211,6 @@ function createOrgs() {
 #        done
 #    done
     createOrg 1 0
-    createOrg 1 1
     createOrg 2 0
     createOrg 3 0
     createOrderer $ordererNume
@@ -440,6 +439,7 @@ function createChannel() {
   done
 
   for (( o=1; o<=$ORG_NUM; o++ ))
+#  for (( o=1; o<=2; o++ ))
   do
       ## Join all the peers to the channel
       infoln "Joining org${o} peer to the channel..."

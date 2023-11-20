@@ -64,11 +64,12 @@ public class WebPageController {
     @GetMapping("/operationTypes")
     public List<String> getOperationTypes() {
 
-        return new ArrayList<String>(){{
+        ArrayList<String> result = new ArrayList<String>(){{
             try (ScanResult scanResult = new ClassGraph().whitelistPackages(OPERATION_TYPE_PACKAGE_NAME).scan()) {
                 scanResult.getAllClasses().forEach(classInfo -> add(classInfo.getName()));
             }
         }};
+        return result;
     }
 
     @PostMapping("/submit/{uuid}")

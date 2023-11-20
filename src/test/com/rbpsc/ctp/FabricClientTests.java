@@ -45,7 +45,7 @@ public class FabricClientTests {
     }
 
     // helper function for getting connected to the gateway
-    public Gateway connect() throws Exception{
+    public Gateway connect() throws Exception {
         // Load a file system based wallet for managing identities.
         Path walletPath = Paths.get(pathToWallet);
         Wallet wallet = Wallets.newFileSystemWallet(walletPath);
@@ -57,7 +57,7 @@ public class FabricClientTests {
         return builder.connect();
     }
 
-    public static DrugLifeCycle<Receipt> buildDrugCycle(String drugName){
+    public static DrugLifeCycle<Receipt> buildDrugCycle(String drugName) {
 
         OperationBase operationBase = new OperationBase();
         operationBase.setId(UUID.randomUUID().toString());
@@ -80,7 +80,7 @@ public class FabricClientTests {
         return drugLifeCycle;
     }
 
-    public static DrugLifeCycle<Receipt> addReceiptToDrugLifeCycle(String msg, DrugLifeCycle<Receipt> receiptDrugLifeCycle){
+    public static DrugLifeCycle<Receipt> addReceiptToDrugLifeCycle(String msg, DrugLifeCycle<Receipt> receiptDrugLifeCycle) {
 
         Receipt receipt = receiptDrugLifeCycle.peakOperationVOQ();
         receipt.setId(UUID.randomUUID().toString());
@@ -93,13 +93,13 @@ public class FabricClientTests {
 
     @Autowired
     ObjectMapper objectMapper;
-    
+
     @Test
-    public void testInteractToSmartContract(){
+    public void testInteractToSmartContract() {
         // enrolls the admin and registers the user
         try {
-            enrollAdmin.enroll();
-            registerUser.register();
+//            enrollAdmin.enroll();
+//            registerUser.register();
         } catch (Exception e) {
             log.error("89:" + e.getMessage());
         }
@@ -113,13 +113,19 @@ public class FabricClientTests {
 
             byte[] result;
 
-            log.info("Submit Transaction: InitLedger creates the initial set of assets on the ledger.");
-            contract.submitTransaction("InitLedger");
+//            log.info("Submit Transaction: InitLedger creates the initial set of assets on the ledger.");
+//            contract.submitTransaction("InitLedger");
+
+            String targetDrugLifeCycleId = "57fab5fa-2ffd-4890-964f-cb1ea07a5d96";
+            log.info("\n");
+            log.info("Check if DrugLifeCycle: " + targetDrugLifeCycleId + " existed");
+            result = contract.evaluateTransaction("drugLifeCycleExists", targetDrugLifeCycleId);
+            log.info("result: " + new String(result));
 
             log.info("\n");
             log.info("Submit Transaction: DrugLifeCycle covid-vaccine");
             DrugLifeCycle<Receipt> covidVaccine = buildDrugCycle("covid-vaccine");
-//            covidVaccine.setId("57fab5fa-2ffd-4890-964f-cb1ea07a5d99");
+            covidVaccine.setId(targetDrugLifeCycleId);
             log.info("121:" + objectMapper.writeValueAsString(covidVaccine));
             contract.submitTransaction("CreateDruglifeCycle", objectMapper.writeValueAsString(covidVaccine));
 
@@ -140,8 +146,9 @@ public class FabricClientTests {
             Receipt receipt = objectMapper.readValue(objectMapper.writeValueAsString(covidVaccine.peakOperationVOQ()), Receipt.class);
             receipt.setId(UUID.randomUUID().toString());
             receipt.setOperationMSG("new test receipt");
-            contract.submitTransaction("addReceiptToDrugLifeCycle", covidVaccine.getId(), objectMapper.writeValueAsString(receipt));
-//
+            result = contract.submitTransaction("addReceiptToDrugLifeCycle", covidVaccine.getId(), objectMapper.writeValueAsString(receipt));
+            log.info("result: " + new String(result));
+
 //            log.info("\n");
 //            log.info("Evaluate Transaction: AssetExists asset1");
 //            // AssetExists returns "true" if an asset with given assetID exist
@@ -167,18 +174,17 @@ public class FabricClientTests {
 //                log.error("Expected an error on UpdateAsset of non-existing Asset: " + e);
 //            }
 //
-
+//
 //
 //            log.info("\n");
 //            log.info("Evaluate Transaction: ReadAsset asset1");
 //            result = contract.evaluateTransaction("ReadAsset", "asset1");
 //            log.info("result: " + new String(result));
-        }
-        catch(Exception e){
+        } catch (Exception e) {
             log.error("157:" + e.getMessage());
             System.exit(1);
         }
 
     }
-    
+
 }

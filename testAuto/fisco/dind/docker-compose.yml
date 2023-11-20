@@ -1,0 +1,23 @@
+version: '3.8'
+services:
+  fisco_dind:
+    build:
+      context: ./
+    working_dir:
+      /home/WeBase
+    container_name: fisco.dind
+    privileged: true
+#    environment:
+#      - DOCKER_HOST=unix:///var/run/docker.sock
+    volumes:
+#      - /var/run/docker.sock:/var/run/docker.sock
+      - ./:/home/WeBase
+    ports:
+      - "5000:5000"
+      - "5001:5001"
+      - "5002:5002"
+      - "5003:5003"
+      - "20200:20200"
+    tty: true
+    command: dockerd
+#    command: tail -f /dev/null

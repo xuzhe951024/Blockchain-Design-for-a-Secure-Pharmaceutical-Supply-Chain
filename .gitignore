@@ -37,6 +37,13 @@ build/
 .gradle
 
 ###  Fabric Contracts Output  ###
-fabric-contracts/build
+testAuto/fabric/fabric-starter/chaincode/2x/java/fabric-contracts/build
 
 testAuto/fabric/wallet/org*
+
+### Corda testAuto  ###
+testAuto/corda/dind/cordaRbpsc/corda-cli
+testAuto/corda/dind/cordaRbpsc/corda5-obligation-cordapp
+
+### Fisco testAuto ###
+testAuto/fisco/dind/webase-deploy

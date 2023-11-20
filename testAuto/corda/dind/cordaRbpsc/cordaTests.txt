@@ -1,0 +1,28 @@
+2a99c6e7-4588-47a0-a4ab-e852775a584b
+
+
+{
+    "clientRequestId": "createdr-1",
+    "flowClassName": "com.r3.developers.samples.obligation.workflows.drug.DrugLifecycleCreateFlow",
+    "requestBody": {
+        "supplyChainDownStream":"CN=Bob, OU=Test Dept, O=R3, L=London, C=GB",
+        "drugLifeCycleReceipt":{"id":"d1762bf0-8285-45a6-8453-21940fd60b59","idFieldName":"id","batchId":"test","drug":{"id":"d1762bf0-8285-45a6-8453-21940fd60b59","idFieldName":"id","batchId":"test","drugTagTagId":"6f228e77-7d9d-4136-806e-59472e159f03","drugName":"covid-vaccine","fake":false,"recalled":false},"lifeCycleQueue":[{"id":"7ac2dca2-b6bc-470e-9462-3cd8be465877","idFieldName":"id","batchId":"test","roleName":"CN=Alice, OU=Test Dept, O=R3, L=London, C=GB","address":"http://manufacture0-T/v1/drugLifeCycle/drugOrderStep/manufacture","operationMSG":"Test MSG 1","processed":true,"domain":"manufacture0-T"}],"expectedReceiver":{"id":"14ebfad6-e27a-43a2-9f26-2097b13772ef","idFieldName":"id","batchId":"test","roleName":"consumer","address":"http://manufacture0-T/v1/consumer","expectedDose":1,"satisfied":false,"domain":"manufacture0-T"},"isAttacked":false,"operationQueueSize":1,"produced":false}
+        }
+}
+
+{
+    "clientRequestId": "transfer-1",
+    "flowClassName": "com.r3.developers.samples.obligation.workflows.drug.DrugLifecycleTransferFlow",
+    "requestBody": {
+        "newSupplyChainDownStream":"CN=Bob, OU=Test Dept, O=R3, L=London, C=GB",
+        "drugLifecycleId":"d1762bf0-8285-45a6-8453-21940fd60b59",
+        "newOperationMSG":"Test MSG 1"
+        }
+}
+
+{
+    "clientRequestId": "list-1",
+    "flowClassName": "com.r3.developers.samples.obligation.workflows.drug.ListDrugLifecycleFlow",
+    "requestBody": {
+        }
+}

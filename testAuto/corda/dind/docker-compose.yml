@@ -1,0 +1,17 @@
+version: '3.8'
+services:
+  corda_dind:
+    build:
+      context: .
+    working_dir:
+      /home/corda
+    container_name: corda.dind
+    privileged: true
+    volumes:
+#      - /var/run/docker.sock:/var/run/docker.sock
+      - ./cordaRbpsc:/home/corda/cordaRbpsc
+    ports:
+      - "7888:8888"
+    tty: true
+#    command: tail -f /dev/null
+    command: sh cordaRbpsc/corda-cli/installCordaCli.sh

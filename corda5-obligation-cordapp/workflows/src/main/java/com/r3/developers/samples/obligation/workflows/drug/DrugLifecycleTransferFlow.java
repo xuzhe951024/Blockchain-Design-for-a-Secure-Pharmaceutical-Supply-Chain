@@ -69,7 +69,8 @@ public class DrugLifecycleTransferFlow implements ClientStartableFlow {
             List<StateAndRef<DrugLifecycleState>> drugLifeCycleStateAndRefs = ledgerService.findUnconsumedStatesByType(DrugLifecycleState.class);
             List<StateAndRef<DrugLifecycleState>> drugLifeCycleStateAndRefsWithId = drugLifeCycleStateAndRefs.stream()
                     .filter(sar -> sar.getState().getContractState().getDrugLifeCycleReceipt().getId().equals(drugLifecycleId)).collect(toList());
-            if (drugLifeCycleStateAndRefsWithId.size() != 1) throw new CordaRuntimeException("Multiple or zero IOU states with id " + drugLifecycleId + " found");
+            if (drugLifeCycleStateAndRefsWithId.size() != 1)
+                throw new CordaRuntimeException("Multiple or zero IOU states with id " + drugLifecycleId + " found");
             StateAndRef<DrugLifecycleState> drugLifeCycleStateAndRef = drugLifeCycleStateAndRefsWithId.get(0);
             DrugLifecycleState drugLifeCycleInput = drugLifeCycleStateAndRef.getState().getContractState();
 
@@ -78,7 +79,13 @@ public class DrugLifecycleTransferFlow implements ClientStartableFlow {
             if (!(myInfo.getName().toString().equals(drugLifeCycleInput.
                     getDrugLifeCycleReceipt().
                     peakOperationVOQ().
-                    getRoleName()))) throw new CordaRuntimeException("Not an authorized supply chain up stream.");
+                    getRoleName())))
+                throw new CordaRuntimeException("Not an authorized supply chain up stream: local node name: " + myInfo.getName().toString() +
+                        "\tOperation upStream name: " +
+                        drugLifeCycleInput.
+                            getDrugLifeCycleReceipt().
+                            peakOperationVOQ().
+                            getRoleName());
 
             // Get MemberInfos for the Vnode running the flow and the otherMember.
             MemberInfo targetSupplyChainNode = requireNonNull(
@@ -124,7 +131,7 @@ public class DrugLifecycleTransferFlow implements ClientStartableFlow {
             // Call FinalizeIOUSubFlow which will finalise the transaction.
             // If successful the flow will return a String of the created transaction id,
             // if not successful it will return an error message.
-            return flowEngine.subFlow(new FinalizeDrugLifecycleFlow.FinalizeDrugLifecycle(signedTransaction, Arrays.asList(myInfo.getName(),targetSupplyChainNode.getName())));
+            return flowEngine.subFlow(new FinalizeDrugLifecycleFlow.FinalizeDrugLifecycle(signedTransaction, Arrays.asList(myInfo.getName(), targetSupplyChainNode.getName())));
         }
         // Catch any exceptions, log them and rethrow the exception.
         catch (Exception e) {
