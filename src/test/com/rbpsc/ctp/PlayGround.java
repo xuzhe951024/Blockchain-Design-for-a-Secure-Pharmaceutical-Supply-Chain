@@ -107,5 +107,9 @@ public class PlayGround {
         ObjectMapper objectMapper = new ObjectMapper();
         System.out.println(objectMapper.writeValueAsString(covidVaccine));
 
+        String testAdd = "http://distributor2-testing/v1/drugLifeCycle/drugOrderStep/distributor";
+        String newUrl = testAdd.replaceFirst("(?<=http://)[^/]*", "localhost:8091");
+        System.out.println(newUrl);
+
     }
 }

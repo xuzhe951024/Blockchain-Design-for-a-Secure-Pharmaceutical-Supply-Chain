@@ -18,7 +18,13 @@ import org.springframework.stereotype.Service;
 import org.springframework.util.StringUtils;
 import reactor.core.publisher.Mono;
 
+import java.util.ArrayList;
 import java.util.List;
+import java.util.Random;
+import java.util.concurrent.ExecutionException;
+import java.util.concurrent.ExecutorService;
+import java.util.concurrent.Executors;
+import java.util.concurrent.Future;
 
 /**
  * @project: WorkLoad
@@ -44,7 +50,7 @@ public class SimulatorDispatcherServiceImpl implements SimulatorDispatcherServic
     }
 
     @Override
-    public void startRequesting(SimulationDataView simulationDataView, String wsUUID) {
+    public void startRequesting(SimulationDataView simulationDataView, String wsUUID, int maxReqThreadNum) {
 //        for (int i = 0; i < 10; i++) {
 //            int finalI = i;
 //            taskExecutor.execute(() -> {
@@ -58,15 +64,24 @@ public class SimulatorDispatcherServiceImpl implements SimulatorDispatcherServic
 //        }
 
         List<DrugLifeCycle<OperationDTO>> drugLifeCycleList = simulationDataView.getDrugLifeCycleList();
+
+        ExecutorService executorService = Executors.newFixedThreadPool(maxReqThreadNum);
+
+        List<Future<?>> futures = new ArrayList<>();
+        List<Long> taskTimes = new ArrayList<>();
+
         drugLifeCycleList.forEach(drugLifeCycle -> {
 
-            taskExecutor.execute(() -> {
+            Future<?> future = executorService.submit(() -> {
                 try {
-                    Thread.sleep(500);
+                    Random random = new Random();
+                    long sleepTime = 500L + (long)(random.nextDouble() * 1501L);
+                    Thread.sleep(sleepTime);
                 } catch (InterruptedException e) {
                     throw new RuntimeException(e);
                 }
 
+                long start = System.currentTimeMillis();
                 while (drugLifeCycle.getOperationQueueSize() > 0) {
                     OperationDTO operationDTO = drugLifeCycle.pollOperationVOQ();
 
@@ -84,7 +99,6 @@ public class SimulatorDispatcherServiceImpl implements SimulatorDispatcherServic
                                 "\nIt may be suffering from DDoS attack!";
                         simpMessagingTemplate.convertAndSend(ServiceConstants.WEB_SCOKET_TOPIC_PROGRESS + wsUUID, wsMessage);
                         log.info(wsMessage);
-                        break;
                     }
 
                     String wsMessage = "Access to: " +
@@ -97,10 +111,57 @@ public class SimulatorDispatcherServiceImpl implements SimulatorDispatcherServic
 
                     //TODO send to blockchain-based system(s)
 
+                    start = System.currentTimeMillis();
+                    for (BlockChainRequestsHandler handler :
+                            blockChainRequestsHandlers) {
+                        handler.sendToNextStep(drugOperationDTO);
+                    }
+
                 }
+                long end = System.currentTimeMillis();
+                return end - start;
             });
 
+            futures.add(future);
+
+            if (futures.size() == maxReqThreadNum) {
+                for (Future<?> f : futures) {
+                    try {
+                        taskTimes.add((Long) f.get());
+
+                        long total = taskTimes.stream().mapToLong(Long::longValue).sum();
+                        double average = total / (double) taskTimes.size();
+
+                        String wsMessage = "Average Task Time: " + average + " ms";
+                        // Send to database-based system
+                        simpMessagingTemplate.convertAndSend(ServiceConstants.WEB_SCOKET_TOPIC_PROGRESS + wsUUID, wsMessage);
+                    } catch (InterruptedException | ExecutionException e) {
+                        throw new RuntimeException(e);
+                    }
+                }
+                futures.clear();
+            }
+
         });
+
+
+        for (Future<?> future : futures) {
+            try {
+                taskTimes.add((Long) future.get());
+            } catch (InterruptedException | ExecutionException e) {
+                throw new RuntimeException(e);
+            }
+        }
+
+        long total = taskTimes.stream().mapToLong(Long::longValue).sum();
+        double average = total / (double) taskTimes.size();
+
+        String wsMessage = "Average Task Time: " + average + " ms";
+        // Send to database-based system
+        simpMessagingTemplate.convertAndSend(ServiceConstants.WEB_SCOKET_TOPIC_PROGRESS + wsUUID, wsMessage);
+
+        executorService.shutdown();
+
     }
 
     private DrugLifeCycleResponse sendToNextStepBaseLine(DrugOperationDTO drugOperationDTO) {
@@ -115,7 +176,8 @@ public class SimulatorDispatcherServiceImpl implements SimulatorDispatcherServic
             return response;
         }
 
-        Mono<DrugLifeCycleResponse> responseMono = webClientUtil.postWithParams(operationDTO.getOperation().getAddress(), drugOperationDTO, DrugOperationDTO.class, DrugLifeCycleResponse.class);
+        Mono<DrugLifeCycleResponse> responseMono = webClientUtil.postWithParams(operationDTO.getOperation().getAddress().replaceFirst("(?<=http://)[^/]*", "localhost:8091"),
+                drugOperationDTO, DrugOperationDTO.class, DrugLifeCycleResponse.class);
 
 //        responseMono.subscribe(result -> {
 //            log.info(result.toString());

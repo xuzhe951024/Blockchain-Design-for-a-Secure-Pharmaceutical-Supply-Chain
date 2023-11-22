@@ -1,6 +1,7 @@
 package com.rbpsc.common.factories.dynamic;
 
 import com.rbpsc.common.factories.DataEntityFactory;
+import lombok.extern.slf4j.Slf4j;
 import org.rbpsc.api.entities.dto.webview.OperationVO;
 import org.rbpsc.api.entities.supplychain.operations.DrugOrderStep;
 import org.rbpsc.api.entities.supplychain.roles.RoleBase;
@@ -26,6 +27,7 @@ import static org.rbpsc.common.constant.EntityConstants.*;
 import static org.rbpsc.common.constant.ServiceConstants.*;
 
 @Service
+@Slf4j
 public class ModelEntityFactory {
     final ConsumerReceiptRepository consumerReceiptRepository;
     final RoleBaseRepository roleBaseRepository;
@@ -58,7 +60,11 @@ public class ModelEntityFactory {
         Random random = new Random();
         return Collections.unmodifiableList(new ArrayList<DrugLifeCycleVO>() {{
             consumerList.forEach(consumer -> {
+
+                log.info("Generating drug lifecycle for consumer: " + consumer.getDomain());
+
                 for (int i = 0; i < consumer.getExpectedDose(); i++) {
+                    log.info("Dose: " + i);
                     DrugLifeCycleVO drugLifeCycleVO = DataEntityFactory.createDrugLifeCycleView();
                     drugLifeCycleVO.setDrugName(experimentConfig.getDrugName());
                     drugLifeCycleVO.setBatchId(experimentConfig.getExperimentName());
@@ -177,7 +183,7 @@ public class ModelEntityFactory {
             drugLifeCycleVOList.forEach(this::build);
         }}));
 
-        buildDockerContainers(DOCKER_FILE_PATH, batchId, uuid);
+//        buildDockerContainers(DOCKER_FILE_PATH, batchId, uuid);
 //        buildDockerContainers("D:\\IDEA_Projects\\Blockchain-Design-for-a-Secure-Pharmaceutical-Supply-Chain\\testAuto\\app\\DockerFile_SupplyChainNode", batchId, uuid);
 
         return simulationDataView;

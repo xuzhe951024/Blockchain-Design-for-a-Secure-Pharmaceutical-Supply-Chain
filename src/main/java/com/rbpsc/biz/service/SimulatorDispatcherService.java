@@ -9,5 +9,5 @@ import org.rbpsc.api.entities.dto.webview.SimulationDataView;
  * @create: 6/16/23
  **/
 public interface SimulatorDispatcherService {
-    void startRequesting(SimulationDataView simulationDataView, String wsUUID);
+    void startRequesting(SimulationDataView simulationDataView, String wsUUID, int maxReqThreadNum) throws InterruptedException;
 }

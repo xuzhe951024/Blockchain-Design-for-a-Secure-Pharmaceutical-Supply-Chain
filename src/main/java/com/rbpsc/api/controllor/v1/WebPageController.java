@@ -32,6 +32,7 @@ public class WebPageController {
     private final SimulatorDispatcherService simulatorDispatcherService;
     private final ModelEntityFactory modelEntityFactory;
     private final WebPageService webPageService;
+    private int maxReqThreadNum;
 
     public WebPageController(SimpMessagingTemplate simpMessagingTemplate, SimulatorDispatcherService simulatorDispatcherService, ModelEntityFactory modelEntityFactory, WebPageService webPageService) {
         this.simpMessagingTemplate = simpMessagingTemplate;
@@ -44,20 +45,10 @@ public class WebPageController {
     @PostMapping("/cards")
     public List<DrugLifeCycleVO> getCards(@RequestBody ExperimentConfig experimentConfig) {
 
+        this.maxReqThreadNum = experimentConfig.getMaxThreadCount();
+        List<DrugLifeCycleVO> drugLifeCycleVOList = modelEntityFactory.createDrugLifeCycleVOList(experimentConfig);
+        return drugLifeCycleVOList;
 
-//        ExperimentConfig experimentConfig = new ExperimentConfig();
-//        experimentConfig.setId(UUID.randomUUID().toString());
-//        experimentConfig.setExperimentName("testing");
-//        experimentConfig.setExperimentDescription("Test experiment");
-//        experimentConfig.setDrugName("Covid-Vaccine");
-//        experimentConfig.setMaxThreadCount(10);
-//        experimentConfig.setManufacturerCount(2);
-//        experimentConfig.setDistributorsCount(2);
-//        experimentConfig.setConsumerCount(2);
-//        experimentConfig.setDoesForEachConsumer(1);
-
-
-        return modelEntityFactory.createDrugLifeCycleVOList(experimentConfig);
     }
 
 
@@ -77,6 +68,7 @@ public class WebPageController {
 
         Thread.sleep(500);
         log.info("Starting to process data & build docker containers:");
+
         simpMessagingTemplate.convertAndSend(WEB_SCOKET_TOPIC_PROGRESS + uuid, "MSG: Starting to process data & build docker containers:");
 
         // Process data...
@@ -85,7 +77,7 @@ public class WebPageController {
         log.info("Finished processing data & building docker containers:");
         simpMessagingTemplate.convertAndSend(WEB_SCOKET_TOPIC_PROGRESS + uuid, "MSG: Finished processing data & building docker containers:");
 
-        simulatorDispatcherService.startRequesting(simulationDataView, uuid);
+        simulatorDispatcherService.startRequesting(simulationDataView, uuid, maxReqThreadNum);
 
 //        for (int i = 0; i <= 5; i++) {
 //            // Assume this is the processing progress

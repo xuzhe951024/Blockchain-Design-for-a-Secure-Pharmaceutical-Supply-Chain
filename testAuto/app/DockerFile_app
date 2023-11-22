@@ -11,5 +11,7 @@ RUN curl -L "https://github.com/docker/compose/releases/download/1.29.2/docker-c
 RUN chmod +x /usr/local/bin/docker-compose
 
 COPY testAuto/app/app.jar ./
+COPY testAuto/fabric/wallet ./testAuto/fabric/wallet
+COPY testAuto/fabric/test-network/organizations/peerOrganizations/org1.example.com ./testAuto/fabric/test-network/organizations/peerOrganizations/org1.example.com
 COPY testAuto/app/application.properties ./
 COPY testAuto/app/DockerFile_SupplyChainNode ./

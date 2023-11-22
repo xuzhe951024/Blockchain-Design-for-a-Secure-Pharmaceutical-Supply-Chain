@@ -27,6 +27,7 @@ services:
     volumes:
       - /var/run/docker.sock:/var/run/docker.sock
       - /home/zhexu/.m2/repository:/home/zhexu/.m2/repository
+#      - /mnt/d/I/Blockchain-Design-for-a-Secure-Pharmaceutical-Supply-Chain/testAuto/fabric:/app/testAuto/fabric
     tty: true
     depends_on:
       - db

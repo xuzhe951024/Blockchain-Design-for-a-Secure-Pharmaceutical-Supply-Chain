@@ -19,6 +19,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 
+import javax.annotation.PostConstruct;
 import java.nio.file.Path;
 import java.nio.file.Paths;
 
@@ -28,6 +29,11 @@ import static org.rbpsc.common.constant.ServiceConstants.*;
 @Service
 @Slf4j
 public class FabricRequestsHandlerImpl implements BlockChainRequestsHandler {
+    @PostConstruct
+    public void init(){
+        log.info("executing FabricRequestsHandlerImpl constructor");
+//        enrollAndRegisterMSPUserId();
+    }
     @Override
     public DrugLifeCycleResponse sendToNextStep(DrugOperationDTO drugOperationDTO) {
 
